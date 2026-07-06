@@ -1,0 +1,196 @@
+﻿@model EduNexus.ViewModels.Dashboard.StudentDashboardViewModel
+
+@{
+    ViewData["Title"] = "Student Dashboard";
+}
+
+<div class="mb-4">
+    <h2 class="fw-bold">Welcome back, @Model.StudentName</h2>
+    <p class="text-muted">Here is your learning overview.</p>
+</div>
+
+<div class="row g-3 mb-4">
+    <div class="col-md-3">
+        <div class="card stat-card">
+            <div class="card-body">
+                <div class="text-muted">Courses</div>
+                <h3 class="fw-bold">@Model.TotalCourses</h3>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card stat-card">
+            <div class="card-body">
+                <div class="text-muted">Packages</div>
+                <h3 class="fw-bold">@Model.TotalPackages</h3>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card stat-card">
+            <div class="card-body">
+                <div class="text-muted">Lessons</div>
+                <h3 class="fw-bold">@Model.CompletedLessons / @Model.TotalLessons</h3>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card stat-card">
+            <div class="card-body">
+                <div class="text-muted">Overall Progress</div>
+                <h3 class="fw-bold">@Model.OverallProgress%</h3>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-4">
+    <div class="col-lg-8">
+        <div class="card border-0 shadow-sm mb-4">
+            <div class="card-header bg-white">
+                <h5 class="mb-0">My Courses</h5>
+            </div>
+
+            <div class="card-body">
+                @if (!Model.Courses.Any())
+                {
+                    <div class="text-muted">No enrolled courses found.</div>
+                }
+                else
+                {
+                    <div class="table-responsive">
+                        <table class="table align-middle">
+                            <thead>
+                                <tr>
+                                    <th>Code</th>
+                                    <th>Course</th>
+                                    <th>Status</th>
+                                    <th style="width: 240px;">Progress</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                @foreach (var course in Model.Courses)
+                                {
+                                    <tr>
+                                        <td>@course.CourseCode</td>
+                                        <td>@course.CourseTitle</td>
+                                        <td>@course.Status</td>
+                                        <td>
+                                            <div class="d-flex align-items-center gap-2">
+                                                <div class="progress flex-grow-1" style="height: 8px;">
+                                                    <div class="progress-bar" style="width: @course.ProgressPercentage%"></div>
+                                                </div>
+                                                <span class="small">@course.ProgressPercentage%</span>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                }
+            </div>
+        </div>
+
+        <div class="card border-0 shadow-sm">
+            <div class="card-header bg-white">
+                <h5 class="mb-0">My Packages</h5>
+            </div>
+
+            <div class="card-body">
+                @if (!Model.Packages.Any())
+                {
+                    <div class="text-muted">No enrolled packages found.</div>
+                }
+                else
+                {
+                    <div class="table-responsive">
+                        <table class="table align-middle">
+                            <thead>
+                                <tr>
+                                    <th>Package</th>
+                                    <th>Description</th>
+                                    <th style="width: 240px;">Progress</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                @foreach (var package in Model.Packages)
+                                {
+                                    <tr>
+                                        <td>@package.GroupName</td>
+                                        <td>@package.Description</td>
+                                        <td>
+                                            <div class="d-flex align-items-center gap-2">
+                                                <div class="progress flex-grow-1" style="height: 8px;">
+                                                    <div class="progress-bar" style="width: @package.ProgressPercentage%"></div>
+                                                </div>
+                                                <span class="small">@package.ProgressPercentage%</span>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-4">
+        <div class="card border-0 shadow-sm mb-4">
+            <div class="card-header bg-white">
+                <h5 class="mb-0">Recent Quiz Attempts</h5>
+            </div>
+
+            <div class="card-body">
+                @if (!Model.RecentQuizAttempts.Any())
+                {
+                    <div class="text-muted">No quiz attempts found.</div>
+                }
+                else
+                {
+                    foreach (var item in Model.RecentQuizAttempts)
+                    {
+                        <div class="border-bottom pb-2 mb-2">
+                            <div class="fw-semibold">@item.QuizTitle</div>
+                            <div class="small text-muted">
+                                Score: @(item.TotalScore?.ToString() ?? "N/A") | @item.Status
+                            </div>
+                        </div>
+                    }
+                }
+            </div>
+        </div>
+
+        <div class="card border-0 shadow-sm">
+            <div class="card-header bg-white">
+                <h5 class="mb-0">Recent Assignments</h5>
+            </div>
+
+            <div class="card-body">
+                @if (!Model.RecentAssignmentResults.Any())
+                {
+                    <div class="text-muted">No assignment submissions found.</div>
+                }
+                else
+                {
+                    foreach (var item in Model.RecentAssignmentResults)
+                    {
+                        <div class="border-bottom pb-2 mb-2">
+                            <div class="fw-semibold">@item.AssignmentTitle</div>
+                            <div class="small text-muted">
+                                Score: @(item.TotalScore?.ToString() ?? "N/A") | @item.GradingStatus
+                            </div>
+                        </div>
+                    }
+                }
+            </div>
+        </div>
+    </div>
+</div>
