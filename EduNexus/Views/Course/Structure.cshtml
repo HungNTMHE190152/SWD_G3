@@ -1,0 +1,29 @@
+﻿@model EduNexus.Models.Course
+
+<h2>@Model.Title - Structure</h2>
+
+<p>@Model.Description</p>
+
+<a class="btn btn-success mb-3"
+   asp-controller="Module"
+   asp-action="Create"
+   asp-route-courseId="@Model.CourseId">
+    Add Module
+</a>
+
+@foreach (var module in Model.Modules.OrderBy(m => m.DisplayOrder))
+{
+    <div class="card mb-3">
+        <div class="card-body">
+            <h4>@module.DisplayOrder. @module.ModuleName</h4>
+            <p>@module.Description</p>
+
+            <a class="btn btn-sm btn-primary"
+               asp-controller="Lesson"
+               asp-action="Index"
+               asp-route-moduleId="@module.ModuleId">
+                View Lessons
+            </a>
+        </div>
+    </div>
+}

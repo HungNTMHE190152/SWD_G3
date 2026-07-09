@@ -1,0 +1,62 @@
+﻿@model EduNexus.Models.Lesson
+
+<h2>Edit Lesson</h2>
+
+<form asp-action="Edit" method="post">
+    <input type="hidden" asp-for="LessonId" />
+    <input type="hidden" asp-for="ModuleId" />
+
+    <div class="mb-3">
+        <label>Lesson Name</label>
+        <input asp-for="LessonName" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label>Lesson Type</label>
+        <select asp-for="LessonType" class="form-control">
+            <option value="MARKDOWN">MARKDOWN</option>
+            <option value="VIDEO">VIDEO</option>
+            <option value="YOUTUBE">YOUTUBE</option>
+        </select>
+    </div>
+
+    <div class="mb-3">
+        <label>Content</label>
+        <textarea asp-for="Content" class="form-control" rows="6"></textarea>
+    </div>
+
+    <div class="mb-3">
+        <label>Video Url</label>
+        <input asp-for="VideoUrl" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label>Duration</label>
+        <input asp-for="Duration" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label>Display Order</label>
+        <input asp-for="DisplayOrder" class="form-control" />
+    </div>
+
+    <div class="form-check mb-3">
+        <input asp-for="IsPublished" class="form-check-input" />
+        <label class="form-check-label">Published</label>
+    </div>
+
+    <button type="submit" name="isPublish" value="false" class="btn btn-secondary">
+        Save Draft
+    </button>
+
+    <button type="submit" name="isPublish" value="true" class="btn btn-success">
+        Save & Publish
+    </button>
+
+    <a asp-controller="Lesson"
+       asp-action="Index"
+       asp-route-moduleId="@Model.ModuleId"
+       class="btn btn-secondary">
+        Back
+    </a>
+</form>

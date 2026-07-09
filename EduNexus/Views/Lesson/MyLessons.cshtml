@@ -1,0 +1,22 @@
+﻿@model EduNexus.Models.Lesson
+
+<h2>@Model.LessonName</h2>
+
+<p><b>Type:</b> @Model.LessonType</p>
+<p><b>Duration:</b> @Model.Duration minutes</p>
+
+<hr />
+
+<div class="card">
+    <div class="card-body">
+        @Model.Content
+    </div>
+</div>
+
+<form asp-controller="Lesson" asp-action="Complete" method="post" class="mt-3">
+    @Html.AntiForgeryToken()
+    <input type="hidden" name="lessonId" value="@Model.LessonId" />
+    <button type="submit" class="btn btn-success">
+        Mark as Completed
+    </button>
+</form>
