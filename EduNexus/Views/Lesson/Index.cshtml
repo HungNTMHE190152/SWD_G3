@@ -1,0 +1,63 @@
+﻿@model List<EduNexus.Models.Lesson>
+
+<h2>Lesson List</h2>
+
+<a class="btn btn-success mb-3"
+   asp-controller="Lesson"
+   asp-action="Create"
+   asp-route-moduleId="@ViewBag.ModuleId">
+    Add Lesson
+</a>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Order</th>
+            <th>Lesson Name</th>
+            <th>Type</th>
+            <th>Published</th>
+            <th></th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @foreach (var lesson in Model)
+        {
+            <tr>
+                <td>@lesson.DisplayOrder</td>
+                <td>@lesson.LessonName</td>
+                <td>@lesson.LessonType</td>
+                <td>@lesson.IsPublished</td>
+                <td>
+                    <a class="btn btn-sm btn-warning"
+                       asp-controller="Lesson"
+                       asp-action="Edit"
+                       asp-route-id="@lesson.LessonId">
+                        Edit
+                    </a>
+
+                    @if (lesson.IsPublished != true)
+                    {
+                        <form asp-action="Publish" method="post" style="display:inline">
+                            @Html.AntiForgeryToken()
+                            <input type="hidden" name="lessonId" value="@lesson.LessonId" />
+                            <input type="hidden" name="moduleId" value="@ViewBag.ModuleId" />
+                            <button type="submit" class="btn btn-sm btn-primary">
+                                Publish
+                            </button>
+                        </form>
+                    }
+
+                    <form asp-action="Delete" method="post" style="display:inline">
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" name="id" value="@lesson.LessonId" />
+                        <input type="hidden" name="moduleId" value="@ViewBag.ModuleId" />
+                        <button type="submit" class="btn btn-sm btn-danger">
+                            Delete
+                        </button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

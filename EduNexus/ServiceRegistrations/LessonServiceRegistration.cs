@@ -1,10 +1,17 @@
-﻿namespace EduNexus.ServiceRegistrations;
+﻿using EduNexus.Services.Implementations;
+using EduNexus.Services.Interfaces;
+
+namespace EduNexus.ServiceRegistrations;
 
 public static class LessonServiceRegistration
 {
     public static IServiceCollection AddLessonServices(this IServiceCollection services)
     {
-        // Person 2 will register Course/Lesson/Progress services here.
+        services.AddScoped<ICourseService, CourseService>();
+        services.AddScoped<IModuleService, ModuleService>();
+        services.AddScoped<ILessonService, LessonService>();
+        services.AddScoped<IProgressService, ProgressService>();
+
         return services;
     }
 }
