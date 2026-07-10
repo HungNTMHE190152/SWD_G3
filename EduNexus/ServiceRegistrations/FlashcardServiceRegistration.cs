@@ -1,10 +1,14 @@
-﻿namespace EduNexus.ServiceRegistrations;
+﻿using EduNexus.Services.Implementations;
+using EduNexus.Services.Interfaces;
+
+namespace EduNexus.ServiceRegistrations;
 
 public static class FlashcardServiceRegistration
 {
     public static IServiceCollection AddFlashcardServices(this IServiceCollection services)
     {
-        // Person 4 will register Flashcard services here.
+        services.AddScoped<IFlashcardService, FlashcardService>();
+
         return services;
     }
 }

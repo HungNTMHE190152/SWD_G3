@@ -1,0 +1,84 @@
+﻿@model EduNexus.ViewModels.Flashcards.FlashcardSetFormViewModel
+
+@{
+    ViewData["Title"] = "Edit Flashcard Set";
+}
+
+<div class="container mt-4">
+
+    <h2>Edit Flashcard Set</h2>
+
+    <form asp-action="EditSet" method="post">
+
+        @Html.AntiForgeryToken()
+
+        <input asp-for="FlashcardSetId" type="hidden" />
+
+        <div class="mb-3">
+
+            <label class="form-label">Course</label>
+
+            <select asp-for="CourseId" class="form-select">
+
+                <option value="">-- Select Course --</option>
+
+                @foreach (var course in Model.Courses)
+                {
+                    <option value="@course.CourseId">
+                        @course.CourseTitle
+                    </option>
+                }
+
+            </select>
+
+            <span asp-validation-for="CourseId" class="text-danger"></span>
+
+        </div>
+
+        <div class="mb-3">
+
+            <label asp-for="SetName" class="form-label"></label>
+
+            <input asp-for="SetName" class="form-control" />
+
+            <span asp-validation-for="SetName" class="text-danger"></span>
+
+        </div>
+
+        <div class="mb-3">
+
+            <label asp-for="Description" class="form-label"></label>
+
+            <textarea asp-for="Description" class="form-control"></textarea>
+
+        </div>
+
+        <div class="form-check mb-3">
+
+            <input asp-for="IsAIGenerated" class="form-check-input" />
+
+            <label asp-for="IsAIGenerated" class="form-check-label"></label>
+
+        </div>
+
+        <div class="d-flex gap-2">
+
+            <button type="submit" class="btn btn-primary">
+                Save Changes
+            </button>
+
+            <a asp-action="Index" class="btn btn-secondary">
+                Cancel
+            </a>
+
+        </div>
+
+    </form>
+
+</div>
+
+@section Scripts {
+
+    <partial name="_ValidationScriptsPartial" />
+
+}
