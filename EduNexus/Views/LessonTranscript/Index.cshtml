@@ -1,0 +1,30 @@
+﻿@model EduNexus.Models.LessonTranscript?
+
+<h2>Lesson Transcript</h2>
+
+<form asp-action="Generate" method="post">
+    <input type="hidden" name="lessonId" value="@ViewBag.LessonId" />
+    <button class="btn btn-success">Generate Fake Transcript</button>
+</form>
+
+<hr />
+
+@if (Model == null)
+{
+    <p>No transcript generated yet.</p>
+}
+else
+{
+    <h4>Status</h4>
+    <p>@Model.Status</p>
+
+    <h4>Raw Transcript</h4>
+    <div class="card card-body">
+        @Model.RawTranscript
+    </div>
+
+    <h4 class="mt-3">Summary</h4>
+    <div class="card card-body">
+        @Model.FormattedSummary
+    </div>
+}

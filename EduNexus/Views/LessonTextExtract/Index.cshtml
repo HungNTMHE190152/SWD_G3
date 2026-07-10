@@ -1,0 +1,26 @@
+﻿<h2>Lesson Text Extract</h2>
+
+@if (ViewBag.Lesson == null)
+{
+    <p>Lesson not found.</p>
+}
+else
+{
+    <h4>Extracted From Lesson Content</h4>
+    <div class="card card-body">
+        @ViewBag.Lesson.Content
+    </div>
+
+    <h4 class="mt-3">Extracted From Transcript</h4>
+
+    @if (ViewBag.Transcript == null)
+    {
+        <p>No transcript available. Please generate transcript first.</p>
+    }
+    else
+    {
+        <div class="card card-body">
+            @ViewBag.Transcript.RawTranscript
+        </div>
+    }
+}

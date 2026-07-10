@@ -56,7 +56,24 @@ public class LessonService : ILessonService
 
         if (lesson == null) return;
 
+        var progresses = await _context.Progresses
+            .Where(p => p.LessonId == lessonId)
+            .ToListAsync();
+
+        var resources = await _context.Resources
+            .Where(r => r.LessonId == lessonId)
+            .ToListAsync();
+
+        var transcripts = await _context.LessonTranscripts
+            .Where(t => t.LessonId == lessonId)
+            .ToListAsync();
+
+        _context.Progresses.RemoveRange(progresses);
+        _context.Resources.RemoveRange(resources);
+        _context.LessonTranscripts.RemoveRange(transcripts);
+
         _context.Lessons.Remove(lesson);
+
         await _context.SaveChangesAsync();
     }
     public async Task<List<Lesson>> GetPublishedLessonsForStudentAsync(long studentId)

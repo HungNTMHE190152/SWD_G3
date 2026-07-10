@@ -11,7 +11,9 @@ public static class LessonServiceRegistration
         services.AddScoped<IModuleService, ModuleService>();
         services.AddScoped<ILessonService, LessonService>();
         services.AddScoped<IProgressService, ProgressService>();
-
+        services.AddScoped<IResourceService, ResourceService>();
+        services.AddScoped<ILessonTranscriptService, LessonTranscriptService>();
+        services.AddScoped<IAiLessonService, AiLessonService>();
         return services;
     }
 }

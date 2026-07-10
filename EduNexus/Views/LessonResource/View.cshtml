@@ -1,0 +1,36 @@
+﻿@model List<EduNexus.Models.Resource>
+
+<h2>Lesson Resources</h2>
+
+@if (!Model.Any())
+{
+    <p>No resources available.</p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Type</th>
+                <th>Size</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.ResourceName</td>
+                    <td>@item.FileType</td>
+                    <td>@item.FileSize bytes</td>
+                    <td>
+                        <a href="@item.FileUrl" target="_blank" class="btn btn-sm btn-primary">
+                            Download / Open
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
