@@ -1,0 +1,299 @@
+﻿@model EduNexus.ViewModels.Flashcards.FlashcardPracticeViewModel
+@using System.Text.Json
+
+@{
+    ViewData["Title"] = "Flashcard Practice";
+}
+
+<style>
+
+    .selected-correct {
+        background: #198754 !important;
+        color: white !important;
+    }
+
+    .selected-incorrect {
+        background: #dc3545 !important;
+        color: white !important;
+    }
+
+    .practice-card-wrapper {
+        perspective: 1200px;
+    }
+
+    .practice-card {
+        width: 100%;
+        height: 360px;
+        position: relative;
+        transform-style: preserve-3d;
+        transition: transform .6s;
+        cursor: pointer;
+    }
+
+    .practice-card.flipped {
+        transform: rotateY(180deg);
+    }
+
+    .practice-face {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        border-radius: 20px;
+        background: #fff;
+        box-shadow: 0 .25rem 1rem rgba(0,0,0,.12);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 40px;
+        text-align: center;
+        font-size: 1.5rem;
+        font-weight: 600;
+        backface-visibility: hidden;
+    }
+
+    .practice-back {
+        transform: rotateY(180deg);
+        background: #0d6efd;
+        color: white;
+    }
+
+</style>
+
+<div class="container py-4">
+
+    <div id="practiceArea">
+
+        <div class="mb-4">
+
+            <h2>@Model.SetName</h2>
+
+            <p class="text-muted">
+                @Model.TotalCards Flashcards
+            </p>
+
+        </div>
+
+        @if (!Model.Flashcards.Any())
+        {
+            <div class="alert alert-warning">
+                No flashcards found.
+            </div>
+        }
+        else
+        {
+            var firstCard = Model.Flashcards.First();
+
+            <div class="d-flex justify-content-between align-items-center mb-3">
+
+                <h5 class="mb-0">
+                    Progress
+                </h5>
+
+                <span id="progressText">
+                    1 / @Model.TotalCards
+                </span>
+
+            </div>
+
+            <div class="progress mb-4">
+
+                <div id="progressBar"
+                     class="progress-bar"
+                     style="width:@(100.0 / Model.TotalCards)%">
+                </div>
+
+            </div>
+
+            <div class="practice-card-wrapper">
+
+                <div id="practiceCard" class="practice-card">
+
+                    <div class="practice-face">
+
+                        <div id="frontContent">
+                            @firstCard.FrontContent
+                        </div>
+
+                    </div>
+
+                    <div class="practice-face practice-back">
+
+                        <div id="backContent">
+                            @firstCard.BackContent
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="text-center mt-4">
+
+                <button id="flipButton"
+                        class="btn btn-primary">
+                    Flip Card
+                </button>
+
+            </div>
+
+            <div class="row mt-4">
+
+                <div class="col-6">
+
+                    <button id="incorrectButton"
+                            class="btn btn-outline-danger w-100">
+
+                        ❌ Incorrect
+
+                    </button>
+
+                </div>
+
+                <div class="col-6">
+
+                    <button id="correctButton"
+                            class="btn btn-success w-100">
+
+                        ✅ Correct
+
+                    </button>
+
+                </div>
+
+            </div>
+
+            <div class="d-flex justify-content-between mt-4">
+
+                <button id="previousButton"
+                        class="btn btn-outline-secondary">
+
+                    Previous
+
+                </button>
+
+                <button id="nextButton"
+                        class="btn btn-primary">
+
+                    Next
+
+                </button>
+
+            </div>
+
+            <script>
+
+                window.flashcardPracticeData =
+                    @Html.Raw(JsonSerializer.Serialize(Model.Flashcards));
+
+            </script>
+        }
+
+    </div>
+
+    <div id="resultArea"
+         class="d-none">
+
+        <div class="card shadow-lg border-0">
+
+            <div class="card-body text-center p-5">
+
+                <h1 class="display-5 mb-3">
+
+                    🎉 Practice Completed
+
+                </h1>
+
+                <p class="text-muted mb-5">
+
+                    Great job! Here is your result.
+
+                </p>
+
+                <div class="row text-center">
+
+                    <div class="col-md-3">
+
+                        <h2 id="resultCorrect">0</h2>
+
+                        <small>Correct</small>
+
+                    </div>
+
+                    <div class="col-md-3">
+
+                        <h2 id="resultIncorrect">0</h2>
+
+                        <small>Incorrect</small>
+
+                    </div>
+
+                    <div class="col-md-3">
+
+                        <h2 id="resultTotal">0</h2>
+
+                        <small>Total</small>
+
+                    </div>
+
+                    <div class="col-md-3">
+
+                        <h2 id="resultScore">0%</h2>
+
+                        <small>Accuracy</small>
+
+                    </div>
+
+                </div>
+
+                <hr class="my-5" />
+
+                <a asp-action="Library"
+                   class="btn btn-primary">
+
+                    Back to Library
+
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<div id="savingOverlay"
+     class="position-fixed top-0 start-0 w-100 h-100 d-none"
+     style="background:rgba(255,255,255,.8);z-index:9999;">
+
+    <div class="d-flex justify-content-center align-items-center w-100 h-100">
+
+        <div class="text-center">
+
+            <div class="spinner-border text-primary mb-3"
+                 style="width:3rem;height:3rem;"
+                 role="status">
+
+                <span class="visually-hidden">Loading...</span>
+
+            </div>
+
+            <h5>Saving Practice...</h5>
+
+            <small class="text-muted">
+
+                Please wait...
+
+            </small>
+
+        </div>
+
+    </div>
+
+</div>
+
+@section Scripts
+{
+    <script src="~/js/flashcard-practice.js" asp-append-version="true"></script>
+}

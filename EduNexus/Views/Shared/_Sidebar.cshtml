@@ -1,0 +1,145 @@
+@using EduNexus.Constants
+@using EduNexus.Helpers
+
+@{
+    string role = User.GetCurrentRole();
+    string currentController = ViewContext.RouteData.Values["controller"]?.ToString() ?? "";
+    string currentAction = ViewContext.RouteData.Values["action"]?.ToString() ?? "";
+
+    bool IsActive(string controller, string action)
+    {
+        return currentController == controller && currentAction == action;
+    }
+}
+
+<ul class="sidebar-menu">
+    @if (role == RoleNames.Student)
+    {
+        <li>
+            <a class="sidebar-link @(IsActive("Dashboard", "Student") ? "active" : "")"
+               asp-controller="Dashboard"
+               asp-action="Student">
+                Dashboard
+            </a>
+        </li>
+
+        <li>
+            <a class="sidebar-link @(IsActive("Dashboard", "PersonalProgress") ? "active" : "")"
+               asp-controller="Dashboard"
+               asp-action="PersonalProgress">
+                Personal Progress
+            </a>
+        </li>
+
+        <li>
+            <a class="sidebar-link"
+               asp-controller="Lesson"
+               asp-action="MyLessons">
+                My Lessons
+            </a>
+        </li>
+
+        <li>
+            <a class="sidebar-link"
+               asp-controller="Submission"
+               asp-action="MyAssignments">
+                Assignments
+            </a>
+        </li>
+
+        <li>
+            <a class="sidebar-link"
+               asp-controller="FlashcardPractice"
+               asp-action="Library">
+                Flashcard Library
+            </a>
+        </li>
+
+        <li>
+            <a class="sidebar-link @(IsActive("QuizAttempt", "Index") ? "active" : "")"
+               asp-controller="QuizAttempt"
+               asp-action="Index">
+                New Quiz
+            </a>
+        </li>
+
+        <li>
+            <a class="sidebar-link @(IsActive("QuizResult", "History") ? "active" : "")"
+               asp-controller="QuizResult"
+               asp-action="History"
+               asp-route-quizId="0">
+                Quiz History
+            </a>
+        </li>
+    }
+
+    @if (role == RoleNames.Sme)
+    {
+        <li>
+            <a class="sidebar-link @(IsActive("Dashboard", "SmeWorkspace") ? "active" : "")"
+               asp-controller="Dashboard"
+               asp-action="SmeWorkspace">
+                SME Workspace
+            </a>
+        </li>
+
+        <li>
+            <a class="sidebar-link"
+               asp-controller="Course"
+               asp-action="Index">
+                Course List
+            </a>
+        </li>
+
+        <li>
+            <a class="sidebar-link"
+               asp-controller="Lesson"
+               asp-action="Index">
+                Lesson Editor
+            </a>
+        </li>
+
+        <li>
+            <a class="sidebar-link"
+               asp-controller="Assignment"
+               asp-action="Index">
+                Assignments
+            </a>
+        </li>
+
+        <li>
+            <a class="sidebar-link"
+               asp-controller="Flashcard"
+               asp-action="Index">
+                Flashcard Editor
+            </a>
+        </li>
+
+        <li>
+            <a class="sidebar-link"
+               asp-controller="QuestionBank"
+               asp-action="Index">
+                Question Bank
+            </a>
+        </li>
+
+        <li>
+            <a class="sidebar-link"
+               asp-controller="Quiz"
+               asp-action="Manage">
+                Quiz Management
+            </a>
+        </li>
+    }
+
+    @if (role == RoleNames.Admin)
+    {
+        <li>
+            <a class="sidebar-link"
+               asp-controller="Home"
+               asp-action="Index">
+                Admin Home
+            </a>
+        </li>
+    }
+</ul>

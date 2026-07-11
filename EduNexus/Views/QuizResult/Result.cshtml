@@ -1,0 +1,17 @@
+@model EduNexus.ViewModels.Quizzes.QuizResultViewModel
+@{ ViewData["Title"] = "Quiz Result"; }
+<h2>Quiz Result: @Model.QuizTitle</h2>
+<div class="card mt-4">
+    <div class="card-body">
+        <h4>Status: @Model.Status</h4>
+        <p><strong>Score:</strong> @Model.TotalScore / @Model.TotalQuestions</p>
+        <p><strong>Correct Answers:</strong> @Model.CorrectAnswers / @Model.TotalQuestions</p>
+        @if(Model.PassingScore.HasValue) {
+            <p><strong>Passing Score Requirement:</strong> @Model.PassingScore</p>
+            var passed = (Model.TotalScore ?? 0) >= Model.PassingScore.Value;
+            <p><strong>Result:</strong> <span class="badge @(passed ? "bg-success" : "bg-danger")">@(passed ? "PASSED" : "FAILED")</span></p>
+        }
+        <a asp-controller="QuizReview" asp-action="Review" asp-route-attemptId="@Model.AttemptId" class="btn btn-info">Review Answers</a>
+        <a asp-controller="QuizAttempt" asp-action="Index" class="btn btn-secondary">Back to Quizzes</a>
+    </div>
+</div>

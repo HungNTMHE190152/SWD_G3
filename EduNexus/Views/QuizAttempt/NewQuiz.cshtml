@@ -1,0 +1,15 @@
+@model EduNexus.ViewModels.Quizzes.NewQuizViewModel
+@{ ViewData["Title"] = "Quiz Details"; }
+<h2>@Model.QuizTitle</h2>
+<p>@Model.Description</p>
+<ul class="list-group mb-3">
+    <li class="list-group-item"><strong>Duration:</strong> @Model.Duration minutes</li>
+    <li class="list-group-item"><strong>Questions:</strong> @Model.QuestionCount</li>
+    <li class="list-group-item"><strong>Passing Score:</strong> @Model.PassingScore</li>
+</ul>
+
+<form asp-action="Start" method="post">
+    <input type="hidden" name="quizId" value="@Model.QuizId" />
+    <button type="submit" class="btn btn-success btn-lg">Start Quiz</button>
+    <a asp-action="Index" class="btn btn-secondary btn-lg">Back</a>
+</form>

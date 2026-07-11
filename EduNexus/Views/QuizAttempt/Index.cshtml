@@ -1,0 +1,22 @@
+@model IEnumerable<EduNexus.ViewModels.Quizzes.NewQuizViewModel>
+@{ ViewData["Title"] = "Available Quizzes"; }
+<h2>Available Quizzes</h2>
+<table class="table">
+    <thead><tr><th>Title</th><th>Questions</th><th>Duration</th><th>Status</th><th>Actions</th></tr></thead>
+    <tbody>
+    @foreach(var item in Model) {
+        <tr>
+            <td>@item.QuizTitle</td>
+            <td>@item.QuestionCount</td>
+            <td>@item.Duration min</td>
+            <td>@(item.HasPreviousAttempts ? $"Attempted ({item.PreviousAttemptCount})" : "Not Attempted")</td>
+            <td>
+                <a asp-action="NewQuiz" asp-route-id="@item.QuizId" class="btn btn-sm btn-primary">Details</a>
+                @if(item.HasPreviousAttempts) {
+                    <a asp-controller="QuizResult" asp-action="History" asp-route-quizId="@item.QuizId" class="btn btn-sm btn-info">History</a>
+                }
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>

@@ -1,0 +1,37 @@
+@model List<EduNexus.ViewModels.Questions.QuestionFormViewModel>
+@{ ViewData["Title"] = "Review Generated Questions"; }
+
+<h2>Review Generated Questions</h2>
+<p class="text-muted">The AI has generated the following questions. Please review them before saving to the question bank.</p>
+
+@for(int i = 0; i < Model.Count; i++) {
+    var q = Model[i];
+    <div class="card mb-3 border-info">
+        <div class="card-header bg-info text-white">
+            <strong>Question @(i+1):</strong> @q.QuestionContent
+        </div>
+        <div class="card-body">
+            <p><strong>Type:</strong> @q.QuestionType | <strong>Difficulty:</strong> @q.Difficulty</p>
+            <p><strong>Explanation:</strong> @q.Explanation</p>
+            
+            <ul class="list-group">
+                @foreach(var choice in q.Choices) {
+                    <li class="list-group-item">
+                        @choice.ChoiceContent
+                        @if (choice.IsCorrect) {
+                            <span class="badge bg-success float-end">Correct</span>
+                        }
+                    </li>
+                }
+            </ul>
+        </div>
+    </div>
+}
+
+<form asp-action="Approve" method="post" class="d-inline">
+    <input type="hidden" name="bankId" value="@ViewBag.BankId" />
+    <input type="hidden" name="topic" value="@ViewBag.Topic" />
+    <button type="submit" class="btn btn-success">Approve and Save to Bank</button>
+</form>
+
+<a asp-action="Index" asp-route-bankId="@ViewBag.BankId" class="btn btn-danger">Discard and Try Again</a>

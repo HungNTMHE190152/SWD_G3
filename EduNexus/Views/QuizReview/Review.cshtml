@@ -1,0 +1,43 @@
+@model EduNexus.ViewModels.Quizzes.QuizReviewViewModel
+@{ ViewData["Title"] = "Quiz Review"; }
+<h2>Quiz Review: @Model.QuizTitle</h2>
+<p>Total Score: @Model.TotalScore</p>
+<a asp-controller="QuizResult" asp-action="History" asp-route-quizId="@Model.Questions.FirstOrDefault()?.QuestionId" class="btn btn-secondary mb-3">Back to History</a>
+
+@for(int i = 0; i < Model.Questions.Count; i++) {
+    var q = Model.Questions[i];
+    <div class="card mb-3 border-@(q.IsCorrect == true ? "success" : "danger")">
+        <div class="card-header">
+            <strong>Question @(i+1):</strong> @q.QuestionContent
+            <span class="float-end badge bg-@(q.IsCorrect == true ? "success" : "danger")">@(q.IsCorrect == true ? "Correct" : "Incorrect")</span>
+        </div>
+        <div class="card-body">
+            @if(q.QuestionType == "Single Choice" || q.QuestionType == "True/False") {
+                <ul class="list-group">
+                    @foreach(var choice in q.Choices) {
+                        var isSelected = choice.IsSelected;
+                        var isCorrect = choice.IsCorrect;
+                        string badge = "";
+                        if (isSelected && isCorrect) badge = "<span class='badge bg-success'>Your Answer (Correct)</span>";
+                        else if (isSelected && !isCorrect) badge = "<span class='badge bg-danger'>Your Answer (Incorrect)</span>";
+                        else if (!isSelected && isCorrect) badge = "<span class='badge bg-warning'>Correct Answer</span>";
+
+                        <li class="list-group-item">
+                            @choice.ChoiceContent @Html.Raw(badge)
+                        </li>
+                    }
+                </ul>
+            } else if(q.QuestionType == "Short Answer") {
+                <p><strong>Your Answer:</strong> @q.AnswerText</p>
+                var correctChoice = q.Choices.FirstOrDefault(c => c.IsCorrect);
+                <p><strong>Correct Answer:</strong> @(correctChoice?.ChoiceContent)</p>
+            }
+            
+            @if(!string.IsNullOrWhiteSpace(q.Explanation)) {
+                <div class="alert alert-info mt-3">
+                    <strong>Explanation:</strong> @q.Explanation
+                </div>
+            }
+        </div>
+    </div>
+}

@@ -1,0 +1,37 @@
+﻿@model EduNexus.Models.Module
+
+<h2>Create Module</h2>
+
+<form asp-action="Create" method="post">
+    @Html.AntiForgeryToken()
+    <input type="hidden" asp-for="CourseId" />
+
+    <div class="mb-3">
+        <label>Module Name</label>
+        <input asp-for="ModuleName" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label>Description</label>
+        <textarea asp-for="Description" class="form-control"></textarea>
+    </div>
+
+    <div class="mb-3">
+        <label>Display Order</label>
+        <input asp-for="DisplayOrder" class="form-control" />
+    </div>
+
+    <div class="form-check mb-3">
+        <input asp-for="IsPublished" class="form-check-input" />
+        <label class="form-check-label">Published</label>
+    </div>
+
+    <button type="submit" class="btn btn-success">Save</button>
+
+    <a asp-controller="Course"
+       asp-action="Structure"
+       asp-route-id="@Model.CourseId"
+       class="btn btn-secondary">
+        Back
+    </a>
+</form>

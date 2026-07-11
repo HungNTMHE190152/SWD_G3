@@ -1,0 +1,11 @@
+@{ ViewData["Title"] = "Import Questions"; }
+<h2>Import Questions</h2>
+<div class="alert alert-info">
+    <p>This is a mock placeholder for Question Import functionality. Due to time constraints, this feature is stubbed.</p>
+</div>
+
+<form asp-action="Import" method="post">
+    <input type="hidden" name="bankId" value="@ViewBag.BankId" />
+    <button type="submit" class="btn btn-primary">Mock Import & Save History</button>
+    <a asp-controller="Question" asp-action="Index" asp-route-bankId="@ViewBag.BankId" class="btn btn-secondary">Back to Questions</a>
+</form>

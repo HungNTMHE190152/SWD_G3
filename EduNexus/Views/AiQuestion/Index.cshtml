@@ -1,0 +1,16 @@
+@{ ViewData["Title"] = "AI Question Generator"; }
+
+<h2>Generate Questions with AI</h2>
+<p>Provide a topic or prompt to generate questions for this Question Bank.</p>
+
+<form asp-action="Generate" method="post" class="mt-4">
+    <input type="hidden" name="bankId" value="@ViewBag.BankId" />
+    
+    <div class="mb-3">
+        <label for="topic" class="form-label">Topic or Prompt</label>
+        <textarea id="topic" name="topic" class="form-control" rows="3" placeholder="e.g. Object Oriented Programming principles..." required></textarea>
+    </div>
+    
+    <button type="submit" class="btn btn-primary">Generate</button>
+    <a asp-controller="Question" asp-action="Index" asp-route-bankId="@ViewBag.BankId" class="btn btn-secondary">Cancel</a>
+</form>

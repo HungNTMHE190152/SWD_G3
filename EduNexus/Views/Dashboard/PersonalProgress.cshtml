@@ -1,0 +1,144 @@
+﻿@model EduNexus.ViewModels.Dashboard.PersonalProgressViewModel
+
+@{
+    ViewData["Title"] = "Personal Progress";
+}
+
+<div class="mb-4">
+    <h2 class="fw-bold">Personal Progress</h2>
+    <p class="text-muted">Track your course, quiz, and assignment progress.</p>
+</div>
+
+<div class="card border-0 shadow-sm mb-4">
+    <div class="card-body">
+        <div class="d-flex justify-content-between align-items-center mb-2">
+            <h5 class="mb-0">Overall Progress</h5>
+            <strong>@Model.OverallProgress%</strong>
+        </div>
+
+        <div class="progress" style="height: 10px;">
+            <div class="progress-bar" style="width: @Model.OverallProgress%"></div>
+        </div>
+    </div>
+</div>
+
+<div class="card border-0 shadow-sm mb-4">
+    <div class="card-header bg-white">
+        <h5 class="mb-0">Course Progress</h5>
+    </div>
+
+    <div class="card-body">
+        @if (!Model.CourseProgressList.Any())
+        {
+            <div class="text-muted">No course progress found.</div>
+        }
+        else
+        {
+            <table class="table align-middle">
+                <thead>
+                    <tr>
+                        <th>Course</th>
+                        <th>Lessons</th>
+                        <th style="width: 260px;">Progress</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    @foreach (var item in Model.CourseProgressList)
+                    {
+                        <tr>
+                            <td>@item.CourseTitle</td>
+                            <td>@item.CompletedLessons / @item.TotalLessons</td>
+                            <td>
+                                <div class="d-flex align-items-center gap-2">
+                                    <div class="progress flex-grow-1" style="height: 8px;">
+                                        <div class="progress-bar" style="width: @item.ProgressPercentage%"></div>
+                                    </div>
+                                    <span class="small">@item.ProgressPercentage%</span>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+    </div>
+</div>
+
+<div class="row g-4">
+    <div class="col-lg-6">
+        <div class="card border-0 shadow-sm">
+            <div class="card-header bg-white">
+                <h5 class="mb-0">Quiz Progress</h5>
+            </div>
+
+            <div class="card-body">
+                @if (!Model.QuizProgressList.Any())
+                {
+                    <div class="text-muted">No quiz progress found.</div>
+                }
+                else
+                {
+                    <table class="table align-middle">
+                        <thead>
+                            <tr>
+                                <th>Quiz</th>
+                                <th>Score</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            @foreach (var item in Model.QuizProgressList)
+                            {
+                                <tr>
+                                    <td>@item.QuizTitle</td>
+                                    <td>@(item.TotalScore?.ToString() ?? "N/A")</td>
+                                    <td>@item.Status</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                }
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-6">
+        <div class="card border-0 shadow-sm">
+            <div class="card-header bg-white">
+                <h5 class="mb-0">Assignment Progress</h5>
+            </div>
+
+            <div class="card-body">
+                @if (!Model.AssignmentProgressList.Any())
+                {
+                    <div class="text-muted">No assignment progress found.</div>
+                }
+                else
+                {
+                    <table class="table align-middle">
+                        <thead>
+                            <tr>
+                                <th>Assignment</th>
+                                <th>Score</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            @foreach (var item in Model.AssignmentProgressList)
+                            {
+                                <tr>
+                                    <td>@item.AssignmentTitle</td>
+                                    <td>@(item.TotalScore?.ToString() ?? "N/A")</td>
+                                    <td>@item.GradingStatus</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                }
+            </div>
+        </div>
+    </div>
+</div>

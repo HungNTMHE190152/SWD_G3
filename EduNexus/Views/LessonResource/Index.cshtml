@@ -1,0 +1,39 @@
+﻿@model List<EduNexus.Models.Resource>
+
+<h2>Lesson Resources</h2>
+
+<form asp-action="Upload" method="post" enctype="multipart/form-data">
+    <input type="hidden" name="lessonId" value="@ViewBag.LessonId" />
+
+    <div class="mb-3">
+        <input type="file" name="file" class="form-control" />
+    </div>
+
+    <button class="btn btn-success">Upload</button>
+</form>
+
+<hr />
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Type</th>
+            <th>Size</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.ResourceName</td>
+                <td>@item.FileType</td>
+                <td>@item.FileSize bytes</td>
+                <td>
+                    <a href="@item.FileUrl" target="_blank">Open</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

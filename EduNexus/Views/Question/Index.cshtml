@@ -1,0 +1,21 @@
+@model IEnumerable<EduNexus.ViewModels.Questions.QuestionListViewModel>
+@{ ViewData["Title"] = "Questions"; }
+<h2>Questions in Bank</h2>
+<a asp-action="Create" asp-route-bankId="@ViewBag.BankId" class="btn btn-primary mb-3">Add Question</a>
+<a asp-controller="QuestionBank" asp-action="Index" class="btn btn-secondary mb-3">Back to Banks</a>
+<table class="table">
+    <thead><tr><th>Content</th><th>Type</th><th>Choices</th><th>AI Gen</th><th>Actions</th></tr></thead>
+    <tbody>
+    @foreach(var item in Model) {
+        <tr>
+            <td>@item.QuestionContent</td>
+            <td>@item.QuestionType</td>
+            <td>@item.ChoiceCount</td>
+            <td>@(item.IsAigenerated == true ? "Yes" : "No")</td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.QuestionId" class="btn btn-sm btn-warning">Edit</a>
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>

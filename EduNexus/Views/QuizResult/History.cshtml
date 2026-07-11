@@ -1,0 +1,22 @@
+@model EduNexus.ViewModels.Quizzes.QuizHistoryViewModel
+@{ ViewData["Title"] = "Quiz History"; }
+<h2>History for @Model.QuizTitle</h2>
+<a asp-controller="QuizAttempt" asp-action="Index" class="btn btn-secondary mb-3">Back to Quizzes</a>
+
+<table class="table">
+    <thead><tr><th>Start Time</th><th>Submit Time</th><th>Score</th><th>Status</th><th>Actions</th></tr></thead>
+    <tbody>
+    @foreach(var item in Model.Attempts) {
+        <tr>
+            <td>@item.StartTime.ToString("g")</td>
+            <td>@item.SubmitTime?.ToString("g")</td>
+            <td>@item.TotalScore</td>
+            <td>@item.Status</td>
+            <td>
+                <a asp-action="Result" asp-route-attemptId="@item.AttemptId" class="btn btn-sm btn-primary">Summary</a>
+                <a asp-controller="QuizReview" asp-action="Review" asp-route-attemptId="@item.AttemptId" class="btn btn-sm btn-info">Detailed Review</a>
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>

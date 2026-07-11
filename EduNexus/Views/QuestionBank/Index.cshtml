@@ -1,0 +1,20 @@
+@model IEnumerable<EduNexus.ViewModels.Questions.QuestionBankListViewModel>
+@{ ViewData["Title"] = "Question Banks"; }
+<h2>Question Banks</h2>
+<a asp-action="Create" asp-route-courseId="@ViewBag.CourseId" class="btn btn-primary mb-3">Create New Bank</a>
+<table class="table">
+    <thead><tr><th>Name</th><th>Public</th><th>Questions</th><th>Actions</th></tr></thead>
+    <tbody>
+    @foreach(var item in Model) {
+        <tr>
+            <td>@item.BankName</td>
+            <td>@(item.IsPublic == true ? "Yes" : "No")</td>
+            <td>@item.QuestionCount</td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.BankId" class="btn btn-sm btn-warning">Edit</a>
+                <a asp-controller="Question" asp-action="Index" asp-route-bankId="@item.BankId" class="btn btn-sm btn-info">Manage Questions</a>
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>
