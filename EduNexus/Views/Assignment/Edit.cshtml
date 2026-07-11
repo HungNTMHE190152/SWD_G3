@@ -1,0 +1,135 @@
+﻿@model EduNexus.ViewModels.Assignment.EditAssignmentViewModel
+
+@{
+    ViewData["Title"] = "Edit Assignment";
+}
+
+<h2>Edit Assignment</h2>
+
+<form asp-action="Edit" method="post">
+
+    <input asp-for="AssignmentId" type="hidden" />
+
+    <div asp-validation-summary="ModelOnly"
+         class="text-danger">
+    </div>
+
+    <div class="mb-3">
+
+        <label asp-for="Title"></label>
+
+        <input asp-for="Title"
+               class="form-control" />
+
+        <span asp-validation-for="Title"
+              class="text-danger"></span>
+
+    </div>
+
+    <div class="mb-3">
+
+        <label asp-for="Description"></label>
+
+        <textarea asp-for="Description"
+                  class="form-control"
+                  rows="4"></textarea>
+
+    </div>
+
+    <div class="mb-3">
+
+        <label asp-for="ModuleId"></label>
+
+        <input asp-for="ModuleId"
+               class="form-control" />
+
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="AssignmentType" class="form-label"></label>
+
+        <select asp-for="AssignmentType" class="form-select">
+            <option value="QUIZ">Quiz</option>
+            <option value="ESSAY">Essay</option>
+            <option value="MIXED">Mixed</option>
+        </select>
+
+        <span asp-validation-for="AssignmentType" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+
+        <label asp-for="TotalScore"></label>
+
+        <input asp-for="TotalScore"
+               class="form-control" />
+
+    </div>
+
+    <div class="mb-3">
+
+        <label asp-for="OpenDate"></label>
+
+        <input asp-for="OpenDate"
+               type="datetime-local"
+               class="form-control" />
+
+    </div>
+
+    <div class="mb-3">
+
+        <label asp-for="DueDate"></label>
+
+        <input asp-for="DueDate"
+               type="datetime-local"
+               class="form-control" />
+
+    </div>
+
+    <div class="form-check">
+
+        <input asp-for="AllowLateSubmission"
+               class="form-check-input" />
+
+        <label asp-for="AllowLateSubmission"
+               class="form-check-label"></label>
+
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Status" class="form-label"></label>
+
+        <select asp-for="Status" class="form-select">
+            <option value="DRAFT">Draft</option>
+            <option value="PUBLISHED">Published</option>
+            <option value="CLOSED">Closed</option>
+        </select>
+
+        <span asp-validation-for="Status" class="text-danger"></span>
+    </div>
+
+    <div class="form-check">
+
+        <input asp-for="IsAIGenerated"
+               class="form-check-input" />
+
+        <label asp-for="IsAIGenerated"
+               class="form-check-label"></label>
+
+    </div>
+    
+
+    <button class="btn btn-success">
+        Update
+    </button>
+
+    <a asp-action="Index"
+       class="btn btn-secondary">
+        Cancel
+    </a>
+
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

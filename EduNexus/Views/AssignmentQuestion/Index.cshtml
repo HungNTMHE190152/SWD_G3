@@ -1,0 +1,244 @@
+﻿@model EduNexus.ViewModels.AssignmentQuestion.AssignmentQuestionManagementViewModel
+
+@{
+    ViewData["Title"] = "Manage Assignment Questions";
+}
+
+<div class="container-fluid">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2>Manage Assignment Questions</h2>
+            <h5 class="text-muted">@Model.AssignmentTitle</h5>
+        </div>
+
+        <a asp-controller="Assignment"
+           asp-action="Details"
+           asp-route-id="@Model.AssignmentId"
+           class="btn btn-secondary">
+            Back to Assignment
+        </a>
+    </div>
+
+    <div class="row">
+
+        <!-- LEFT -->
+
+        <div class="col-md-6">
+
+            <div class="card shadow-sm">
+
+                <div class="card-header bg-primary text-white">
+
+                    <h5 class="mb-0">
+                        Available Questions
+                    </h5>
+
+                </div>
+
+                <div class="card-body">
+
+                    @if (!Model.AvailableQuestions.Any())
+                    {
+                        <div class="alert alert-info">
+                            No available questions.
+                        </div>
+                    }
+                    else
+                    {
+                        <table class="table table-hover">
+
+                            <thead>
+
+                                <tr>
+
+                                    <th>ID</th>
+
+                                    <th>Question</th>
+
+                                    <th>Type</th>
+
+                                    <th>Difficulty</th>
+
+                                    <th></th>
+
+                                </tr>
+
+                            </thead>
+
+                            <tbody>
+
+                                @foreach (var item in Model.AvailableQuestions)
+                                {
+                                    <tr>
+
+                                        <td>@item.QuestionId</td>
+
+                                        <td>@item.QuestionContent</td>
+
+                                        <td>@item.QuestionType</td>
+
+                                        <td>@item.Difficulty</td>
+
+                                        <td>
+
+                                            <form asp-action="AddQuestion"
+                                                  method="post">
+
+                                                <input type="hidden"
+                                                       name="assignmentId"
+                                                       value="@Model.AssignmentId" />
+
+                                                <input type="hidden"
+                                                       name="questionId"
+                                                       value="@item.QuestionId" />
+
+                                                <button class="btn btn-success btn-sm">
+
+                                                    Add
+
+                                                </button>
+
+                                            </form>
+
+                                        </td>
+
+                                    </tr>
+                                }
+
+                            </tbody>
+
+                        </table>
+                    }
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- RIGHT -->
+
+        <div class="col-md-6">
+
+            <div class="card shadow-sm">
+
+                <div class="card-header bg-success text-white">
+
+                    <h5 class="mb-0">
+
+                        Questions In Assignment
+
+                    </h5>
+
+                </div>
+
+                <div class="card-body">
+
+                    @if (!Model.CurrentQuestions.Any())
+                    {
+                        <div class="alert alert-warning">
+
+                            Assignment has no questions.
+
+                        </div>
+                    }
+                    else
+                    {
+                        <form asp-action="SaveChanges" method="post">
+
+                            <input type="hidden"
+                                   asp-for="AssignmentId" />
+
+                            <table class="table table-striped">
+
+                                <thead>
+                                    <tr>
+                                        <th>Order</th>
+                                        <th>Question</th>
+                                        <th>Type</th>
+                                        <th>Score</th>
+                                        <th>Remove</th>
+                                    </tr>
+                                </thead>
+
+                                <tbody>
+
+                                    @for (int i = 0; i < Model.CurrentQuestions.Count; i++)
+                                    {
+                                        <tr>
+
+                                            <td>
+
+                                                <input asp-for="CurrentQuestions[i].AssignmentQuestionId"
+                                                       type="hidden" />
+
+                                                <input asp-for="CurrentQuestions[i].AssignmentId"
+                                                       type="hidden" />
+
+                                                <input asp-for="CurrentQuestions[i].DisplayOrder"
+                                                       class="form-control"
+                                                       style="width:80px;" />
+
+                                            </td>
+
+                                            <td>
+
+                                                @Model.CurrentQuestions[i].QuestionContent
+
+                                                <input asp-for="CurrentQuestions[i].QuestionId"
+                                                       type="hidden" />
+
+                                            </td>
+
+                                            <td>
+
+                                                @Model.CurrentQuestions[i].QuestionType
+
+                                            </td>
+
+                                            <td>
+
+                                                <input asp-for="CurrentQuestions[i].Score"
+                                                       class="form-control"
+                                                       style="width:90px;" />
+
+                                            </td>
+
+                                            <td>
+
+                                                <button type="submit"
+                                                        formaction="@Url.Action("RemoveQuestion", "AssignmentQuestion")"
+                                                        formmethod="post"
+                                                        name="assignmentQuestionId"
+                                                        value="@Model.CurrentQuestions[i].AssignmentQuestionId"
+                                                        class="btn btn-danger btn-sm">
+                                                    Remove
+                                                </button>
+
+                                            </td>
+
+                                        </tr>
+                                    }
+
+                                </tbody>
+
+                            </table>
+
+                            <button type="submit"
+                                    class="btn btn-success">
+                                Save Changes
+                            </button>
+
+                        </form>
+                    }
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

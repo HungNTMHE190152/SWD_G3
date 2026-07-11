@@ -1,0 +1,40 @@
+﻿
+@model EduNexus.ViewModels.Rubric.CreateRubricViewModel
+
+@{
+    ViewData["Title"] = "Tạo Rubric mới";
+}
+
+<div class="container mt-4">
+    <h2>Tạo Rubric cho Assignment</h2>
+    <form asp-action="Create" method="post">
+        <input type="hidden" asp-for="AssignmentId" />
+
+        <div class="mb-3">
+            <label asp-for="RubricName" class="form-label"></label>
+            <input asp-for="RubricName" class="form-control" />
+            <span asp-validation-for="RubricName" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Description" class="form-label"></label>
+            <textarea asp-for="Description" class="form-control" rows="4"></textarea>
+            <span asp-validation-for="Description" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="TotalWeight" class="form-label"></label>
+            <input asp-for="TotalWeight" type="number" step="0.01" class="form-control" />
+            <span asp-validation-for="TotalWeight" class="text-danger"></span>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Tạo Rubric</button>
+        <a asp-action="Index" asp-route-assignmentId="@Model.AssignmentId" class="btn btn-secondary">Hủy</a>
+    </form>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

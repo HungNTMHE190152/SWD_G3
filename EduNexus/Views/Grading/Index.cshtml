@@ -1,0 +1,41 @@
+﻿@model List<EduNexus.ViewModels.Assignment.AssignmentGradingListViewModel>
+
+@{
+    ViewData["Title"] = "Quản lý Chấm bài";
+}
+
+<div class="container mt-4">
+    <h2>Quản lý Chấm bài theo Rubric</h2>
+    <p class="text-muted">Chọn Assignment để xem danh sách bài nộp</p>
+
+    <div class="row">
+        @if (Model == null || !Model.Any())
+        {
+            <div class="col-12">
+                <div class="alert alert-info">Chưa có Assignment nào có bài nộp.</div>
+            </div>
+        }
+        else
+        {
+            @foreach (var item in Model)
+            {
+                <div class="col-md-6 col-lg-4 mb-4">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h5 class="card-title">@item.AssignmentTitle</h5>
+                            <p class="card-text">
+                                <span class="badge bg-primary">@item.SubmissionCount bài nộp</span>
+                            </p>
+                        </div>
+                        <div class="card-footer">
+                            <a asp-action="Submissions" asp-route-assignmentId="@item.AssignmentId"
+                               class="btn btn-primary w-100">
+                                Xem Bài Nộp
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+    </div>
+</div>

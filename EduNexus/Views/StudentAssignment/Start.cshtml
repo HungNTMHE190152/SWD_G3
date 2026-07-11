@@ -1,0 +1,53 @@
+﻿@model EduNexus.ViewModels.Student.StudentAssignmentWorkspaceViewModel
+
+@{
+    ViewData["Title"] = Model.Title;
+}
+
+<div class="container mt-4">
+    <div class="card shadow">
+        <div class="card-header bg-info text-white">
+            <h4>@Model.Title</h4>
+            <small>Trạng thái: @Model.Status | Lần lưu cuối: @(Model.LastSaved?.ToString("dd/MM/yyyy HH:mm"))</small>
+        </div>
+        <div class="card-body">
+            <form asp-action="SaveDraft" method="post">
+                <input type="hidden" asp-for="SubmissionId" />
+                <input type="hidden" asp-for="AssignmentId" />
+                <input type="hidden" asp-for="StudentId" />
+
+                <div class="mb-4">
+                    <h5>Mô tả bài tập</h5>
+                    <p>@Model.Description</p>
+                </div>
+
+                @if (Model.AssignmentType.ToUpper().Contains("ESSAY") || Model.AssignmentType.ToUpper().Contains("MIXED"))
+                {
+                    <div class="mb-4">
+                        <label class="form-label fw-bold">Bài làm của bạn (Essay)</label>
+                        <textarea asp-for="SubmissionText" class="form-control" rows="15"></textarea>
+                    </div>
+                }
+
+                @if (Model.Questions.Any())
+                {
+                    <h5>Câu hỏi</h5>
+                    @for (int i = 0; i < Model.Questions.Count; i++)
+                    {
+                        var q = Model.Questions[i];
+                        <div class="mb-4 border p-3 rounded">
+                            <input type="hidden" name="Questions[@i].QuestionId" value="@q.QuestionId" />
+                            <p><strong>@(i + 1). @q.QuestionContent</strong></p>
+                            <textarea name="Questions[@i].Answer" class="form-control" rows="3" placeholder="Nhập đáp án...">@q.Answer</textarea>
+                        </div>
+                    }
+                }
+
+                <div class="mt-4">
+                    <button type="submit" class="btn btn-success">💾 Save Draft</button>
+                    <a asp-action="Details" asp-route-assignmentId="@Model.AssignmentId" class="btn btn-secondary">Quay lại</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

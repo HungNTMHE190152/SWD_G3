@@ -1,0 +1,91 @@
+﻿@model EduNexus.ViewModels.Rubric.RubricManagementViewModel
+@{
+    ViewData["Title"] = "Quản lý Tiêu chí - " + Model.RubricName;
+}
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between mb-4">
+        <div>
+            <h3>Quản lý Tiêu chí Chấm điểm</h3>
+            <p><strong>Assignment:</strong> @Model.AssignmentTitle</p>
+            <p><strong>Rubric:</strong> @Model.RubricName (Total Weight: @Model.TotalWeight%)</p>
+        </div>
+        <a asp-controller="Rubric" asp-action="Index" asp-route-assignmentId="@Model.AssignmentId" class="btn btn-secondary">
+            ← Quay lại Rubric
+        </a>
+    </div>
+
+    <form asp-action="SaveChanges" method="post">
+        <input type="hidden" asp-for="RubricId" />
+
+        <table class="table table-bordered table-hover">
+            <thead class="table-light">
+                <tr>
+                    <th>Thứ tự</th>
+                    <th>Tiêu chí</th>
+                    <th>Mô tả</th>
+                    <th>Weight (%)</th>
+                    <th>Max Score</th>
+                    <th>Hành động</th>
+                </tr>
+            </thead>
+            <tbody>
+                @for (int i = 0; i < Model.CurrentCriteria.Count; i++)
+                {
+                    var item = Model.CurrentCriteria[i];
+                    <tr>
+                        <td>
+                            <input type="hidden" name="CurrentCriteria[@i].RubricCriterionId" value="@item.CriterionId" />
+                            <input type="hidden" name="CurrentCriteria[@i].RubricId" value="@item.RubricId" />
+                            <input type="number" name="CurrentCriteria[@i].DisplayOrder" value="@item.DisplayOrder" class="form-control form-control-sm" style="width:80px;" />
+                        </td>
+                        <td>
+                            <input type="text" name="CurrentCriteria[@i].CriterionName" value="@item.CriterionName" class="form-control form-control-sm" />
+                        </td>
+                        <td>
+                            <input type="text" name="CurrentCriteria[@i].Description" value="@item.Description" class="form-control form-control-sm" />
+                        </td>
+                        <td>
+                            <input type="number" step="0.01" name="CurrentCriteria[@i].Weight" value="@item.Weight" class="form-control form-control-sm" />
+                        </td>
+                        <td>
+                            <input type="number" step="0.01" name="CurrentCriteria[@i].MaxScore" value="@item.MaxScore" class="form-control form-control-sm" />
+                        </td>
+                        <td>
+                            <a asp-action="Remove" asp-route-CriterionId="@item.CriterionId" asp-route-rubricId="@Model.RubricId"
+                               class="btn btn-sm btn-danger" onclick="return confirm('Xóa tiêu chí này?');">Xóa</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+        <button type="submit" class="btn btn-success">💾 Save Changes</button>
+    </form>
+
+    <hr />
+
+    <h5>+ Thêm Tiêu chí Mới</h5>
+    <form asp-action="Create" method="post" class="row g-3">
+        <input type="hidden" name="RubricId" value="@Model.RubricId" />
+        <!-- Form fields cho CreateCriterionViewModel -->
+        <div class="col-md-3">
+            <input type="text" name="CriterionName" class="form-control" placeholder="Tên tiêu chí" required />
+        </div>
+        <div class="col-md-3">
+            <input type="text" name="Description" class="form-control" placeholder="Mô tả" />
+        </div>
+        <div class="col-md-2">
+            <input type="number" step="0.01" name="Weight" class="form-control" placeholder="Weight (%)" required />
+        </div>
+        <div class="col-md-2">
+            <input type="number" step="0.01" name="MaxScore" class="form-control" placeholder="Max Score" required />
+        </div>
+        <div class="col-md-1">
+            <input type="number" name="DisplayOrder" class="form-control" value="1" required />
+        </div>
+        <div class="col-md-1">
+            <button type="submit" class="btn btn-primary">Thêm</button>
+        </div>
+    </form>
+</div>

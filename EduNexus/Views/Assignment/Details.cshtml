@@ -1,0 +1,77 @@
+﻿@model EduNexus.ViewModels.Assignment.AssignmentDetailViewModel
+
+@{
+    ViewData["Title"] = "Assignment Details";
+}
+
+<h2 class="mb-4">Assignment Details</h2>
+
+<div class="card shadow-sm">
+
+    <div class="card-body">
+
+        <dl class="row">
+
+            <dt class="col-sm-3">Title</dt>
+            <dd class="col-sm-9">@Model.Title</dd>
+
+            <dt class="col-sm-3">Course</dt>
+            <dd class="col-sm-9">@Model.CourseName</dd>
+
+            <dt class="col-sm-3">Module</dt>
+            <dd class="col-sm-9">@Model.ModuleName</dd>
+
+            <dt class="col-sm-3">Description</dt>
+            <dd class="col-sm-9">@Model.Description</dd>
+
+            <dt class="col-sm-3">Assignment Type</dt>
+            <dd class="col-sm-9">@Model.AssignmentType</dd>
+
+            <dt class="col-sm-3">Total Score</dt>
+            <dd class="col-sm-9">@Model.TotalScore</dd>
+
+            <dt class="col-sm-3">Open Date</dt>
+            <dd class="col-sm-9">@Model.OpenDate?.ToString("dd/MM/yyyy")</dd>
+
+            <dt class="col-sm-3">Due Date</dt>
+            <dd class="col-sm-9">@Model.DueDate?.ToString("dd/MM/yyyy")</dd>
+
+            <dt class="col-sm-3">Status</dt>
+            <dd class="col-sm-9">@Model.Status</dd>
+
+            <dt class="col-sm-3">Created By</dt>
+            <dd class="col-sm-9">@Model.CreatedBy</dd>
+
+        </dl>
+
+    </div>
+
+</div>
+
+<div class="mt-3">
+
+    <a asp-action="Edit"
+       asp-route-id="@Model.AssignmentId"
+       class="btn btn-warning">
+        Edit
+    </a>
+
+    <a asp-controller="AssignmentQuestion"
+       asp-action="Index"
+       asp-route-assignmentId="@Model.AssignmentId"
+       class="btn btn-success">
+        Manage Questions
+    </a>
+    <a asp-controller="Rubric" 
+    asp-action="Index" 
+    asp-route-assignmentId="@Model.AssignmentId"
+       class="btn btn-info">
+       Quản lý Rubric
+   </a>
+
+    <a asp-action="Index"
+       class="btn btn-secondary">
+        Back
+    </a>
+
+</div>

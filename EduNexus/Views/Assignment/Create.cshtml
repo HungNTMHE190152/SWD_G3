@@ -1,0 +1,82 @@
+﻿@model EduNexus.ViewModels.Assignment.CreateAssignmentViewModel;
+
+@{
+    ViewData["Title"] = "Create Assignment";
+}
+
+<h2>Create Assignment</h2>
+
+<form asp-action="Create" method="post">
+
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+    <div class="mb-3">
+        <label asp-for="Title"></label>
+        <input asp-for="Title" class="form-control" />
+        <span asp-validation-for="Title" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Description"></label>
+        <textarea asp-for="Description" rows="4" class="form-control"></textarea>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="ModuleId"></label>
+        <input asp-for="ModuleId" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="AssignmentType" class="form-label"></label>
+
+        <select asp-for="AssignmentType" class="form-select">
+            <option value="">-- Select Assignment Type --</option>
+            <option value="QUIZ">Quiz</option>
+            <option value="ESSAY">Essay</option>
+            <option value="MIXED">Mixed</option>
+        </select>
+
+        <span asp-validation-for="AssignmentType" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="TotalScore"></label>
+        <input asp-for="TotalScore" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="OpenDate"></label>
+        <input asp-for="OpenDate"
+               type="datetime-local"
+               class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="DueDate"></label>
+        <input asp-for="DueDate"
+               type="datetime-local"
+               class="form-control" />
+    </div>
+
+    <div class="form-check mb-3">
+        <input asp-for="AllowLateSubmission"
+               class="form-check-input" />
+        <label asp-for="AllowLateSubmission"
+               class="form-check-label">
+        </label>
+    </div>
+
+    <button class="btn btn-primary">
+        Save
+    </button>
+
+    <a asp-action="Index"
+       class="btn btn-secondary">
+        Cancel
+    </a>
+
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

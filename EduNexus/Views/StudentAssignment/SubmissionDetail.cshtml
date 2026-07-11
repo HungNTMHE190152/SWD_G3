@@ -1,0 +1,62 @@
+﻿@model EduNexus.ViewModels.Student.StudentSubmissionDetailViewModel
+
+@{
+    ViewData["Title"] = "Chi tiết Bài Nộp";
+}
+
+<div class="container mt-4">
+    <a asp-action="MySubmissions" class="btn btn-secondary mb-3">← Lịch sử Nộp bài</a>
+
+    <div class="card">
+        <div class="card-header bg-primary text-white">
+            <h4>@Model.AssignmentTitle</h4>
+            <h6>@Model.CourseName - @Model.ModuleName</h6>
+        </div>
+        <div class="card-body">
+            <p>
+                <strong>Trạng thái:</strong>
+                <span class="badge @(Model.IsDraft ? "bg-warning" : "bg-success")">@Model.SubmissionStatus</span>
+            </p>
+            <p><strong>Nộp lúc:</strong> @Model.SubmittedAt?.ToString("dd/MM/yyyy HH:mm")</p>
+            <p><strong>Trạng thái chấm:</strong> @Model.GradingStatus</p>
+
+            <hr />
+
+            <h5>Nội dung bài làm</h5>
+            <div class="border p-3 bg-light" style="min-height: 200px; white-space: pre-wrap;">
+                @Model.SubmissionText
+            </div>
+
+            @if (Model.Attachments.Any())
+            {
+                <h5 class="mt-4">File đính kèm</h5>
+                <ul class="list-group">
+                    @foreach (var att in Model.Attachments)
+                    {
+                        <li class="list-group-item">
+                            <a href="@att.FileUrl" target="_blank">@att.FileName</a>
+                            <small class="text-muted">(@att.UploadedAt?.ToString("dd/MM/yyyy"))</small>
+                        </li>
+                    }
+                </ul>
+            }
+
+            @if (Model.IsDraft)
+            {
+                <div class="mt-4">
+                    <a asp-action="Start" asp-route-assignmentId="@Model.AssignmentId"
+                       class="btn btn-success">Tiếp tục chỉnh sửa</a>
+                </div>
+            }
+            @if (Model.GradingStatus == "COMPLETED" || Model.GradingStatus == "AI_GRADED")
+            {
+                <div class="mt-4">
+                    <a asp-action="AIResult" asp-route-submissionId="@Model.SubmissionId"
+                       class="btn btn-success">
+                        📊 Xem Kết quả Chấm AI
+                    </a>
+                </div>
+            }
+        </div>
+    </div>
+</div>

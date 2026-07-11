@@ -1,0 +1,33 @@
+﻿
+@model EduNexus.ViewModels.Rubric.RubricDetailViewModel
+
+@{
+    ViewData["Title"] = "Chi tiết Rubric";
+}
+
+<div class="container mt-4">
+    <h2>Chi tiết Rubric</h2>
+    <div class="card">
+        <div class="card-body">
+            <dl class="row">
+                <dt class="col-sm-3">Tên Rubric</dt>
+                <dd class="col-sm-9">@Model.RubricName</dd>
+
+                <dt class="col-sm-3">Mô tả</dt>
+                <dd class="col-sm-9">@Model.Description</dd>
+
+                <dt class="col-sm-3">Tổng trọng số</dt>
+                <dd class="col-sm-9">@Model.TotalWeight %</dd>
+            </dl>
+        </div>
+    </div>
+    <div class="mt-3">
+        <a asp-action="Edit" asp-route-id="@Model.RubricId" class="btn btn-warning">Sửa</a>
+        <a asp-action="Delete" asp-route-id="@Model.RubricId" class="btn btn-danger">Xóa</a>
+        <a asp-action="Index" asp-route-assignmentId="@Model.AssignmentId" class="btn btn-secondary">Quay lại danh sách</a>
+        <a asp-controller="RubricCriterion" asp-action="Index" asp-route-rubricId="@Model.RubricId"
+           class="btn btn-primary">
+            <i class="bi bi-list-check"></i> Manage Criteria
+        </a>
+    </div>
+</div>

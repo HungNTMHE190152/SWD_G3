@@ -1,10 +1,15 @@
-﻿namespace EduNexus.ServiceRegistrations;
+﻿using EduNexus.Services.Implementations;
+using EduNexus.Services.Interfaces;
 
-public static class AssignmentServiceRegistration
+namespace EduNexus.ServiceRegistrations
 {
-    public static IServiceCollection AddAssignmentServices(this IServiceCollection services)
+    public static class AssignmentServiceRegistration
     {
-        // Person 3 will register Assignment services here.
-        return services;
+        public static IServiceCollection AddAssignmentServices(this IServiceCollection services)
+        {
+            services.AddScoped<IAssignmentService, AssignmentService>();
+
+            return services;
+        }
     }
 }

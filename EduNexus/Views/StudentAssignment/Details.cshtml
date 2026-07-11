@@ -1,0 +1,129 @@
+﻿@model EduNexus.ViewModels.Student.StudentAssignmentDetailViewModel
+
+@{
+    ViewData["Title"] = Model.Title;
+}
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between mb-4">
+        <a asp-action="Index" class="btn btn-secondary">← Quay lại My Assignments</a>
+    </div>
+
+    <div class="card shadow-sm">
+        <div class="card-header bg-primary text-white">
+            <h3>@Model.Title</h3>
+            <h5>@Model.CourseName - @Model.ModuleName</h5>
+        </div>
+        <div class="card-body">
+            <div class="row mb-4">
+                <div class="col-md-8">
+                    <p><strong>Mô tả:</strong> @Model.Description</p>
+                    <p><strong>Loại:</strong> @Model.AssignmentType</p>
+                    <p><strong>Điểm tối đa:</strong> @Model.TotalScore</p>
+                </div>
+                <div class="col-md-4 text-end">
+                    @if (Model.IsOpen)
+                    {
+                        <span class="badge bg-success fs-5">Đang mở</span>
+                    }
+                    else if (Model.IsClosed)
+                    {
+                        <span class="badge bg-secondary fs-5">Đã đóng</span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-warning fs-5">Chưa mở</span>
+                    }
+                    <br /><br />
+
+                    @if (Model.IsSubmitted)
+                    {
+                        <span class="badge bg-success fs-5">✅ ĐÃ NỘP</span>
+                        <br />
+                        @* <small class="text-muted">
+                            Nộp lúc: @(Model.SubmittedAt?.ToString("dd/MM/yyyy HH:mm") ?? "Không xác định")
+                        </small> *@
+                    }
+                    else
+                    {
+                        <span class="badge bg-info">@Model.SubmissionStatus</span>
+                    }
+                </div>
+            </div>
+
+            <div class="mb-4">
+                <h5>Thời gian</h5>
+                <p><strong>Mở:</strong> @Model.OpenDate?.ToString("dd/MM/yyyy HH:mm")</p>
+                <p><strong>Đóng:</strong> @Model.DueDate?.ToString("dd/MM/yyyy HH:mm")</p>
+                @if (Model.AllowLateSubmission == true)
+                {
+                    <p class="text-success">Cho phép nộp muộn</p>
+                }
+            </div>
+
+            @if (Model.Questions.Any())
+            {
+                <h5>Danh sách Câu hỏi (@Model.Questions.Count)</h5>
+                <ol class="list-group list-group-numbered">
+                    @foreach (var q in Model.Questions)
+                    {
+                        <li class="list-group-item">
+                            <strong>@q.QuestionContent</strong>
+                            <span class="badge bg-secondary float-end">@q.QuestionType</span>
+                            <br />
+                            <small>Điểm: @q.Score | Độ khó: @q.Difficulty</small>
+                        </li>
+                    }
+                </ol>
+            }
+            else if (Model.AssignmentType.ToUpper().Contains("ESSAY"))
+            {
+                <div class="alert alert-info">
+                    <strong>Bài tập này yêu cầu nộp bài luận (Essay).</strong>
+                </div>
+            }
+        </div>
+
+        <div class="card-footer d-flex gap-2">
+            @if (!Model.IsSubmitted && Model.IsOpen && Model.Status == "PUBLISHED")
+            {
+                <a asp-action="Start" asp-route-assignmentId="@Model.AssignmentId"
+                   class="btn btn-success">🚀 Tiếp tục làm bài</a>
+
+                <form asp-action="SubmitAssignment" method="post" style="display:inline;">
+                    <input type="hidden" name="assignmentId" value="@Model.AssignmentId" />
+                    <button type="submit" class="btn btn-danger"
+                            onclick="return confirm('Bạn có chắc chắn muốn nộp bài?\nSau khi nộp sẽ KHÔNG thể chỉnh sửa nữa!');">
+                        📤 Nộp Bài
+                    </button>
+                </form>
+            }
+            else if (Model.IsSubmitted)
+            {
+                <span class="badge bg-success fs-5 p-3">✅ ĐÃ NỘP</span>
+
+                @if (Model.SubmissionStatus == "AIGRADED" || Model.SubmissionStatus == "COMPLETED")
+                {
+                    <a asp-action="AISubmissionResult" asp-route-submissionId="@Model.AssignmentId"
+                       class="btn btn-primary">
+                        📊 Xem Kết quả Chấm AI
+                    </a>
+                }
+                else
+                {
+                    <span class="badge bg-warning">Đang chờ AI chấm...</span>
+                }
+            }
+            else if (Model.IsSubmitted)
+            {
+                <span class="badge bg-success fs-5 p-3">✅ ĐÃ NỘP</span>
+            }
+            else if (Model.IsClosed)
+            {
+                <button class="btn btn-secondary" disabled>Đã đóng</button>
+            }
+
+            <a asp-action="Index" class="btn btn-secondary">Quay lại</a>
+        </div>
+    </div>
+</div>

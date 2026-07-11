@@ -1,0 +1,106 @@
+﻿@model List<EduNexus.ViewModels.Student.StudentAssignmentListViewModel>
+
+@{
+    ViewData["Title"] = "My Assignments";
+}
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="fw-bold">My Assignments</h2>
+        <input type="text" id="searchInput" class="form-control w-25" placeholder="Tìm theo tiêu đề..." onkeyup="filterTable()">
+    </div>
+
+    <table class="table table-hover table-bordered" id="assignmentTable">
+        <thead class="table-light">
+            <tr>
+                <th>Assignment</th>
+                <th>Course</th>
+                <th>Module</th>
+                <th>Type</th>
+                <th>Score</th>
+                <th>Open Date</th>
+                <th>Due Date</th>
+                <th>Status</th>
+                <th>Submission</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td><strong>@item.Title</strong></td>
+                    <td>@item.CourseName</td>
+                    <td>@item.ModuleName</td>
+                    <td>@item.AssignmentType</td>
+                    <td>@item.TotalScore</td>
+                    <td>@(item.OpenDate?.ToString("dd/MM/yyyy"))</td>
+                    <td>@(item.DueDate?.ToString("dd/MM/yyyy"))</td>
+                    <td>
+                        @switch (item.AssignmentStatus)
+                        {
+                            case "Open":
+                                <span class="badge bg-success">Open</span>
+                                ; break;
+                            case "Closed":
+
+                                <span class="badge bg-secondary">Closed</span>
+                                ; break;
+                            default:
+
+                                <span class="badge bg-warning">Not Open</span>
+                                ; break;
+                        }
+                    </td>
+                    <td>
+                        @switch (item.SubmissionStatus)
+                        {
+                            case "Submitted":
+                                <span class="badge bg-primary">Submitted</span>
+                                ; break;
+                            case "Draft":
+
+                                <span class="badge bg-info">Draft</span>
+                                ; break;
+                            default:
+
+                                <span class="badge bg-light text-dark">Not Submitted</span>
+                                ; break;
+                        }
+                    </td>
+                    <td>
+                        @if (item.IsOpen)
+                        {
+                            <a asp-controller="StudentAssignment" asp-action="Details" asp-route-assignmentId="@item.AssignmentId"
+                               class="btn btn-sm btn-primary">View Assignment</a>
+                        }
+                        else if (item.IsSubmitted)
+                        {
+                            <a href="#" class="btn btn-sm btn-info">View Submission</a>
+                        }
+                        else
+                        {
+                            <button class="btn btn-sm btn-secondary" disabled>Closed</button>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<script>
+    function filterTable() {
+        let input = document.getElementById("searchInput").value.toUpperCase();
+        let table = document.getElementById("assignmentTable");
+        let tr = table.getElementsByTagName("tr");
+
+        for (let i = 1; i < tr.length; i++) {
+            let td = tr[i].getElementsByTagName("td")[0];
+            if (td) {
+                let txtValue = td.textContent || td.innerText;
+                tr[i].style.display = txtValue.toUpperCase().indexOf(input) > -1 ? "" : "none";
+            }
+        }
+    }
+</script>

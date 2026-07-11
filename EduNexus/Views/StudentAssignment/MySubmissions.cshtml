@@ -1,0 +1,50 @@
+﻿@model List<EduNexus.ViewModels.Student.StudentSubmissionHistoryViewModel>
+
+@{
+    ViewData["Title"] = "Lịch sử Nộp bài";
+}
+
+<div class="container mt-4">
+    <h2>Lịch sử Nộp bài</h2>
+    <a asp-action="Index" class="btn btn-secondary mb-3">← My Assignments</a>
+
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th>Assignment</th>
+                <th>Course</th>
+                <th>Module</th>
+                <th>Nộp lúc</th>
+                <th>Trạng thái</th>
+                <th>Chấm điểm</th>
+                <th>Hành động</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.AssignmentTitle</td>
+                    <td>@item.CourseName</td>
+                    <td>@item.ModuleName</td>
+                    <td>@(item.SubmittedAt?.ToString("dd/MM/yyyy HH:mm") ?? "-")</td>
+                    <td>
+                        <span class="badge @(item.IsDraft ? "bg-warning" : "bg-success")">
+                            @item.SubmissionStatus
+                        </span>
+                    </td>
+                    <td>@item.GradingStatus</td>
+                    <td>
+                        <a asp-action="SubmissionDetail" asp-route-submissionId="@item.SubmissionId"
+                           class="btn btn-info btn-sm">Xem chi tiết</a>
+                        @if (item.IsDraft)
+                        {
+                            <a asp-action="Start" asp-route-assignmentId="@item.AssignmentId"
+                               class="btn btn-success btn-sm">Tiếp tục chỉnh sửa</a>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

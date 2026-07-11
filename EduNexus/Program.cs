@@ -1,9 +1,10 @@
 using EduNexus.Data;
+using EduNexus.ServiceRegistrations;
+using EduNexus.Services;
 using EduNexus.Services.Implementations;
 using EduNexus.Services.Interfaces;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
-using EduNexus.ServiceRegistrations;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -31,6 +32,13 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
     });
 
 builder.Services.AddAuthorization();
+builder.Services.AddAssignmentServices();
+builder.Services.AddScoped<IAssignmentQuestionService, AssignmentQuestionService>();
+builder.Services.AddScoped<IRubricService, RubricService>();
+builder.Services.AddScoped<IRubricCriterionService, RubricCriterionService>();
+builder.Services.AddScoped<IGradingService, GradingService>();
+builder.Services.AddScoped<IStudentAssignmentService, StudentAssignmentService>();
+builder.Services.AddScoped<IAIGradingService, AIGradingService>();
 
 var app = builder.Build();
 
