@@ -1,0 +1,90 @@
+﻿@model List<EduNexus.Models.Lesson>
+
+<h2>Lesson List</h2>
+
+<div class="mb-3">
+    <a class="btn btn-success"
+       asp-controller="Lesson"
+       asp-action="Create"
+       asp-route-moduleId="@ViewBag.ModuleId">
+        Add Lesson
+    </a>
+
+    <a class="btn btn-outline-success"
+       asp-controller="AiLesson"
+       asp-action="Staging"
+       asp-route-moduleId="@ViewBag.ModuleId">
+        AI Lesson Staging
+    </a>
+
+</div>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Order</th>
+            <th>Lesson Name</th>
+            <th>Type</th>
+            <th>Published</th>
+            <th></th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @foreach (var lesson in Model)
+        {
+            <tr>
+                <td>@lesson.DisplayOrder</td>
+                <td>@lesson.LessonName</td>
+                <td>@lesson.LessonType</td>
+                <td>@lesson.IsPublished</td>
+                <td>
+                    <a class="btn btn-sm btn-warning"
+                       asp-controller="Lesson"
+                       asp-action="Edit"
+                       asp-route-id="@lesson.LessonId">
+                        Edit
+                    </a>
+                    <a class="btn btn-sm btn-info"
+                       asp-controller="LessonResource"
+                       asp-action="Index"
+                       asp-route-lessonId="@lesson.LessonId">
+                        Resources
+                    </a>
+                    <a class="btn btn-sm btn-secondary"
+                       asp-controller="LessonTranscript"
+                       asp-action="Index"
+                       asp-route-lessonId="@lesson.LessonId">
+                        Transcript
+                    </a>
+                    <a class="btn btn-sm btn-dark"
+                       asp-controller="LessonTextExtract"
+                       asp-action="Index"
+                       asp-route-lessonId="@lesson.LessonId">
+                        Text Extract
+                    </a>
+                    @if (lesson.IsPublished != true)
+                    {
+                        <form asp-action="Publish" method="post" style="display:inline">
+                            @Html.AntiForgeryToken()
+                            <input type="hidden" name="lessonId" value="@lesson.LessonId" />
+                            <input type="hidden" name="moduleId" value="@ViewBag.ModuleId" />
+                            <button type="submit" class="btn btn-sm btn-primary">
+                                Publish
+                            </button>
+                        </form>
+                    }
+
+                    <form asp-action="Delete" method="post" style="display:inline">
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" name="id" value="@lesson.LessonId" />
+                        <input type="hidden" name="moduleId" value="@ViewBag.ModuleId" />
+                        <button type="submit" class="btn btn-sm btn-danger">
+                            Delete
+                        </button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

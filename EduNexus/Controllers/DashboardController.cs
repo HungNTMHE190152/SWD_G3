@@ -49,4 +49,16 @@ public class DashboardController : Controller
     {
         return View();
     }
+    [Authorize(Roles = RoleNames.Student)]
+    public async Task<IActionResult> MyLessons()
+    {
+        long studentId = User.GetCurrentUserId();
+
+        if (studentId == 0)
+        {
+            return RedirectToAction("Login", "Auth");
+        }
+
+        return RedirectToAction("MyLessons", "Lesson", new { id = 1 });
+    }
 }

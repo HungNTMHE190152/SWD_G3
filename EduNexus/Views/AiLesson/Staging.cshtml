@@ -1,0 +1,14 @@
+﻿<h2>AI Lesson Staging</h2>
+
+<form asp-action="Generate" method="post">
+    <input type="hidden" name="moduleId" value="@ViewBag.ModuleId" />
+
+    <div class="mb-3">
+        <label>Prompt</label>
+        <textarea name="prompt" class="form-control" rows="5"></textarea>
+    </div>
+
+    <button type="submit" class="btn btn-success">
+        Generate Fake Lesson
+    </button>
+</form>

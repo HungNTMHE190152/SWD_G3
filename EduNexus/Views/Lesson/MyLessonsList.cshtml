@@ -1,0 +1,41 @@
+﻿@model List<EduNexus.Models.Lesson>
+
+<h2>My Lessons</h2>
+
+@if (!Model.Any())
+{
+    <p>No lessons found.</p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Course Module</th>
+                <th>Lesson</th>
+                <th>Type</th>
+                <th>Duration</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var lesson in Model)
+            {
+                <tr>
+                    <td>@lesson.Module.ModuleName</td>
+                    <td>@lesson.LessonName</td>
+                    <td>@lesson.LessonType</td>
+                    <td>@lesson.Duration minutes</td>
+                    <td>
+                        <a class="btn btn-sm btn-primary"
+                           asp-controller="Lesson"
+                           asp-action="ViewLesson"
+                           asp-route-id="@lesson.LessonId">
+                            Open
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

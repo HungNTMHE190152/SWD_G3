@@ -1,0 +1,386 @@
+﻿@model EduNexus.ViewModels.Flashcards.FlashcardStagingViewModel
+
+@{
+    ViewData["Title"] = "Flashcard Staging";
+}
+
+<div class="container mt-4">
+
+    <!-- Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <div>
+            <h2>@Model.SetName</h2>
+
+            <p class="text-muted mb-1">
+                Course: @Model.CourseTitle
+            </p>
+
+            @if (!string.IsNullOrWhiteSpace(Model.Description))
+            {
+                <p class="text-secondary">
+                    @Model.Description
+                </p>
+            }
+        </div>
+
+        <div>
+            <a asp-action="Details"
+               asp-route-id="@Model.FlashcardSetId"
+               class="btn btn-outline-secondary">
+                Back to Editor
+            </a>
+            <a asp-action="Preview"
+               asp-route-id="@Model.FlashcardSetId"
+               class="btn btn-primary">
+
+                Preview
+
+            </a>
+        </div>
+
+    </div>
+
+    <!-- Validation Result -->
+    <div class="alert @(Model.IsReady ? "alert-success" : "alert-warning")">
+
+        <strong>Validation Result</strong>
+
+        <br />
+
+        @Model.PassedRules / @Model.TotalRules validation rules passed.
+
+    </div>
+
+    <!-- Statistics -->
+    <div class="row mb-4">
+
+        <div class="col-lg-3 col-md-6 mb-3">
+
+            <div class="card shadow-sm border-primary">
+
+                <div class="card-body text-center">
+
+                    <h6 class="text-muted">
+                        Total Cards
+                    </h6>
+
+                    <h3>
+                        @Model.TotalCards
+                    </h3>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="col-lg-3 col-md-6 mb-3">
+
+            <div class="card shadow-sm border-success">
+
+                <div class="card-body text-center">
+
+                    <h6 class="text-muted">
+                        Avg Question
+                    </h6>
+
+                    <h3>
+                        @Model.AverageQuestionLength
+                    </h3>
+
+                    <small>characters</small>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="col-lg-3 col-md-6 mb-3">
+
+            <div class="card shadow-sm border-warning">
+
+                <div class="card-body text-center">
+
+                    <h6 class="text-muted">
+                        Avg Answer
+                    </h6>
+
+                    <h3>
+                        @Model.AverageAnswerLength
+                    </h3>
+
+                    <small>characters</small>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="col-lg-3 col-md-6 mb-3">
+
+            <div class="card shadow-sm border-info">
+
+                <div class="card-body text-center">
+
+                    <h6 class="text-muted">
+                        Max Display Order
+                    </h6>
+
+                    <h3>
+                        @Model.MaxDisplayOrder
+                    </h3>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Data Quality -->
+    <div class="row mb-4">
+
+        <div class="col-md-6">
+
+            <div class="alert alert-light border">
+
+                Empty Questions
+
+                <strong class="float-end">
+
+                    @Model.EmptyQuestionCount
+
+                </strong>
+
+            </div>
+
+        </div>
+
+        <div class="col-md-6">
+
+            <div class="alert alert-light border">
+
+                Empty Answers
+
+                <strong class="float-end">
+
+                    @Model.EmptyAnswerCount
+
+                </strong>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Flashcard Set Information -->
+    <div class="card shadow-sm mb-4">
+
+        <div class="card-header">
+
+            Flashcard Set Information
+
+        </div>
+
+        <div class="card-body">
+
+            <p>
+
+                <strong>Set Name:</strong>
+
+                @Model.SetName
+
+            </p>
+
+            <p>
+
+                <strong>Course:</strong>
+
+                @Model.CourseTitle
+
+            </p>
+
+            <p>
+
+                <strong>Description:</strong>
+
+                @Model.Description
+
+            </p>
+
+        </div>
+
+    </div>
+
+    <!-- Validation Summary -->
+    <div class="card shadow-sm mb-4">
+
+        <div class="card-header bg-primary text-white">
+
+            Validation Summary
+
+        </div>
+
+        <div class="card-body">
+
+            @if (Model.IsReady)
+            {
+                <div class="alert alert-success">
+
+                    This flashcard set passed all validation rules.
+
+                </div>
+            }
+            else
+            {
+                <div class="alert alert-warning">
+
+                    This flashcard set still has validation issues.
+
+                </div>
+            }
+
+            <table class="table table-bordered table-hover">
+
+                <thead>
+
+                    <tr>
+
+                        <th style="width:35%">
+                            Rule
+                        </th>
+
+                        <th style="width:15%">
+                            Status
+                        </th>
+
+                        <th>
+                            Message
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                    @foreach (var rule in Model.ValidationResults)
+                    {
+                        <tr>
+
+                            <td>
+
+                                @rule.RuleName
+
+                            </td>
+
+                            <td>
+
+                                @if (rule.IsPassed)
+                                {
+                                    <span class="badge bg-success">
+                                        PASS
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-danger">
+                                        FAIL
+                                    </span>
+                                }
+
+                            </td>
+
+                            <td>
+
+                                @rule.Message
+
+                            </td>
+
+                        </tr>
+                    }
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+    <!-- Flashcard List -->
+    <div class="card shadow-sm">
+
+        <div class="card-header">
+
+            Flashcards
+
+        </div>
+
+        <div class="card-body">
+
+            <table class="table table-hover">
+
+                <thead>
+
+                    <tr>
+
+                        <th style="width:8%">
+                            Order
+                        </th>
+
+                        <th style="width:36%">
+                            Question
+                        </th>
+
+                        <th>
+                            Answer Preview
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                    @foreach (var item in Model.Flashcards)
+                    {
+                        <tr>
+
+                            <td>
+
+                                @item.DisplayOrder
+
+                            </td>
+
+                            <td>
+
+                                @item.FrontContent
+
+                            </td>
+
+                            <td>
+
+                                @(item.BackContent.Length > 80
+                                                            ? item.BackContent[..80] + "..."
+                                                            : item.BackContent)
+
+                        </td>
+
+                        </tr>
+                                        }
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div>
