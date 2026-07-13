@@ -1,0 +1,114 @@
+﻿@model EduNexus.ViewModels.Quizzes.QuizHistoryViewModel
+
+@{
+    ViewData["Title"] = "Quiz History";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h2 class="fw-bold mb-1">Quiz History</h2>
+        <p class="text-muted mb-0">Review your previous quiz attempts.</p>
+    </div>
+
+    <a asp-controller="Quiz" asp-action="NewQuiz" class="btn btn-primary">
+        New Quiz
+    </a>
+</div>
+
+@if (!Model.Attempts.Any())
+{
+    <div class="card border-0 shadow-sm">
+        <div class="card-body text-center py-5">
+            <h5>No quiz attempts yet</h5>
+            <p class="text-muted">Start a quiz to see your history here.</p>
+        </div>
+    </div>
+}
+else
+{
+    <div class="card border-0 shadow-sm">
+        <div class="table-responsive">
+            <table class="table align-middle mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th>Quiz</th>
+                        <th>Course</th>
+                        <th>Attempt</th>
+                        <th>Score</th>
+                        <th>Status</th>
+                        <th>Started</th>
+                        <th>Submitted</th>
+                        <th class="text-end">Action</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    @foreach (var attempt in Model.Attempts)
+                    {
+                        <tr>
+                            <td class="fw-semibold">@attempt.QuizTitle</td>
+                            <td>@attempt.CourseTitle</td>
+                            <td>#@attempt.AttemptNumber</td>
+                            <td>
+                                @if (attempt.TotalScore != null)
+                                {
+                                    <span>@attempt.TotalScore / 10</span>
+                                }
+                                else
+                                {
+                                    <span class="text-muted">Not submitted</span>
+                                }
+                            </td>
+                            <td>
+                                @if (attempt.Status == "GRADED")
+                                {
+                                    if (attempt.IsPassed)
+                                    {
+                                        <span class="badge bg-success">Passed</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-danger">Failed</span>
+                                    }
+                                }
+                                else
+                                {
+                                    <span class="badge bg-warning text-dark">@attempt.Status</span>
+                                }
+                            </td>
+                            <td>@attempt.StartTime.ToString("dd/MM/yyyy HH:mm")</td>
+                            <td>@attempt.SubmitTime?.ToString("dd/MM/yyyy HH:mm")</td>
+                            <td class="text-end">
+                                @if (attempt.Status == "IN_PROGRESS")
+                                {
+                                    <a asp-controller="QuizAttempt"
+                                       asp-action="Taking"
+                                       asp-route-id="@attempt.AttemptId"
+                                       class="btn btn-sm btn-outline-primary">
+                                        Continue
+                                    </a>
+                                }
+                                else
+                                {
+                                    <a asp-controller="QuizResult"
+                                       asp-action="Result"
+                                       asp-route-id="@attempt.AttemptId"
+                                       class="btn btn-sm btn-outline-primary">
+                                        Result
+                                    </a>
+
+                                    <a asp-controller="QuizReview"
+                                       asp-action="Index"
+                                       asp-route-id="@attempt.AttemptId"
+                                       class="btn btn-sm btn-outline-secondary">
+                                        Review
+                                    </a>
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+}

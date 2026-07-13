@@ -1,0 +1,149 @@
+﻿@model EduNexus.ViewModels.Quizzes.QuizQuestionSelectionViewModel
+
+@{
+    ViewData["Title"] = "Quiz Questions";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h2 class="fw-bold mb-1">@Model.QuizTitle</h2>
+        <p class="text-muted mb-0">Course: @Model.CourseTitle</p>
+    </div>
+
+    <a asp-controller="Quiz" asp-action="Index" class="btn btn-outline-secondary">
+        Back to Quiz List
+    </a>
+</div>
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success">
+        @TempData["SuccessMessage"]
+    </div>
+}
+
+<div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+<div class="card border-0 shadow-sm mb-4">
+    <div class="card-body">
+        <form asp-action="Questions" method="get" class="row g-3 align-items-end">
+            <input type="hidden" name="id" value="@Model.QuizId" />
+
+            <div class="col-md-8">
+                <label class="form-label">Question Bank</label>
+                <select name="bankId" class="form-select" asp-items="Model.QuestionBanks">
+                    <option value="">-- Select question bank --</option>
+                </select>
+            </div>
+
+            <div class="col-md-4">
+                <button type="submit" class="btn btn-primary w-100">
+                    Load Questions
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+@if (!Model.QuestionBanks.Any())
+{
+    <div class="card border-0 shadow-sm">
+        <div class="card-body text-center py-5">
+            <h5>No question bank found</h5>
+            <p class="text-muted">
+                Please create a question bank for this course first.
+            </p>
+
+            <a asp-controller="QuestionBank" asp-action="Create" class="btn btn-primary">
+                Create Question Bank
+            </a>
+        </div>
+    </div>
+}
+else if (!Model.Questions.Any())
+{
+    <div class="card border-0 shadow-sm">
+        <div class="card-body text-center py-5">
+            <h5>No questions in this bank</h5>
+            <p class="text-muted">
+                Add questions to the selected bank before using it in a quiz.
+            </p>
+
+            <a asp-controller="QuestionBank" asp-action="Details" asp-route-id="@Model.BankId" class="btn btn-primary">
+                Open Question Bank
+            </a>
+        </div>
+    </div>
+}
+else
+{
+    <form asp-action="Questions" method="post">
+        @Html.AntiForgeryToken()
+
+        <input type="hidden" asp-for="QuizId" />
+        <input type="hidden" asp-for="QuizTitle" />
+        <input type="hidden" asp-for="CourseTitle" />
+        <input type="hidden" asp-for="BankId" />
+
+        <div class="card border-0 shadow-sm">
+            <div class="table-responsive">
+                <table class="table align-middle mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th style="width: 70px;">Use</th>
+                            <th>Question</th>
+                            <th>Type</th>
+                            <th>Difficulty</th>
+                            <th>Choices</th>
+                            <th style="width: 120px;">Score</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        @for (int i = 0; i < Model.Questions.Count; i++)
+                        {
+                            <tr>
+                                <td>
+                                    <input type="hidden" asp-for="Questions[i].QuestionId" />
+                                    <input type="hidden" asp-for="Questions[i].QuestionContent" />
+                                    <input type="hidden" asp-for="Questions[i].QuestionType" />
+                                    <input type="hidden" asp-for="Questions[i].Difficulty" />
+                                    <input type="hidden" asp-for="Questions[i].ChoiceCount" />
+                                    <input type="hidden" asp-for="Questions[i].DisplayOrder" />
+
+                                    <input asp-for="Questions[i].IsSelected" class="form-check-input" />
+                                </td>
+
+                                <td style="max-width: 520px;">
+                                    <div class="fw-semibold">
+                                        @Model.Questions[i].QuestionContent
+                                    </div>
+                                </td>
+
+                                <td>@Model.Questions[i].QuestionType</td>
+
+                                <td>@Model.Questions[i].Difficulty</td>
+
+                                <td>@Model.Questions[i].ChoiceCount</td>
+
+                                <td>
+                                    <input asp-for="Questions[i].Score"
+                                           class="form-control form-control-sm"
+                                           type="number"
+                                           step="0.1"
+                                           min="0.1" />
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="card-body border-top">
+                <button type="submit" class="btn btn-primary">
+                    Save Quiz Questions
+                </button>
+            </div>
+        </div>
+    </form>
+}

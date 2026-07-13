@@ -1,0 +1,88 @@
+﻿@model EduNexus.ViewModels.Questions.QuestionListViewModel
+
+@{
+    ViewData["Title"] = "Question Bank Detail";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h2 class="fw-bold mb-1">@Model.BankName</h2>
+        <p class="text-muted mb-0">Course: @Model.CourseTitle</p>
+    </div>
+
+    <div class="d-flex gap-2">
+        <a asp-controller="Question"
+           asp-action="Create"
+           asp-route-bankId="@Model.BankId"
+           class="btn btn-primary">
+            Add Question
+        </a>
+
+        <a asp-controller="QuestionBank"
+           asp-action="Index"
+           class="btn btn-outline-secondary">
+            Back
+        </a>
+    </div>
+</div>
+
+@if (!Model.Questions.Any())
+{
+    <div class="card border-0 shadow-sm">
+        <div class="card-body text-center py-5">
+            <h5>No questions yet</h5>
+            <p class="text-muted">Add questions and choices for this bank.</p>
+
+            <a asp-controller="Question"
+               asp-action="Create"
+               asp-route-bankId="@Model.BankId"
+               class="btn btn-primary">
+                Add Question
+            </a>
+        </div>
+    </div>
+}
+else
+{
+    <div class="card border-0 shadow-sm">
+        <div class="table-responsive">
+            <table class="table align-middle mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th>Question</th>
+                        <th>Type</th>
+                        <th>Difficulty</th>
+                        <th>Choices</th>
+                        <th>Correct</th>
+                        <th>AI</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var q in Model.Questions)
+                    {
+                        <tr>
+                            <td style="max-width: 420px;">
+                                <div class="fw-semibold">@q.QuestionContent</div>
+                                <small class="text-muted">@q.Explanation</small>
+                            </td>
+                            <td>@q.QuestionType</td>
+                            <td>@q.Difficulty</td>
+                            <td>@q.ChoiceCount</td>
+                            <td>@q.CorrectChoiceCount</td>
+                            <td>
+                                @if (q.IsAIGenerated)
+                                {
+                                    <span class="badge bg-info">AI</span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-secondary">Manual</span>
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+}

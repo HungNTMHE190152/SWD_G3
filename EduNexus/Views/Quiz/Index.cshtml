@@ -1,0 +1,93 @@
+﻿@model List<EduNexus.ViewModels.Quizzes.QuizListItemViewModel>
+
+@{
+    ViewData["Title"] = "Quiz Management";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h2 class="fw-bold mb-1">Quiz Management</h2>
+        <p class="text-muted mb-0">Create quizzes and select questions from question banks.</p>
+    </div>
+
+    <a asp-controller="Quiz" asp-action="Create" class="btn btn-primary">
+        Create Quiz
+    </a>
+</div>
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success">
+        @TempData["SuccessMessage"]
+    </div>
+}
+
+@if (!Model.Any())
+{
+    <div class="card border-0 shadow-sm">
+        <div class="card-body text-center py-5">
+            <h5>No quiz yet</h5>
+            <p class="text-muted">Create your first quiz to start adding questions.</p>
+
+            <a asp-controller="Quiz" asp-action="Create" class="btn btn-primary">
+                Create Quiz
+            </a>
+        </div>
+    </div>
+}
+else
+{
+    <div class="card border-0 shadow-sm">
+        <div class="table-responsive">
+            <table class="table align-middle mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th>Quiz</th>
+                        <th>Course</th>
+                        <th>Module</th>
+                        <th>Duration</th>
+                        <th>Passing</th>
+                        <th>Questions</th>
+                        <th>Shuffle</th>
+                        <th class="text-end">Action</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    @foreach (var quiz in Model)
+                    {
+                        <tr>
+                            <td>
+                                <div class="fw-semibold">@quiz.QuizTitle</div>
+                                <small class="text-muted">@quiz.Description</small>
+                            </td>
+                            <td>@quiz.CourseTitle</td>
+                            <td>@quiz.ModuleName</td>
+                            <td>@quiz.Duration minutes</td>
+                            <td>@quiz.PassingScore</td>
+                            <td>@quiz.QuestionCount</td>
+                            <td>
+                                @if (quiz.ShuffleQuestion || quiz.ShuffleAnswer)
+                                {
+                                    <span class="badge bg-success">Enabled</span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-secondary">Off</span>
+                                }
+                            </td>
+                            <td class="text-end">
+                                <a asp-controller="Quiz"
+                                   asp-action="Questions"
+                                   asp-route-id="@quiz.QuizId"
+                                   class="btn btn-sm btn-outline-primary">
+                                    Add Questions
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+}

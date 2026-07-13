@@ -1,0 +1,74 @@
+﻿@model EduNexus.ViewModels.Quizzes.QuizFormViewModel
+
+@{
+    ViewData["Title"] = "Create Quiz";
+}
+
+<div class="card border-0 shadow-sm">
+    <div class="card-body">
+        <h2 class="fw-bold mb-3">Create Quiz</h2>
+
+        <form asp-action="Create" method="post">
+            @Html.AntiForgeryToken()
+
+            <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+            <div class="mb-3">
+                <label asp-for="ModuleId" class="form-label">Module</label>
+                <select asp-for="ModuleId" asp-items="Model.Modules" class="form-select">
+                    <option value="">-- Select module --</option>
+                </select>
+                <span asp-validation-for="ModuleId" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="QuizTitle" class="form-label">Quiz Title</label>
+                <input asp-for="QuizTitle" class="form-control" />
+                <span asp-validation-for="QuizTitle" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Description" class="form-label">Description</label>
+                <textarea asp-for="Description" class="form-control" rows="4"></textarea>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label asp-for="Duration" class="form-label">Duration minutes</label>
+                    <input asp-for="Duration" class="form-control" type="number" />
+                    <span asp-validation-for="Duration" class="text-danger"></span>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <label asp-for="PassingScore" class="form-label">Passing Score</label>
+                    <input asp-for="PassingScore" class="form-control" type="number" step="0.1" />
+                    <span asp-validation-for="PassingScore" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="form-check mb-2">
+                <input asp-for="ShuffleQuestion" class="form-check-input" />
+                <label asp-for="ShuffleQuestion" class="form-check-label">
+                    Shuffle questions
+                </label>
+            </div>
+
+            <div class="form-check mb-4">
+                <input asp-for="ShuffleAnswer" class="form-check-input" />
+                <label asp-for="ShuffleAnswer" class="form-check-label">
+                    Shuffle answers
+                </label>
+            </div>
+
+            <div class="d-flex gap-2">
+                <button type="submit" class="btn btn-primary">
+                    Create Quiz
+                </button>
+
+                <a asp-action="Index" class="btn btn-outline-secondary">
+                    Cancel
+                </a>
+            </div>
+        </form>
+    </div>
+</div>

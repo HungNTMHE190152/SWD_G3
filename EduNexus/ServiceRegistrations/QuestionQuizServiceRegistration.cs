@@ -1,10 +1,17 @@
-﻿namespace EduNexus.ServiceRegistrations;
+﻿using EduNexus.Services.Implementations;
+using EduNexus.Services.Interfaces;
+
+namespace EduNexus.ServiceRegistrations;
 
 public static class QuestionQuizServiceRegistration
 {
     public static IServiceCollection AddQuestionQuizServices(this IServiceCollection services)
     {
-        // Person 5 will register Question/Quiz services here.
+        services.AddScoped<IQuestionBankService, QuestionBankService>();
+        services.AddScoped<IQuestionService, QuestionService>();
+        services.AddScoped<IQuizService, QuizService>();
+        services.AddScoped<IQuizAttemptService, QuizAttemptService>();
+
         return services;
     }
 }

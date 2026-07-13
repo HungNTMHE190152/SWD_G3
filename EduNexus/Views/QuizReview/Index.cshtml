@@ -1,0 +1,64 @@
+﻿@model EduNexus.ViewModels.Quizzes.QuizReviewViewModel
+
+@{
+    ViewData["Title"] = "Quiz Review";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h2 class="fw-bold mb-1">@Model.QuizTitle</h2>
+        <p class="text-muted mb-0">Score: @Model.TotalScore / 10</p>
+    </div>
+
+    <a asp-controller="Quiz" asp-action="History" class="btn btn-outline-secondary">
+        Back to History
+    </a>
+</div>
+
+@for (int i = 0; i < Model.Questions.Count; i++)
+{
+    var item = Model.Questions[i];
+
+    <div class="card border-0 shadow-sm mb-4">
+        <div class="card-body">
+            <div class="d-flex justify-content-between align-items-start mb-3">
+                <h5 class="fw-bold mb-0">Question @(i + 1)</h5>
+
+                @if (item.IsCorrect)
+                {
+                    <span class="badge bg-success">Correct</span>
+                }
+                else
+                {
+                    <span class="badge bg-danger">Incorrect</span>
+                }
+            </div>
+
+            <p class="fw-semibold">@item.QuestionContent</p>
+
+            <div class="mb-2">
+                <strong>Your answer:</strong>
+                <span class="@(item.IsCorrect ? "text-success" : "text-danger")">
+                    @item.SelectedAnswer
+                </span>
+            </div>
+
+            <div class="mb-2">
+                <strong>Correct answer:</strong>
+                <span class="text-success">@item.CorrectAnswer</span>
+            </div>
+
+            <div class="mb-2">
+                <strong>Score:</strong> @item.Score
+            </div>
+
+            @if (!string.IsNullOrWhiteSpace(item.Explanation))
+            {
+                <div class="alert alert-light border mt-3 mb-0">
+                    <strong>Explanation:</strong>
+                    <div>@item.Explanation</div>
+                </div>
+            }
+        </div>
+    </div>
+}

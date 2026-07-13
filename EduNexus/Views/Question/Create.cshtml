@@ -1,0 +1,163 @@
+﻿@model EduNexus.ViewModels.Questions.QuestionFormViewModel
+
+@{
+    ViewData["Title"] = "Create Question";
+}
+
+<div class="card border-0 shadow-sm">
+    <div class="card-body">
+        <h2 class="fw-bold mb-1">Create Question</h2>
+        <p class="text-muted mb-4">Question Bank: @Model.BankName</p>
+
+        <form asp-action="Create" method="post">
+            @Html.AntiForgeryToken()
+
+            <input type="hidden" asp-for="BankId" />
+            <input type="hidden" asp-for="BankName" />
+
+            <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+            <div class="mb-3">
+                <label asp-for="QuestionContent" class="form-label">Question Content</label>
+                <textarea asp-for="QuestionContent" class="form-control" rows="4"></textarea>
+                <span asp-validation-for="QuestionContent" class="text-danger"></span>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label asp-for="QuestionType" class="form-label">Question Type</label>
+                    <select asp-for="QuestionType" class="form-select" id="questionTypeSelect">
+                        <option value="MULTIPLE_CHOICE">Multiple Choice</option>
+                        <option value="TRUE_FALSE">True / False</option>
+                    </select>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <label asp-for="Difficulty" class="form-label">Difficulty</label>
+                    <select asp-for="Difficulty" class="form-select">
+                        <option value="EASY">Easy</option>
+                        <option value="MEDIUM">Medium</option>
+                        <option value="HARD">Hard</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Explanation" class="form-label">Explanation</label>
+                <textarea asp-for="Explanation" class="form-control" rows="3"></textarea>
+            </div>
+
+            <hr />
+
+            <h5 class="fw-bold mb-3">Choices</h5>
+            <p class="text-muted">Tick exactly one correct answer.</p>
+
+            @for (int i = 0; i < Model.Choices.Count; i++)
+            {
+                <input type="hidden"
+                       asp-for="Choices[i].DisplayOrder"
+                       class="choice-order" />
+
+                <div class="input-group mb-3 choice-row" data-index="@i">
+                    <div class="input-group-text">
+                        <input asp-for="Choices[i].IsCorrect"
+                               class="form-check-input mt-0 choice-correct" />
+                    </div>
+
+                    <span class="input-group-text">
+                        @(i + 1)
+                    </span>
+
+                    <input asp-for="Choices[i].ChoiceContent"
+                           class="form-control choice-content"
+                           placeholder="Enter choice content" />
+                </div>
+            }
+
+            <div class="d-flex gap-2 mt-4">
+                <button type="submit" class="btn btn-primary">Save Question</button>
+
+                <a asp-controller="QuestionBank"
+                   asp-action="Details"
+                   asp-route-id="@Model.BankId"
+                   class="btn btn-outline-secondary">
+                    Cancel
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const questionTypeSelect = document.getElementById("questionTypeSelect");
+            const rows = document.querySelectorAll(".choice-row");
+            const correctInputs = document.querySelectorAll(".choice-correct");
+
+            function allowOnlyOneCorrect() {
+                correctInputs.forEach(input => {
+                    input.addEventListener("change", function () {
+                        if (this.checked) {
+                            correctInputs.forEach(other => {
+                                if (other !== this) {
+                                    other.checked = false;
+                                }
+                            });
+                        }
+                    });
+                });
+            }
+
+            function applyQuestionType() {
+                const isTrueFalse = questionTypeSelect.value === "TRUE_FALSE";
+
+                rows.forEach(row => {
+                    const index = parseInt(row.dataset.index);
+                    const contentInput = row.querySelector(".choice-content");
+                    const correctInput = row.querySelector(".choice-correct");
+                    const orderInput = row.previousElementSibling;
+
+                    if (isTrueFalse) {
+                        if (index === 0) {
+                            row.style.display = "";
+                            contentInput.value = "True";
+                            contentInput.readOnly = true;
+                            contentInput.disabled = false;
+                            correctInput.disabled = false;
+                        }
+                        else if (index === 1) {
+                            row.style.display = "";
+                            contentInput.value = "False";
+                            contentInput.readOnly = true;
+                            contentInput.disabled = false;
+                            correctInput.disabled = false;
+                        }
+                        else {
+                            row.style.display = "none";
+                            contentInput.value = "";
+                            contentInput.disabled = true;
+                            correctInput.checked = false;
+                            correctInput.disabled = true;
+                        }
+                    }
+                    else {
+                        row.style.display = "";
+                        contentInput.readOnly = false;
+                        contentInput.disabled = false;
+                        correctInput.disabled = false;
+
+                        if ((index === 0 || index === 1) &&
+                            (contentInput.value === "True" || contentInput.value === "False")) {
+                            contentInput.value = "";
+                        }
+                    }
+                });
+            }
+
+            allowOnlyOneCorrect();
+            questionTypeSelect.addEventListener("change", applyQuestionType);
+            applyQuestionType();
+        });
+    </script>
+}
