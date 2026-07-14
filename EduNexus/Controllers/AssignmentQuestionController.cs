@@ -13,9 +13,9 @@ namespace EduNexus.Controllers
             _service = service;
         }
 
-        public async Task<IActionResult> Index(long assignmentId)
+        public async Task<IActionResult> Index(long assignmentId, long? bankId)
         {
-            var model = await _service.GetAssignmentQuestionsAsync(assignmentId);
+            var model = await _service.GetAssignmentQuestionsAsync(assignmentId, bankId);
             return View(model);
         }
 

@@ -5,7 +5,7 @@ namespace EduNexus.Services.Interfaces;
 public interface IAssignmentQuestionService
 {
     Task<AssignmentQuestionManagementViewModel>
-        GetAssignmentQuestionsAsync(long assignmentId);
+    GetAssignmentQuestionsAsync(long assignmentId, long? bankId);
 
     Task AddQuestionAsync(long assignmentId, long questionId);
 
