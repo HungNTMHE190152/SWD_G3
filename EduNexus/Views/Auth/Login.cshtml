@@ -28,7 +28,12 @@
                         @Model.ErrorMessage
                     </div>
                 }
-
+                @if (TempData["SuccessMessage"] != null)
+                {
+                    <div class="alert alert-success">
+                        @TempData["SuccessMessage"]
+                    </div>
+                }
                 <form asp-controller="Auth" asp-action="Login" method="post">
                     @Html.AntiForgeryToken()
 
@@ -53,13 +58,12 @@
                         Login
                     </button>
                 </form>
+                <div class="text-center mt-3">
+                    <span class="text-muted">Don't have an account?</span>
+                    <a asp-controller="Auth" asp-action="Register">Register as Student</a>
+                </div>
 
                 <hr />
-
-                <div class="small text-muted">
-                    <div><strong>Student:</strong> student01 / 123456</div>
-                    <div><strong>SME:</strong> sme01 / 123456</div>
-                </div>
             </div>
         </div>
     </div>

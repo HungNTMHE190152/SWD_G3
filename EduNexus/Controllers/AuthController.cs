@@ -106,4 +106,39 @@ public class AuthController : Controller
 
         return RedirectToAction("Index", "Home");
     }
+
+    [HttpGet]
+    public IActionResult Register()
+    {
+        if (User.Identity?.IsAuthenticated == true)
+        {
+            string role = User.FindFirstValue(ClaimTypes.Role) ?? string.Empty;
+            return RedirectByRole(role);
+        }
+
+        return View(new RegisterViewModel());
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Register(RegisterViewModel model)
+    {
+        if (!ModelState.IsValid)
+        {
+            return View(model);
+        }
+
+        try
+        {
+            await _authService.RegisterStudentAsync(model);
+
+            TempData["SuccessMessage"] = "Register successfully. Please login.";
+            return RedirectToAction(nameof(Login));
+        }
+        catch (Exception ex)
+        {
+            model.ErrorMessage = ex.Message;
+            return View(model);
+        }
+    }
 }
