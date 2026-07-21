@@ -6,6 +6,7 @@ using EduNexus.ViewModels.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
+//nothing here
 namespace EduNexus.Services.Authentication.Implementations
 {
     public class AuthService : IAuthService

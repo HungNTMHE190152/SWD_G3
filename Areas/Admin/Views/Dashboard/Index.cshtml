@@ -1,245 +1,309 @@
 ﻿@model EduNexus.Areas.Admin.ViewModels.Dashboard.AdminDashboardViewModel
 
 @{
-    ViewData["Title"] = "Admin Dashboard";
+    ViewData["Title"] = "Dashboard";
 }
 
-<div class="container-fluid py-4">
-    <div class="d-flex justify-content-between
-                align-items-center mb-4">
-        <div>
-            <h1 class="h3 mb-1">Admin Dashboard</h1>
+<div class="page-header">
+    <div>
+        <div class="page-eyebrow">
+            Administration overview
+        </div>
 
-            <p class="text-muted mb-0">
-                Overview of users, courses and classrooms.
+        <h2 class="page-title">
+            Welcome back, @User.Identity?.Name
+        </h2>
+
+        <p class="page-description">
+            Monitor users, courses awaiting approval
+            and classroom activity across EduNexus.
+        </p>
+    </div>
+
+    <div class="page-actions">
+        <a asp-area="Admin"
+           asp-controller="UserManagement"
+           asp-action="Create"
+           class="btn-app-secondary">
+
+            <i class="bi bi-person-plus"></i>
+            Create account
+        </a>
+
+        <a asp-area="Admin"
+           asp-controller="CourseReview"
+           asp-action="Index"
+           class="btn-app-primary">
+
+            <i class="bi bi-journal-check"></i>
+            Review courses
+        </a>
+    </div>
+</div>
+
+<div class="row g-3 mb-4">
+    <div class="col-sm-6 col-xl-3">
+        <div class="stat-card">
+            <div class="stat-card-header">
+                <div>
+                    <div class="stat-card-label">
+                        Total users
+                    </div>
+
+                    <div class="stat-card-value">
+                        @Model.TotalUsers
+                    </div>
+                </div>
+
+                <div class="stat-icon">
+                    <i class="bi bi-people"></i>
+                </div>
+            </div>
+
+            <div class="stat-card-note">
+                All registered users
+            </div>
+        </div>
+    </div>
+
+    <div class="col-sm-6 col-xl-3">
+        <div class="stat-card">
+            <div class="stat-card-header">
+                <div>
+                    <div class="stat-card-label">
+                        Active accounts
+                    </div>
+
+                    <div class="stat-card-value">
+                        @Model.ActiveAccounts
+                    </div>
+                </div>
+
+                <div class="stat-icon">
+                    <i class="bi bi-person-check"></i>
+                </div>
+            </div>
+
+            <div class="stat-card-note">
+                Accounts allowed to sign in
+            </div>
+        </div>
+    </div>
+
+    <div class="col-sm-6 col-xl-3">
+        <div class="stat-card">
+            <div class="stat-card-header">
+                <div>
+                    <div class="stat-card-label">
+                        Pending courses
+                    </div>
+
+                    <div class="stat-card-value">
+                        @Model.PendingCourseCount
+                    </div>
+                </div>
+
+                <div class="stat-icon">
+                    <i class="bi bi-hourglass-split"></i>
+                </div>
+            </div>
+
+            <div class="stat-card-note">
+                Awaiting Admin review
+            </div>
+        </div>
+    </div>
+
+    <div class="col-sm-6 col-xl-3">
+        <div class="stat-card">
+            <div class="stat-card-header">
+                <div>
+                    <div class="stat-card-label">
+                        Active classrooms
+                    </div>
+
+                    <div class="stat-card-value">
+                        @Model.ActiveClassroomCount
+                    </div>
+                </div>
+
+                <div class="stat-icon">
+                    <i class="bi bi-easel2"></i>
+                </div>
+            </div>
+
+            <div class="stat-card-note">
+                Open or in progress
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-3 mb-4">
+    <div class="col-md-4">
+        <div class="app-card">
+            <div class="app-card-body">
+                <div class="d-flex align-items-center
+                            justify-content-between">
+                    <div>
+                        <div class="stat-card-label">
+                            Students
+                        </div>
+
+                        <div class="fs-3 fw-bold mt-1">
+                            @Model.StudentCount
+                        </div>
+                    </div>
+
+                    <div class="stat-icon">
+                        <i class="bi bi-mortarboard"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="app-card">
+            <div class="app-card-body">
+                <div class="d-flex align-items-center
+                            justify-content-between">
+                    <div>
+                        <div class="stat-card-label">
+                            Teachers
+                        </div>
+
+                        <div class="fs-3 fw-bold mt-1">
+                            @Model.TeacherCount
+                        </div>
+                    </div>
+
+                    <div class="stat-icon">
+                        <i class="bi bi-person-video3"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="app-card">
+            <div class="app-card-body">
+                <div class="d-flex align-items-center
+                            justify-content-between">
+                    <div>
+                        <div class="stat-card-label">
+                            Subject experts
+                        </div>
+
+                        <div class="fs-3 fw-bold mt-1">
+                            @Model.SmeCount
+                        </div>
+                    </div>
+
+                    <div class="stat-icon">
+                        <i class="bi bi-lightbulb"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="data-table-card">
+    <div class="app-card-header">
+        <div>
+            <h3 class="app-card-title">
+                Courses pending review
+            </h3>
+
+            <p class="app-card-subtitle">
+                The five most recently submitted courses.
             </p>
         </div>
 
-        <div class="text-muted">
-            @DateTime.Now.ToString("dd/MM/yyyy")
-        </div>
+        <a asp-area="Admin"
+           asp-controller="CourseReview"
+           asp-action="Index"
+           class="btn-app-secondary">
+
+            View all
+            <i class="bi bi-arrow-right"></i>
+        </a>
     </div>
 
-    <div class="row g-3 mb-4">
-        <div class="col-sm-6 col-xl-3">
-            <div class="card shadow-sm h-100">
-                <div class="card-body">
-                    <p class="text-muted mb-1">
-                        Total Users
-                    </p>
-
-                    <h2 class="mb-0">
-                        @Model.TotalUsers
-                    </h2>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-sm-6 col-xl-3">
-            <div class="card shadow-sm h-100">
-                <div class="card-body">
-                    <p class="text-muted mb-1">
-                        Active Accounts
-                    </p>
-
-                    <h2 class="mb-0">
-                        @Model.ActiveAccounts
-                    </h2>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-sm-6 col-xl-3">
-            <div class="card shadow-sm h-100">
-                <div class="card-body">
-                    <p class="text-muted mb-1">
-                        Students
-                    </p>
-
-                    <h2 class="mb-0">
-                        @Model.StudentCount
-                    </h2>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-sm-6 col-xl-3">
-            <div class="card shadow-sm h-100">
-                <div class="card-body">
-                    <p class="text-muted mb-1">
-                        Teachers
-                    </p>
-
-                    <h2 class="mb-0">
-                        @Model.TeacherCount
-                    </h2>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-sm-6 col-xl-3">
-            <div class="card shadow-sm h-100">
-                <div class="card-body">
-                    <p class="text-muted mb-1">
-                        SMEs
-                    </p>
-
-                    <h2 class="mb-0">
-                        @Model.SmeCount
-                    </h2>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-sm-6 col-xl-3">
-            <div class="card shadow-sm
-                        border-warning h-100">
-                <div class="card-body">
-                    <p class="text-muted mb-1">
-                        Courses Pending Review
-                    </p>
-
-                    <h2 class="mb-0 text-warning">
-                        @Model.PendingCourseCount
-                    </h2>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-sm-6 col-xl-3">
-            <div class="card shadow-sm
-                        border-primary h-100">
-                <div class="card-body">
-                    <p class="text-muted mb-1">
-                        Active Classrooms
-                    </p>
-
-                    <h2 class="mb-0 text-primary">
-                        @Model.ActiveClassroomCount
-                    </h2>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-sm-6 col-xl-3">
-            <div class="card shadow-sm
-                        border-success h-100">
-                <div class="card-body">
-                    <p class="text-muted mb-1">
-                        Completed Classrooms
-                    </p>
-
-                    <h2 class="mb-0 text-success">
-                        @Model.CompletedClassroomCount
-                    </h2>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="card shadow-sm">
-        <div class="card-header bg-white
-                    d-flex justify-content-between
-                    align-items-center">
-            <div>
-                <h2 class="h5 mb-1">
-                    Recent Courses Pending Review
-                </h2>
-
-                <small class="text-muted">
-                    The five most recently submitted courses.
-                </small>
+    @if (Model.RecentPendingCourses.Count == 0)
+    {
+        <div class="empty-state">
+            <div class="empty-state-icon">
+                <i class="bi bi-check2-circle"></i>
             </div>
 
-            <a asp-area="Admin"
-               asp-controller="CourseReview"
-               asp-action="Index"
-               class="btn btn-outline-primary">
-                View all
-            </a>
+            <h3>No courses waiting for review</h3>
+
+            <p>
+                All submitted courses have been reviewed.
+                Newly submitted courses will appear here.
+            </p>
         </div>
+    }
+    else
+    {
+        <div class="table-responsive">
+            <table class="table app-table">
+                <thead>
+                    <tr>
+                        <th>Course</th>
+                        <th>Category</th>
+                        <th>SME</th>
+                        <th>Modules</th>
+                        <th>Lessons</th>
+                        <th>Submitted</th>
+                        <th class="text-end">Action</th>
+                    </tr>
+                </thead>
 
-        <div class="card-body p-0">
-            @if (Model.RecentPendingCourses.Count == 0)
-            {
-                <div class="p-4 text-center text-muted">
-                    There are currently no courses
-                    waiting for review.
-                </div>
-            }
-            else
-            {
-                <div class="table-responsive">
-                    <table class="table table-hover
-                                      align-middle mb-0">
-                        <thead class="table-light">
-                            <tr>
-                                <th>Course</th>
-                                <th>Category</th>
-                                <th>SME</th>
-                                <th>Modules</th>
-                                <th>Lessons</th>
-                                <th>Submitted</th>
-                                <th class="text-end">
-                                    Action
-                                </th>
-                            </tr>
-                        </thead>
+                <tbody>
+                    @foreach (var course
+                                    in Model.RecentPendingCourses)
+                    {
+                        <tr>
+                            <td>
+                                <div class="table-primary-text">
+                                    @course.Title
+                                </div>
 
-                        <tbody>
-                            @foreach (var course
-                                                    in Model.RecentPendingCourses)
-                            {
-                                <tr>
-                                    <td>
-                                        <div class="fw-semibold">
-                                            @course.Title
-                                        </div>
-
-                                        <small class="text-muted">
-                                            @course.CourseCode
-                                        </small>
-                                    </td>
-
-                                    <td>
-                                        @course.CategoryName
-                                    </td>
-
-                                    <td>
-                                        @course.SmeName
-                                    </td>
-
-                                    <td>
-                                        @course.ModuleCount
-                                    </td>
-
-                                    <td>
-                                        @course.LessonCount
-                                    </td>
-
-                                    <td>
-                                        @(course.SubmittedAt
-                                                                        ?.ToString(
-                                                                        "dd/MM/yyyy HH:mm")
-                                                                        ?? "N/A")
+                                <div class="table-secondary-text">
+                                    @course.CourseCode
+                                </div>
                             </td>
 
-                                    <td class="text-end">
-                                        <a asp-area="Admin"
-                                           asp-controller="CourseReview"
-                                           asp-action="Details"
-                                           asp-route-id="@course.CourseId"
-                                           class="btn btn-sm
-                                                          btn-primary">
-                                            Review
-                                        </a>
-                                    </td>
-                                </tr>
-                                                }
-                        </tbody>
-                    </table>
-                </div>
-            }
+                            <td>@course.CategoryName</td>
+                            <td>@course.SmeName</td>
+                            <td>@course.ModuleCount</td>
+                            <td>@course.LessonCount</td>
+
+                            <td>
+                                @(course.SubmittedAt
+                                                        ?.ToString("dd/MM/yyyy HH:mm")
+                                                        ?? "N/A")
+                    </td>
+
+                            <td class="text-end">
+                                <a asp-area="Admin"
+                                   asp-controller="CourseReview"
+                                   asp-action="Details"
+                                   asp-route-id="@course.CourseId"
+                                   class="btn btn-sm
+                                                  btn-outline-primary">
+
+                                    Review
+                                </a>
+                            </td>
+                        </tr>
+                                }
+                </tbody>
+            </table>
         </div>
-    </div>
+    }
 </div>

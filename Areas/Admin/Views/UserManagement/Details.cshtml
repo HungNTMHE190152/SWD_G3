@@ -1,0 +1,233 @@
+﻿@model EduNexus.Areas.Admin.ViewModels.UserManagement.UserDetailsViewModel
+
+@{
+    ViewData["Title"] = "User Details";
+}
+
+<div class="container py-4">
+    <div class="d-flex justify-content-between
+                align-items-center mb-4">
+        <div>
+            <h1 class="h3 mb-1">@Model.FullName</h1>
+
+            <p class="text-muted mb-0">
+                User and account details
+            </p>
+        </div>
+
+        <a asp-area="Admin"
+           asp-controller="UserManagement"
+           asp-action="Index"
+           class="btn btn-outline-secondary">
+            Back to List
+        </a>
+    </div>
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success">
+            @TempData["SuccessMessage"]
+        </div>
+    }
+
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger">
+            @TempData["ErrorMessage"]
+        </div>
+    }
+
+    <div class="row g-4">
+        <div class="col-lg-7">
+            <div class="card shadow-sm mb-4">
+                <div class="card-header bg-white">
+                    <strong>Personal information</strong>
+                </div>
+
+                <div class="card-body">
+                    <dl class="row mb-0">
+                        <dt class="col-sm-4">Full name</dt>
+                        <dd class="col-sm-8">@Model.FullName</dd>
+
+                        <dt class="col-sm-4">Email</dt>
+                        <dd class="col-sm-8">@Model.Email</dd>
+
+                        <dt class="col-sm-4">Phone</dt>
+                        <dd class="col-sm-8">
+                            @(Model.PhoneNumber ?? "N/A")
+                        </dd>
+
+                        <dt class="col-sm-4">User status</dt>
+                        <dd class="col-sm-8">
+                            @if (Model.UserStatus == "ACTIVE")
+                            {
+                                <span class="badge bg-success">
+                                    ACTIVE
+                                </span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-secondary">
+                                    INACTIVE
+                                </span>
+                            }
+                        </dd>
+
+                        <dt class="col-sm-4">Created</dt>
+                        <dd class="col-sm-8">
+                            @Model.UserCreatedAt.ToString(
+                            "dd/MM/yyyy HH:mm")
+                        </dd>
+                    </dl>
+                </div>
+            </div>
+
+            <div class="card shadow-sm">
+                <div class="card-header bg-white">
+                    <strong>Account information</strong>
+                </div>
+
+                <div class="card-body">
+                    <dl class="row mb-0">
+                        <dt class="col-sm-4">Username</dt>
+                        <dd class="col-sm-8">@Model.Username</dd>
+
+                        <dt class="col-sm-4">Role</dt>
+                        <dd class="col-sm-8">@Model.RoleName</dd>
+
+                        <dt class="col-sm-4">Account status</dt>
+                        <dd class="col-sm-8">
+                            @if (Model.IsAccountActive)
+                            {
+                                <span class="badge bg-success">
+                                    Active
+                                </span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-danger">
+                                    Locked
+                                </span>
+                            }
+                        </dd>
+
+                        <dt class="col-sm-4">Last login</dt>
+                        <dd class="col-sm-8">
+                            @(Model.LastLoginAt
+                                                        ?.ToString("dd/MM/yyyy HH:mm")
+                                                        ?? "Never")
+                        </dd>
+
+                        <dt class="col-sm-4">
+                            Account created
+                        </dt>
+
+                        <dd class="col-sm-8">
+                            @Model.AccountCreatedAt.ToString(
+                                                        "dd/MM/yyyy HH:mm")
+                        </dd>
+                    </dl>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-5">
+            <div class="card shadow-sm mb-4">
+                <div class="card-header bg-white">
+                    <strong>Account access</strong>
+                </div>
+
+                <div class="card-body">
+                    <p class="text-muted">
+                        Locking an account prevents
+                        the user from signing in.
+                    </p>
+
+                    <form asp-area="Admin"
+                          asp-controller="UserManagement"
+                          asp-action="SetAccountActive"
+                          method="post">
+
+                        <input type="hidden"
+                               name="id"
+                               value="@Model.UserId" />
+
+                        <input type="hidden"
+                               name="isActive"
+                               value="@(!Model.IsAccountActive)" />
+
+                        @if (Model.IsAccountActive)
+                        {
+                            <button type="submit"
+                                    class="btn btn-danger w-100"
+                                    onclick="return confirm(
+                                        'Lock this account?');">
+                                Lock Account
+                            </button>
+                        }
+                        else
+                        {
+                            <button type="submit"
+                                    class="btn btn-success w-100">
+                                Unlock Account
+                            </button>
+                        }
+                    </form>
+                </div>
+            </div>
+
+            <div class="card shadow-sm">
+                <div class="card-header bg-white">
+                    <strong>Change role</strong>
+                </div>
+
+                <div class="card-body">
+                    <form asp-area="Admin"
+                          asp-controller="UserManagement"
+                          asp-action="ChangeRole"
+                          method="post">
+
+                        <input type="hidden"
+                               name="id"
+                               value="@Model.UserId" />
+
+                        <div class="mb-3">
+                            <label class="form-label">
+                                Role
+                            </label>
+
+                            <select name="roleId"
+                                    class="form-select"
+                                    required>
+                                @foreach (var role in Model.Roles)
+                                {
+                                    if (role.RoleId ==
+                                    Model.RoleId)
+                                    {
+                                        <option value="@role.RoleId"
+                                                selected>
+                                            @role.RoleName
+                                        </option>
+                                    }
+                                    else
+                                    {
+                                        <option value="@role.RoleId">
+                                            @role.RoleName
+                                        </option>
+                                    }
+                                }
+                            </select>
+                        </div>
+
+                        <button type="submit"
+                                class="btn btn-primary w-100"
+                                onclick="return confirm(
+                                'Change this account role?');">
+                            Save Role
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -12,6 +12,10 @@ namespace EduNexus.Extensions.ServiceRegistrations
                 IAdminDashboardService,
                 AdminDashboardService>();
 
+            services.AddScoped<
+                IUserManagementService,
+                UserManagementService>();
+
             return services;
         }
     }
