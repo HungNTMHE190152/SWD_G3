@@ -2,10 +2,10 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace EduNexus.Areas.Admin.Controllers
+namespace EduNexus.Areas.SME.Controllers
 {
-    [Area("Admin")]
-    [Authorize(Roles = RoleNames.Admin)]
+    [Area("SME")]
+    [Authorize(Roles = RoleNames.Sme)]
     public class DashboardController : Controller
     {
         [HttpGet]

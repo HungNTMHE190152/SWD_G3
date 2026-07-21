@@ -19,13 +19,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Areas\Student\Controllers\" />
     <Folder Include="Areas\Student\ViewModels\" />
     <Folder Include="Areas\Student\Views\Shared\" />
-    <Folder Include="Areas\Teacher\Controllers\" />
     <Folder Include="Areas\Teacher\ViewModels\" />
     <Folder Include="Areas\Teacher\Views\Shared\" />
-    <Folder Include="Areas\SME\Controllers\" />
     <Folder Include="Areas\SME\ViewModels\" />
     <Folder Include="Areas\SME\Views\Shared\" />
     <Folder Include="Areas\Admin\ViewModels\" />

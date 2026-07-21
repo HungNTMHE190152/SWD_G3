@@ -1,12 +1,14 @@
 using EduNexus.Data;
 using Microsoft.EntityFrameworkCore;
 using EduNexus.Extensions.ServiceRegistrations;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using EduNexus.Data.SeedData;
 
 namespace EduNexus
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
 
@@ -16,12 +18,35 @@ namespace EduNexus
             builder.Services.AddSmeServices();
             builder.Services.AddTeacherServices();
             builder.Services.AddStudentServices();
+            builder.Services.AddAuthenticationServices();
+
+            builder.Services
+                .AddAuthentication(
+                    CookieAuthenticationDefaults.AuthenticationScheme)
+                .AddCookie(options =>
+                {
+                    options.Cookie.Name = "EduNexus.Authentication";
+
+                    options.LoginPath = "/Auth/Login";
+                    options.LogoutPath = "/Auth/Logout";
+                    options.AccessDeniedPath = "/Auth/AccessDenied";
+
+                    options.ExpireTimeSpan = TimeSpan.FromHours(8);
+                    options.SlidingExpiration = true;
+                });
+
+            builder.Services.AddAuthorization();
 
             builder.Services.AddDbContext<EduNexusContext>(options =>
     options.UseSqlServer(
         builder.Configuration.GetConnectionString("DefaultConnection")));
 
             var app = builder.Build();
+
+            if (app.Environment.IsDevelopment())
+            {
+                await DbSeeder.SeedDemoAccountsAsync(app.Services);
+            }
 
             // Configure the HTTP request pipeline.
             if (!app.Environment.IsDevelopment())
@@ -36,6 +61,7 @@ namespace EduNexus
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.MapControllerRoute(
