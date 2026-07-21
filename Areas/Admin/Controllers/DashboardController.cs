@@ -1,4 +1,6 @@
-﻿using EduNexus.Constants;
+﻿using EduNexus.Areas.Admin.ViewModels.Dashboard;
+using EduNexus.Constants;
+using EduNexus.Services.Administration.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -8,10 +10,23 @@ namespace EduNexus.Areas.Admin.Controllers
     [Authorize(Roles = RoleNames.Admin)]
     public class DashboardController : Controller
     {
-        [HttpGet]
-        public IActionResult Index()
+        private readonly IAdminDashboardService
+            _adminDashboardService;
+
+        public DashboardController(
+            IAdminDashboardService adminDashboardService)
         {
-            return View();
+            _adminDashboardService = adminDashboardService;
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Index()
+        {
+            AdminDashboardViewModel viewModel =
+                await _adminDashboardService
+                    .GetDashboardAsync();
+
+            return View(viewModel);
         }
     }
 }

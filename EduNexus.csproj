@@ -25,8 +25,8 @@
     <Folder Include="Areas\Teacher\Views\Shared\" />
     <Folder Include="Areas\SME\ViewModels\" />
     <Folder Include="Areas\SME\Views\Shared\" />
-    <Folder Include="Areas\Admin\ViewModels\" />
     <Folder Include="Areas\Admin\Views\Shared\" />
+    <Folder Include="Services\Administration\Interfaces\" />
   </ItemGroup>
 
 </Project>

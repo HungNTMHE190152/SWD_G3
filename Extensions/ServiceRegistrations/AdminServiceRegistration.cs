@@ -1,10 +1,17 @@
-﻿namespace EduNexus.Extensions.ServiceRegistrations
+﻿using EduNexus.Services.Administration.Implementations;
+using EduNexus.Services.Administration.Interfaces;
+
+namespace EduNexus.Extensions.ServiceRegistrations
 {
     public static class AdminServiceRegistration
     {
         public static IServiceCollection AddAdminServices(
             this IServiceCollection services)
         {
+            services.AddScoped<
+                IAdminDashboardService,
+                AdminDashboardService>();
+
             return services;
         }
     }
