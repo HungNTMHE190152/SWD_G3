@@ -1,4 +1,6 @@
-﻿using EduNexus.Constants;
+﻿using EduNexus.Areas.Admin.ViewModels.CourseReview;
+using EduNexus.Constants;
+using EduNexus.Services.Administration.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -8,18 +10,33 @@ namespace EduNexus.Areas.Admin.Controllers
     [Authorize(Roles = RoleNames.Admin)]
     public class CourseReviewController : Controller
     {
-        [HttpGet]
-        public IActionResult Index()
+        private readonly ICourseReviewService
+            _courseReviewService;
+
+        public CourseReviewController(
+            ICourseReviewService courseReviewService)
         {
-            return Content(
-                "Course Review List will be implemented next.");
+            _courseReviewService =
+                courseReviewService;
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Index(
+            [FromQuery] CourseReviewFilterViewModel filter)
+        {
+            CourseReviewIndexViewModel viewModel =
+                await _courseReviewService
+                    .GetCoursesAsync(filter);
+
+            return View(viewModel);
         }
 
         [HttpGet]
         public IActionResult Details(long id)
         {
             return Content(
-                $"Course Review Details: CourseId = {id}");
+                $"Course Review Details will be implemented next. "
+                + $"CourseId = {id}");
         }
     }
 }
