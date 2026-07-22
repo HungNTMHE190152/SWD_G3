@@ -1,6 +1,6 @@
-﻿namespace EduNexus.Areas.Admin.ViewModels.Profile
+﻿namespace EduNexus.ViewModels.Profile
 {
-    public class AdminProfileViewModel
+    public class UserProfileViewModel
     {
         public long UserId { get; set; }
 

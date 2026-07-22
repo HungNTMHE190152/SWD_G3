@@ -1,25 +1,24 @@
 ﻿using System.Text.RegularExpressions;
-using EduNexus.Areas.Admin.ViewModels.Profile;
-using EduNexus.Constants;
 using EduNexus.Data;
-using EduNexus.Services.Administration.Interfaces;
 using EduNexus.Services.Common;
+using EduNexus.Services.Interfaces;
+using EduNexus.ViewModels.Profile;
 using Microsoft.EntityFrameworkCore;
 
-namespace EduNexus.Services.Administration.Implementations
+namespace EduNexus.Services.Implementations
 {
-    public class AdminProfileService
-        : IAdminProfileService
+    public class ProfileService
+        : IProfileService
     {
         private readonly EduNexusContext _context;
 
-        public AdminProfileService(
+        public ProfileService(
             EduNexusContext context)
         {
             _context = context;
         }
 
-        public async Task<AdminProfileViewModel?>
+        public async Task<UserProfileViewModel?>
             GetProfileAsync(long userId)
         {
             if (userId <= 0)
@@ -42,10 +41,8 @@ namespace EduNexus.Services.Administration.Implementations
                     equals role.RoleId
 
                 where user.UserId == userId
-                      && role.RoleName
-                      == RoleNames.Admin
 
-                select new AdminProfileViewModel
+                select new UserProfileViewModel
                 {
                     UserId =
                         user.UserId,
@@ -86,7 +83,7 @@ namespace EduNexus.Services.Administration.Implementations
             ).FirstOrDefaultAsync();
         }
 
-        public async Task<EditAdminProfileViewModel?>
+        public async Task<EditProfileViewModel?>
             GetEditAsync(long userId)
         {
             if (userId <= 0)
@@ -103,16 +100,9 @@ namespace EduNexus.Services.Administration.Implementations
                     on user.UserId
                     equals account.UserId
 
-                join role in
-                    _context.Roles.AsNoTracking()
-                    on account.RoleId
-                    equals role.RoleId
-
                 where user.UserId == userId
-                      && role.RoleName
-                      == RoleNames.Admin
 
-                select new EditAdminProfileViewModel
+                select new EditProfileViewModel
                 {
                     FullName =
                         user.FullName,
@@ -129,7 +119,7 @@ namespace EduNexus.Services.Administration.Implementations
         public async Task<ServiceResult>
             UpdateProfileAsync(
                 long userId,
-                EditAdminProfileViewModel model)
+                EditProfileViewModel model)
         {
             if (userId <= 0)
             {
@@ -205,13 +195,7 @@ namespace EduNexus.Services.Administration.Implementations
                         on user.UserId
                         equals account.UserId
 
-                    join role in _context.Roles
-                        on account.RoleId
-                        equals role.RoleId
-
                     where user.UserId == userId
-                          && role.RoleName
-                          == RoleNames.Admin
 
                     select new
                     {
@@ -223,13 +207,19 @@ namespace EduNexus.Services.Administration.Implementations
             if (profileRecord == null)
             {
                 return ServiceResult.Failure(
-                    "The Admin profile was not found.");
+                    "The user profile was not found.");
             }
 
             if (!profileRecord.Account.IsActive)
             {
                 return ServiceResult.Failure(
                     "The current account is inactive.");
+            }
+
+            if (profileRecord.User.Status != "ACTIVE")
+            {
+                return ServiceResult.Failure(
+                    "The current user profile is inactive.");
             }
 
             bool hasChanges =
@@ -283,13 +273,13 @@ namespace EduNexus.Services.Administration.Implementations
                 return true;
             }
 
-            bool isValidUri =
+            bool isValidUrl =
                 Uri.TryCreate(
                     avatarUrl,
                     UriKind.Absolute,
                     out Uri? uri);
 
-            if (!isValidUri
+            if (!isValidUrl
                 || uri == null)
             {
                 return false;

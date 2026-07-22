@@ -1,4 +1,4 @@
-﻿@model EduNexus.Areas.Admin.ViewModels.Profile.EditAdminProfileViewModel
+﻿@model EduNexus.ViewModels.Profile.EditProfileViewModel
 
 @{
     ViewData["Title"] = "Edit Profile";
@@ -20,7 +20,7 @@
     </div>
 
     <div class="page-actions">
-        <a asp-area="Admin"
+        <a asp-area=""
            asp-controller="Profile"
            asp-action="Index"
            class="btn-app-secondary">
@@ -39,10 +39,6 @@
                     <h3 class="app-card-title">
                         Avatar preview
                     </h3>
-
-                    <p class="app-card-subtitle">
-                        Preview of the current Avatar URL.
-                    </p>
                 </div>
             </div>
 
@@ -50,6 +46,10 @@
                 <img id="avatarPreview"
                      src="@Model.AvatarUrl"
                      alt="Avatar preview"
+                     class="@(string.IsNullOrWhiteSpace(
+                                              Model.AvatarUrl)
+                                                 ? "d-none"
+                                                 : "")"
                      style="
                         width: 130px;
                         height: 130px;
@@ -57,14 +57,13 @@
                         border-radius: 30px;
                         object-fit: cover;
                         border: 1px solid var(--border);
-                        display:
-                            @(string.IsNullOrWhiteSpace(
-                                                     Model.AvatarUrl)
-                                                         ? "none"
-                                                         : "block");
                      " />
 
                 <div id="avatarPlaceholder"
+                     class="@(string.IsNullOrWhiteSpace(
+                                              Model.AvatarUrl)
+                                                 ? ""
+                                                 : "d-none")"
                      style="
                         width: 130px;
                         height: 130px;
@@ -75,20 +74,11 @@
                         background: var(--accent-light);
                         color: var(--accent);
                         font-size: 48px;
-                        display:
-                            @(string.IsNullOrWhiteSpace(
-                                                     Model.AvatarUrl)
-                                                         ? "flex"
-                                                         : "none");
+                        display: flex;
                      ">
 
                     <i class="bi bi-person"></i>
                 </div>
-
-                <p class="text-muted small mt-4 mb-0">
-                    Use an HTTP/HTTPS image URL or a local path
-                    beginning with <code>/</code>.
-                </p>
             </div>
         </div>
     </div>
@@ -102,13 +92,14 @@
                     </h3>
 
                     <p class="app-card-subtitle">
-                        Email, username and role cannot be changed here.
+                        Email, username and role
+                        cannot be changed here.
                     </p>
                 </div>
             </div>
 
             <div class="app-card-body">
-                <form asp-area="Admin"
+                <form asp-area=""
                       asp-controller="Profile"
                       asp-action="Edit"
                       method="post">
@@ -124,8 +115,7 @@
 
                         <input asp-for="FullName"
                                class="form-control"
-                               autocomplete="name"
-                               placeholder="Enter your full name" />
+                               autocomplete="name" />
 
                         <span asp-validation-for="FullName"
                               class="text-danger small">
@@ -139,17 +129,11 @@
 
                         <input asp-for="PhoneNumber"
                                class="form-control"
-                               autocomplete="tel"
-                               placeholder="Example: +84 912 345 678" />
+                               autocomplete="tel" />
 
                         <span asp-validation-for="PhoneNumber"
                               class="text-danger small">
                         </span>
-
-                        <div class="form-text">
-                            Digits, spaces, parentheses,
-                            plus and hyphen are accepted.
-                        </div>
                     </div>
 
                     <div class="mb-4">
@@ -159,33 +143,14 @@
 
                         <input asp-for="AvatarUrl"
                                id="avatarUrlInput"
-                               class="form-control"
-                               placeholder="https://example.com/avatar.jpg" />
+                               class="form-control" />
 
                         <span asp-validation-for="AvatarUrl"
                               class="text-danger small">
                         </span>
 
                         <div class="form-text">
-                            Leave blank to remove the current avatar.
-                        </div>
-                    </div>
-
-                    <div class="app-alert app-alert-info mb-4">
-                        <div class="alert-icon">
-                            <i class="bi bi-info-circle"></i>
-                        </div>
-
-                        <div class="alert-content">
-                            <strong>
-                                Account identity
-                            </strong>
-
-                            <span>
-                                Email address, username, role and account
-                                status are managed by the system and cannot
-                                be edited from this form.
-                            </span>
+                            Leave blank to remove the avatar.
                         </div>
                     </div>
 
@@ -194,7 +159,7 @@
                                 flex-wrap
                                 gap-2">
 
-                        <a asp-area="Admin"
+                        <a asp-area=""
                            asp-controller="Profile"
                            asp-action="Index"
                            class="btn-app-secondary">
@@ -235,34 +200,34 @@
                         "avatarPlaceholder");
 
                 function showPlaceholder() {
-                    avatarPreview.style.display =
-                        "none";
+                    avatarPreview.classList.add(
+                        "d-none");
 
-                    avatarPlaceholder.style.display =
-                        "flex";
+                    avatarPlaceholder.classList.remove(
+                        "d-none");
                 }
 
                 function showPreview(url) {
                     avatarPreview.src =
                         url;
 
-                    avatarPreview.style.display =
-                        "block";
+                    avatarPreview.classList.remove(
+                        "d-none");
 
-                    avatarPlaceholder.style.display =
-                        "none";
+                    avatarPlaceholder.classList.add(
+                        "d-none");
                 }
 
-                function updateAvatarPreview() {
-                    const url =
+                function updatePreview() {
+                    const value =
                         avatarInput.value.trim();
 
-                    if (!url) {
+                    if (!value) {
                         showPlaceholder();
                         return;
                     }
 
-                    showPreview(url);
+                    showPreview(value);
                 }
 
                 avatarPreview.addEventListener(
@@ -271,9 +236,7 @@
 
                 avatarInput.addEventListener(
                     "input",
-                    updateAvatarPreview);
-
-                updateAvatarPreview();
+                    updatePreview);
             });
     </script>
 }

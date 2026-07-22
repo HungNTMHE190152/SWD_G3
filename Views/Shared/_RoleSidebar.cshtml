@@ -162,25 +162,6 @@
                 </span>
             </a>
         </li>
-        <li class="sidebar-section-title">
-            Account
-        </li>
-
-        <li>
-            <a asp-area="Admin"
-               asp-controller="Profile"
-               asp-action="Index"
-               class="sidebar-link @ActiveLink(
-                      "Admin",
-                      "Profile")">
-
-            <i class="bi bi-person-circle"></i>
-
-                <span>
-                    My Profile
-                </span>
-            </a>
-        </li>
         }
 
     @* =====================================================
@@ -419,6 +400,34 @@
 
                 <span>
                     My Rankings
+                </span>
+            </a>
+        </li>
+        }
+
+    @* =====================================================
+       SHARED PROFILE MENU
+       Hiển thị cho tất cả tài khoản đã đăng nhập
+       ===================================================== *@
+
+    @if (User.Identity?.IsAuthenticated == true)
+    {
+        <li class="sidebar-section-title">
+            Account
+        </li>
+
+        <li>
+            <a asp-area=""
+               asp-controller="Profile"
+               asp-action="Index"
+               class="sidebar-link @ActiveLink(
+                                  "",
+                                  "Profile")">
+
+            <i class="bi bi-person-circle"></i>
+
+                <span>
+                    My Profile
                 </span>
             </a>
         </li>

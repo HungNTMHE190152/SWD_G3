@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace EduNexus.Areas.Admin.ViewModels.Profile
+namespace EduNexus.ViewModels.Profile
 {
-    public class EditAdminProfileViewModel
+    public class EditProfileViewModel
         : IValidatableObject
     {
         [Display(Name = "Full name")]
@@ -46,10 +46,10 @@ namespace EduNexus.Areas.Admin.ViewModels.Profile
             string avatarValue =
                 AvatarUrl.Trim();
 
-            bool isRelativePath =
+            bool isLocalPath =
                 avatarValue.StartsWith("/");
 
-            bool isAbsoluteUrl =
+            bool isWebUrl =
                 Uri.TryCreate(
                     avatarValue,
                     UriKind.Absolute,
@@ -60,8 +60,8 @@ namespace EduNexus.Areas.Admin.ViewModels.Profile
                     || avatarUri.Scheme == Uri.UriSchemeHttps
                 );
 
-            if (!isRelativePath
-                && !isAbsoluteUrl)
+            if (!isLocalPath
+                && !isWebUrl)
             {
                 yield return new ValidationResult(
                     "Avatar URL must be an HTTP/HTTPS URL "

@@ -36,9 +36,7 @@ namespace EduNexus.Extensions.ServiceRegistrations
     ITeacherPerformanceReportService,
     TeacherPerformanceReportService>();
 
-            services.AddScoped<
-    IAdminProfileService,
-    AdminProfileService>();
+            
             return services;
         }
     }

@@ -1,25 +1,23 @@
 ﻿using System.Security.Claims;
-using EduNexus.Areas.Admin.ViewModels.Profile;
-using EduNexus.Constants;
 using EduNexus.Extensions;
-using EduNexus.Services.Administration.Interfaces;
 using EduNexus.Services.Common;
+using EduNexus.Services.Interfaces;
+using EduNexus.ViewModels.Profile;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace EduNexus.Areas.Admin.Controllers
+namespace EduNexus.Controllers
 {
-    [Area("Admin")]
-    [Authorize(Roles = RoleNames.Admin)]
+    [Authorize]
     public class ProfileController : Controller
     {
-        private readonly IAdminProfileService
+        private readonly IProfileService
             _profileService;
 
         public ProfileController(
-            IAdminProfileService profileService)
+            IProfileService profileService)
         {
             _profileService = profileService;
         }
@@ -30,7 +28,7 @@ namespace EduNexus.Areas.Admin.Controllers
             long currentUserId =
                 User.GetCurrentUserId();
 
-            AdminProfileViewModel? viewModel =
+            UserProfileViewModel? viewModel =
                 await _profileService
                     .GetProfileAsync(currentUserId);
 
@@ -48,7 +46,7 @@ namespace EduNexus.Areas.Admin.Controllers
             long currentUserId =
                 User.GetCurrentUserId();
 
-            EditAdminProfileViewModel? viewModel =
+            EditProfileViewModel? viewModel =
                 await _profileService
                     .GetEditAsync(currentUserId);
 
@@ -63,7 +61,7 @@ namespace EduNexus.Areas.Admin.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(
-            EditAdminProfileViewModel model)
+            EditProfileViewModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -88,11 +86,6 @@ namespace EduNexus.Areas.Admin.Controllers
                 return View(model);
             }
 
-            /*
-             * Refresh ClaimTypes.Name in the authentication
-             * cookie so the shared sidebar immediately displays
-             * the newly updated full name.
-             */
             await RefreshAuthenticationCookieAsync(
                 model.FullName.Trim());
 
