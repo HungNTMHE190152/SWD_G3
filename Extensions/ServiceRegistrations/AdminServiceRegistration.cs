@@ -23,6 +23,10 @@ namespace EduNexus.Extensions.ServiceRegistrations
             services.AddScoped<
     ICourseReviewService,
     CourseReviewService>();
+
+            services.AddScoped<
+    IRankingConfigurationService,
+    RankingConfigurationService>();
             return services;
         }
     }

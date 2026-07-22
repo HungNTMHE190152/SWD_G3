@@ -1,0 +1,676 @@
+﻿@model EduNexus.Areas.Admin.ViewModels.RankingConfiguration.RankingConfigurationIndexViewModel
+
+@{
+    ViewData["Title"] = "Ranking Configuration";
+}
+
+<div class="page-header">
+    <div>
+        <div class="page-eyebrow">
+            Student performance
+        </div>
+
+        <h2 class="page-title">
+            Ranking Configuration
+        </h2>
+
+        <p class="page-description">
+            Configure how assignment results, quiz scores
+            and lesson completion contribute to the
+            overall student ranking score.
+        </p>
+    </div>
+</div>
+
+<div class="row g-4">
+    <div class="col-xl-8">
+        <div class="app-card mb-4">
+            <div class="app-card-header">
+                <div>
+                    <h3 class="app-card-title">
+                        Ranking weights
+                    </h3>
+
+                    <p class="app-card-subtitle">
+                        The total of all three components
+                        must equal exactly 100%.
+                    </p>
+                </div>
+
+                @if (Model.HasActiveConfiguration)
+                {
+                    <span class="status-badge status-success">
+                        <i class="bi bi-check-circle"></i>
+                        ACTIVE CONFIGURATION
+                    </span>
+                }
+                else
+                {
+                    <span class="status-badge status-warning">
+                        <i class="bi bi-exclamation-circle"></i>
+                        NOT SAVED
+                    </span>
+                }
+            </div>
+
+            <div class="app-card-body">
+                <form asp-area="Admin"
+                      asp-controller="RankingConfiguration"
+                      asp-action="Save"
+                      method="post"
+                      id="rankingConfigurationForm">
+
+                    <div asp-validation-summary="ModelOnly"
+                         class="app-alert app-alert-danger">
+                    </div>
+
+                    <div class="ranking-weight-grid">
+                        <div class="ranking-weight-card
+                                    assignment-weight-card">
+
+                            <div class="ranking-weight-header">
+                                <div class="ranking-weight-icon">
+                                    <i class="bi bi-clipboard-check"></i>
+                                </div>
+
+                                <div>
+                                    <h4>Assignments</h4>
+
+                                    <p>
+                                        Graded assignment submissions
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div class="ranking-input-wrapper">
+                                <input asp-for="Form.AssignmentPercentage"
+                                       id="assignmentPercentage"
+                                       class="form-control
+                                              ranking-percentage-input"
+                                       type="number"
+                                       min="0"
+                                       max="100"
+                                       step="0.01" />
+
+                                <span class="ranking-percent-symbol">
+                                    %
+                                </span>
+                            </div>
+
+                            <span asp-validation-for="Form.AssignmentPercentage"
+                                  class="text-danger small">
+                            </span>
+
+                            <div class="ranking-progress">
+                                <div class="ranking-progress-bar"
+                                     id="assignmentProgress">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="ranking-weight-card
+                                    quiz-weight-card">
+
+                            <div class="ranking-weight-header">
+                                <div class="ranking-weight-icon">
+                                    <i class="bi bi-ui-checks-grid"></i>
+                                </div>
+
+                                <div>
+                                    <h4>Quizzes</h4>
+
+                                    <p>
+                                        Highest graded quiz attempts
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div class="ranking-input-wrapper">
+                                <input asp-for="Form.QuizPercentage"
+                                       id="quizPercentage"
+                                       class="form-control
+                                              ranking-percentage-input"
+                                       type="number"
+                                       min="0"
+                                       max="100"
+                                       step="0.01" />
+
+                                <span class="ranking-percent-symbol">
+                                    %
+                                </span>
+                            </div>
+
+                            <span asp-validation-for="Form.QuizPercentage"
+                                  class="text-danger small">
+                            </span>
+
+                            <div class="ranking-progress">
+                                <div class="ranking-progress-bar"
+                                     id="quizProgress">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="ranking-weight-card
+                                    lesson-weight-card">
+
+                            <div class="ranking-weight-header">
+                                <div class="ranking-weight-icon">
+                                    <i class="bi bi-journal-check"></i>
+                                </div>
+
+                                <div>
+                                    <h4>Lesson progress</h4>
+
+                                    <p>
+                                        Percentage of lessons completed
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div class="ranking-input-wrapper">
+                                <input asp-for="Form.LessonProgressPercentage"
+                                       id="lessonPercentage"
+                                       class="form-control
+                                              ranking-percentage-input"
+                                       type="number"
+                                       min="0"
+                                       max="100"
+                                       step="0.01" />
+
+                                <span class="ranking-percent-symbol">
+                                    %
+                                </span>
+                            </div>
+
+                            <span asp-validation-for="Form.LessonProgressPercentage"
+                                  class="text-danger small">
+                            </span>
+
+                            <div class="ranking-progress">
+                                <div class="ranking-progress-bar"
+                                     id="lessonProgress">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="ranking-total-panel mt-4"
+                         id="rankingTotalPanel">
+
+                        <div>
+                            <span class="ranking-total-label">
+                                Total configured weight
+                            </span>
+
+                            <strong id="totalPercentage">
+                                @Model.Form.TotalPercentage.ToString("0.##")%
+                            </strong>
+                        </div>
+
+                        <div id="totalStatus"
+                             class="status-badge">
+                        </div>
+                    </div>
+
+                    <div class="ranking-formula-preview mt-4">
+                        <div class="formula-preview-header">
+                            <i class="bi bi-calculator"></i>
+
+                            <div>
+                                <strong>
+                                    Formula preview
+                                </strong>
+
+                                <small>
+                                    Student ranking score calculation
+                                </small>
+                            </div>
+                        </div>
+
+                        <div class="formula-preview-content">
+                            <span>
+                                Assignment Average
+                            </span>
+
+                            <strong>
+                                × <span id="formulaAssignment">
+                                    @Model.Form.AssignmentPercentage.ToString("0.##")
+                                </span>%
+                            </strong>
+
+                            <span class="formula-plus">+</span>
+
+                            <span>
+                                Quiz Average
+                            </span>
+
+                            <strong>
+                                × <span id="formulaQuiz">
+                                    @Model.Form.QuizPercentage.ToString("0.##")
+                                </span>%
+                            </strong>
+
+                            <span class="formula-plus">+</span>
+
+                            <span>
+                                Lesson Progress
+                            </span>
+
+                            <strong>
+                                × <span id="formulaLesson">
+                                    @Model.Form.LessonProgressPercentage.ToString("0.##")
+                                </span>%
+                            </strong>
+                        </div>
+                    </div>
+
+                    <div class="d-flex flex-wrap
+                                justify-content-between
+                                align-items-center
+                                gap-3 mt-4">
+
+                        <p class="text-muted small mb-0">
+                            Saving creates a new configuration
+                            and preserves the previous version
+                            in history.
+                        </p>
+
+                        <button type="submit"
+                                class="btn-app-primary"
+                                id="saveConfigurationButton">
+
+                            <i class="bi bi-check-lg"></i>
+                            Save configuration
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xl-4">
+        <div class="app-card mb-4">
+            <div class="app-card-header">
+                <div>
+                    <h3 class="app-card-title">
+                        Current configuration
+                    </h3>
+
+                    <p class="app-card-subtitle">
+                        Configuration currently used by
+                        the ranking calculation.
+                    </p>
+                </div>
+            </div>
+
+            <div class="app-card-body">
+                @if (Model.HasActiveConfiguration)
+                {
+                    <div class="current-ranking-summary">
+                        <div class="current-ranking-item">
+                            <span>
+                                <i class="bi bi-clipboard-check"></i>
+                                Assignments
+                            </span>
+
+                            <strong>
+                                @Model.Form.AssignmentPercentage.ToString("0.##")%
+                            </strong>
+                        </div>
+
+                        <div class="current-ranking-item">
+                            <span>
+                                <i class="bi bi-ui-checks-grid"></i>
+                                Quizzes
+                            </span>
+
+                            <strong>
+                                @Model.Form.QuizPercentage.ToString("0.##")%
+                            </strong>
+                        </div>
+
+                        <div class="current-ranking-item">
+                            <span>
+                                <i class="bi bi-journal-check"></i>
+                                Lesson progress
+                            </span>
+
+                            <strong>
+                                @Model.Form.LessonProgressPercentage.ToString("0.##")%
+                            </strong>
+                        </div>
+                    </div>
+
+                    <hr />
+
+                    <dl class="row small mb-0">
+                        <dt class="col-5 text-muted">
+                            Updated by
+                        </dt>
+
+                        <dd class="col-7 text-end fw-semibold">
+                            @Model.CurrentUpdatedByName
+                        </dd>
+
+                        <dt class="col-5 text-muted">
+                            Updated at
+                        </dt>
+
+                        <dd class="col-7 text-end fw-semibold">
+                            @Model.CurrentUpdatedAt
+                            ?.ToString("dd/MM/yyyy HH:mm")
+                        </dd>
+                    </dl>
+                }
+                else
+                {
+                    <div class="empty-state py-4">
+                        <div class="empty-state-icon">
+                            <i class="bi bi-sliders"></i>
+                        </div>
+
+                        <h3>No active configuration</h3>
+
+                        <p>
+                            The form currently displays the
+                            recommended default values.
+                            Save them to activate ranking.
+                        </p>
+                    </div>
+                }
+            </div>
+        </div>
+
+        <div class="app-card">
+            <div class="app-card-header">
+                <div>
+                    <h3 class="app-card-title">
+                        Calculation notes
+                    </h3>
+                </div>
+            </div>
+
+            <div class="app-card-body">
+                <ul class="ranking-note-list">
+                    <li>
+                        Missing assignments contribute
+                        a score of zero.
+                    </li>
+
+                    <li>
+                        The highest graded attempt is used
+                        for each quiz.
+                    </li>
+
+                    <li>
+                        Lesson progress is based on the
+                        percentage of completed lessons.
+                    </li>
+
+                    <li>
+                        All components are converted to
+                        the same score scale before applying
+                        these weights.
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="data-table-card mt-4">
+    <div class="app-card-header">
+        <div>
+            <h3 class="app-card-title">
+                Configuration history
+            </h3>
+
+            <p class="app-card-subtitle">
+                The 20 most recently saved configurations.
+            </p>
+        </div>
+    </div>
+
+    @if (Model.History.Count == 0)
+    {
+        <div class="empty-state">
+            <div class="empty-state-icon">
+                <i class="bi bi-clock-history"></i>
+            </div>
+
+            <h3>No configuration history</h3>
+
+            <p>
+                Saved ranking configurations will appear here.
+            </p>
+        </div>
+    }
+    else
+    {
+        <div class="table-responsive">
+            <table class="table app-table">
+                <thead>
+                    <tr>
+                        <th>Version</th>
+                        <th>Assignment</th>
+                        <th>Quiz</th>
+                        <th>Lesson progress</th>
+                        <th>Total</th>
+                        <th>Updated by</th>
+                        <th>Updated at</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    @foreach (var configuration
+                                    in Model.History)
+                    {
+                        <tr>
+                            <td>
+                                <span class="table-primary-text">
+                                    #@configuration.RankingConfigurationId
+                                </span>
+                            </td>
+
+                            <td>
+                                @configuration.AssignmentPercentage
+                                .ToString("0.##")%
+                            </td>
+
+                            <td>
+                                @configuration.QuizPercentage
+                                .ToString("0.##")%
+                            </td>
+
+                            <td>
+                                @configuration.LessonProgressPercentage
+                                .ToString("0.##")%
+                            </td>
+
+                            <td>
+                                <strong>
+                                    @configuration.TotalPercentage
+                                    .ToString("0.##")%
+                                </strong>
+                            </td>
+
+                            <td>
+                                @configuration.UpdatedByName
+                            </td>
+
+                            <td>
+                                @configuration.UpdatedAt
+                                .ToString("dd/MM/yyyy HH:mm")
+                            </td>
+
+                            <td>
+                                @if (configuration.IsActive)
+                                {
+                                    <span class="status-badge
+                                                             status-success">
+
+                                        <i class="bi bi-check-circle"></i>
+                                        ACTIVE
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="status-badge
+                                                             status-neutral">
+
+                                        PREVIOUS
+                                    </span>
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+
+    <script>
+        document.addEventListener(
+            "DOMContentLoaded",
+            function () {
+                const assignmentInput =
+                    document.getElementById(
+                        "assignmentPercentage");
+
+                const quizInput =
+                    document.getElementById(
+                        "quizPercentage");
+
+                const lessonInput =
+                    document.getElementById(
+                        "lessonPercentage");
+
+                const totalElement =
+                    document.getElementById(
+                        "totalPercentage");
+
+                const totalStatus =
+                    document.getElementById(
+                        "totalStatus");
+
+                const totalPanel =
+                    document.getElementById(
+                        "rankingTotalPanel");
+
+                const saveButton =
+                    document.getElementById(
+                        "saveConfigurationButton");
+
+                function getValue(input) {
+                    const value =
+                        Number.parseFloat(input.value);
+
+                    return Number.isFinite(value)
+                        ? value
+                        : 0;
+                }
+
+                function formatNumber(value) {
+                    return Number.isInteger(value)
+                        ? value.toString()
+                        : value.toFixed(2)
+                            .replace(/0+$/, "")
+                            .replace(/\.$/, "");
+                }
+
+                function clampProgress(value) {
+                    return Math.max(
+                        0,
+                        Math.min(100, value));
+                }
+
+                function updateRankingPreview() {
+                    const assignment =
+                        getValue(assignmentInput);
+
+                    const quiz =
+                        getValue(quizInput);
+
+                    const lesson =
+                        getValue(lessonInput);
+
+                    const total =
+                        assignment + quiz + lesson;
+
+                    totalElement.textContent =
+                        formatNumber(total) + "%";
+
+                    document.getElementById(
+                        "formulaAssignment")
+                        .textContent =
+                            formatNumber(assignment);
+
+                    document.getElementById(
+                        "formulaQuiz")
+                        .textContent =
+                            formatNumber(quiz);
+
+                    document.getElementById(
+                        "formulaLesson")
+                        .textContent =
+                            formatNumber(lesson);
+
+                    document.getElementById(
+                        "assignmentProgress")
+                        .style.width =
+                            clampProgress(assignment) + "%";
+
+                    document.getElementById(
+                        "quizProgress")
+                        .style.width =
+                            clampProgress(quiz) + "%";
+
+                    document.getElementById(
+                        "lessonProgress")
+                        .style.width =
+                            clampProgress(lesson) + "%";
+
+                    const totalIsValid =
+                        Math.abs(total - 100) < 0.0001;
+
+                    totalStatus.className =
+                        "status-badge "
+                        + (
+                            totalIsValid
+                                ? "status-success"
+                                : "status-danger"
+                        );
+
+                    totalStatus.innerHTML =
+                        totalIsValid
+                            ? '<i class="bi bi-check-circle"></i> VALID'
+                            : '<i class="bi bi-exclamation-circle"></i> MUST EQUAL 100%';
+
+                    totalPanel.classList.toggle(
+                        "ranking-total-invalid",
+                        !totalIsValid);
+
+                    saveButton.disabled =
+                        !totalIsValid;
+                }
+
+                [
+                    assignmentInput,
+                    quizInput,
+                    lessonInput
+                ].forEach(function (input) {
+                    input.addEventListener(
+                        "input",
+                        updateRankingPreview);
+                });
+
+                updateRankingPreview();
+            });
+    </script>
+}

@@ -1198,4 +1198,242 @@ textarea.form-control {
             font-size: 23px;
         }
     }
+    /* Ranking configuration */
+
+    .ranking-weight-grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 16px;
+    }
+
+    .ranking-weight-card {
+        padding: 18px;
+        border: 1px solid var(--border);
+        border-radius: 15px;
+        background: var(--surface-muted);
+    }
+
+    .ranking-weight-header {
+        min-height: 58px;
+        display: flex;
+        align-items: flex-start;
+        gap: 12px;
+    }
+
+    .ranking-weight-icon {
+        width: 42px;
+        height: 42px;
+        flex: 0 0 auto;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 12px;
+        background: var(--accent-light);
+        color: var(--accent);
+        font-size: 18px;
+    }
+
+    .ranking-weight-header h4 {
+        margin: 1px 0 3px;
+        color: var(--text);
+        font-size: 14px;
+        font-weight: 720;
+    }
+
+    .ranking-weight-header p {
+        margin: 0;
+        color: var(--text-muted);
+        font-size: 11px;
+        line-height: 1.45;
+    }
+
+    .ranking-input-wrapper {
+        position: relative;
+        margin-top: 18px;
+    }
+
+    .ranking-percentage-input {
+        height: 55px;
+        padding-right: 43px;
+        font-size: 24px;
+        font-weight: 750;
+    }
+
+    .ranking-percent-symbol {
+        position: absolute;
+        top: 50%;
+        right: 17px;
+        transform: translateY(-50%);
+        color: var(--text-muted);
+        font-size: 17px;
+        font-weight: 700;
+    }
+
+    .ranking-progress {
+        height: 6px;
+        margin-top: 14px;
+        overflow: hidden;
+        border-radius: 999px;
+        background: #e5e7eb;
+    }
+
+    .ranking-progress-bar {
+        width: 0;
+        height: 100%;
+        border-radius: inherit;
+        background: var(--accent);
+        transition: width 0.2s ease;
+    }
+
+    .ranking-total-panel {
+        padding: 16px 18px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 15px;
+        border: 1px solid #bfe7d7;
+        border-radius: 14px;
+        background: var(--success-light);
+        transition: background 0.2s ease, border-color 0.2s ease;
+    }
+
+        .ranking-total-panel > div:first-child {
+            display: flex;
+            flex-direction: column;
+        }
+
+    .ranking-total-label {
+        color: var(--text-muted);
+        font-size: 11px;
+    }
+
+    .ranking-total-panel strong {
+        color: var(--text);
+        font-size: 25px;
+    }
+
+    .ranking-total-panel.ranking-total-invalid {
+        border-color: #f2c3c3;
+        background: var(--danger-light);
+    }
+
+    .ranking-formula-preview {
+        padding: 18px;
+        border: 1px solid rgba(var(--accent-rgb), 0.2);
+        border-radius: 14px;
+        background: var(--accent-light);
+    }
+
+    .formula-preview-header {
+        display: flex;
+        align-items: center;
+        gap: 11px;
+    }
+
+        .formula-preview-header > i {
+            color: var(--accent);
+            font-size: 21px;
+        }
+
+        .formula-preview-header div {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .formula-preview-header strong {
+            font-size: 13px;
+        }
+
+        .formula-preview-header small {
+            color: var(--text-muted);
+            font-size: 10px;
+        }
+
+    .formula-preview-content {
+        margin-top: 17px;
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 8px;
+        color: var(--text);
+        font-size: 12px;
+    }
+
+        .formula-preview-content strong {
+            color: var(--accent-dark);
+        }
+
+    .formula-plus {
+        margin: 0 5px;
+        color: var(--text-muted);
+        font-weight: 750;
+    }
+
+    .current-ranking-summary {
+        display: flex;
+        flex-direction: column;
+        gap: 11px;
+    }
+
+    .current-ranking-item {
+        padding: 12px 13px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 15px;
+        border: 1px solid var(--border);
+        border-radius: 11px;
+        background: var(--surface-muted);
+    }
+
+        .current-ranking-item span {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--text-muted);
+            font-size: 12px;
+        }
+
+            .current-ranking-item span i {
+                color: var(--accent);
+            }
+
+        .current-ranking-item strong {
+            color: var(--text);
+            font-size: 16px;
+        }
+
+    .ranking-note-list {
+        margin: 0;
+        padding-left: 18px;
+        color: var(--text-muted);
+        font-size: 12px;
+        line-height: 1.65;
+    }
+
+        .ranking-note-list li + li {
+            margin-top: 9px;
+        }
+
+    @media (max-width: 991.98px) {
+        .ranking-weight-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    @media (max-width: 575.98px) {
+        .ranking-total-panel {
+            align-items: flex-start;
+            flex-direction: column;
+        }
+
+        .formula-preview-content {
+            align-items: flex-start;
+            flex-direction: column;
+        }
+
+        .formula-plus {
+            display: none;
+        }
+    }
 }
