@@ -1,0 +1,354 @@
+﻿@model EduNexus.Areas.Admin.ViewModels.Category.CategoryIndexViewModel
+
+@{
+    ViewData["Title"] = "Categories";
+}
+
+<div class="page-header">
+    <div>
+        <div class="page-eyebrow">
+            Course organization
+        </div>
+
+        <h2 class="page-title">
+            Category Management
+        </h2>
+
+        <p class="page-description">
+            Create and manage the categories used to organize
+            courses across EduNexus.
+        </p>
+    </div>
+
+    <div class="page-actions">
+        <a asp-area="Admin"
+           asp-controller="Category"
+           asp-action="Create"
+           class="btn-app-primary">
+
+            <i class="bi bi-plus-lg"></i>
+            Add category
+        </a>
+    </div>
+</div>
+
+<!-- Search and filter -->
+<div class="filter-card">
+    <form method="get"
+          asp-area="Admin"
+          asp-controller="Category"
+          asp-action="Index">
+
+        <div class="row g-3 align-items-end">
+            <div class="col-md-6">
+                <label class="form-label">
+                    Search category
+                </label>
+
+                <div class="input-group">
+                    <span class="input-group-text bg-white">
+                        <i class="bi bi-search"></i>
+                    </span>
+
+                    <input type="text"
+                           name="SearchText"
+                           value="@Model.Filter.SearchText"
+                           class="form-control"
+                           placeholder="Search by name or description" />
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <label class="form-label">
+                    Status
+                </label>
+
+                <select name="IsActive"
+                        class="form-select">
+
+                    <option value="">
+                        All statuses
+                    </option>
+
+                    @if (Model.Filter.IsActive == true)
+                    {
+                        <option value="true" selected>
+                            Active
+                        </option>
+                    }
+                    else
+                    {
+                        <option value="true">
+                            Active
+                        </option>
+                    }
+
+                    @if (Model.Filter.IsActive == false)
+                    {
+                        <option value="false" selected>
+                            Inactive
+                        </option>
+                    }
+                    else
+                    {
+                        <option value="false">
+                            Inactive
+                        </option>
+                    }
+                </select>
+            </div>
+
+            <div class="col-md-3">
+                <div class="d-flex gap-2">
+                    <button type="submit"
+                            class="btn-app-primary flex-grow-1">
+
+                        <i class="bi bi-funnel"></i>
+                        Apply
+                    </button>
+
+                    <a asp-area="Admin"
+                       asp-controller="Category"
+                       asp-action="Index"
+                       class="btn-app-secondary">
+
+                        Reset
+                    </a>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+<!-- Category table -->
+<div class="data-table-card">
+    <div class="app-card-header">
+        <div>
+            <h3 class="app-card-title">
+                Category directory
+            </h3>
+
+            <p class="app-card-subtitle">
+                @Model.TotalItems category record(s)
+            </p>
+        </div>
+    </div>
+
+    @if (Model.Categories.Count == 0)
+    {
+        <div class="empty-state">
+            <div class="empty-state-icon">
+                <i class="bi bi-tags"></i>
+            </div>
+
+            <h3>No categories found</h3>
+
+            <p>
+                No categories match the current filters.
+                Create a new category or reset your search.
+            </p>
+
+            <a asp-area="Admin"
+               asp-controller="Category"
+               asp-action="Create"
+               class="btn-app-primary mt-3">
+
+                <i class="bi bi-plus-lg"></i>
+                Add first category
+            </a>
+        </div>
+    }
+    else
+    {
+        <div class="table-responsive">
+            <table class="table app-table">
+                <thead>
+                    <tr>
+                        <th>Category</th>
+                        <th>Courses</th>
+                        <th>Status</th>
+                        <th>Created</th>
+                        <th class="text-end">
+                            Actions
+                        </th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    @foreach (var category in Model.Categories)
+                    {
+                        <tr>
+                            <td>
+                                <div class="table-primary-text">
+                                    @category.CategoryName
+                                </div>
+
+                                <div class="table-secondary-text">
+                                    @if (string.IsNullOrWhiteSpace(
+                                                                category.Description))
+                                    {
+                                        <span>
+                                            No description provided
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span>
+                                            @category.Description
+                                        </span>
+                                    }
+                                </div>
+                            </td>
+
+                            <td>
+                                <span class="status-badge status-info">
+                                    <i class="bi bi-journals"></i>
+                                    @category.CourseCount
+                                </span>
+                            </td>
+
+                            <td>
+                                @if (category.IsActive)
+                                {
+                                    <span class="status-badge status-success">
+                                        <i class="bi bi-check-circle"></i>
+                                        ACTIVE
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="status-badge status-neutral">
+                                        <i class="bi bi-pause-circle"></i>
+                                        INACTIVE
+                                    </span>
+                                }
+                            </td>
+
+                            <td>
+                                @category.CreatedAt.ToString("dd/MM/yyyy")
+                            </td>
+
+                            <td class="text-end">
+                                <div class="d-inline-flex
+                                                    align-items-center gap-2">
+
+                                    <!-- Edit button -->
+                                    <a asp-area="Admin"
+                                       asp-controller="Category"
+                                       asp-action="Edit"
+                                       asp-route-id="@category.CategoryId"
+                                       class="btn btn-sm
+                                                      btn-outline-primary">
+
+                                        <i class="bi bi-pencil"></i>
+                                        Edit
+                                    </a>
+
+                                    <!-- Deactivate form -->
+                                    @if (category.IsActive)
+                                    {
+                                        <form asp-area="Admin"
+                                              asp-controller="Category"
+                                              asp-action="SetActive"
+                                              method="post"
+                                              class="d-inline">
+
+                                            <input type="hidden"
+                                                   name="id"
+                                                   value="@category.CategoryId" />
+
+                                            <input type="hidden"
+                                                   name="isActive"
+                                                   value="false" />
+
+                                            <button type="submit"
+                                                    class="btn btn-sm
+                                                                       btn-outline-danger"
+                                                    onclick="return confirm('Deactivate this category?');">
+
+                                                <i class="bi bi-pause-circle"></i>
+                                                Deactivate
+                                            </button>
+                                        </form>
+                                    }
+                                    else
+                                    {
+                                        <!-- Activate form -->
+                                        <form asp-area="Admin"
+                                              asp-controller="Category"
+                                              asp-action="SetActive"
+                                              method="post"
+                                              class="d-inline">
+
+                                            <input type="hidden"
+                                                   name="id"
+                                                   value="@category.CategoryId" />
+
+                                            <input type="hidden"
+                                                   name="isActive"
+                                                   value="true" />
+
+                                            <button type="submit"
+                                                    class="btn btn-sm
+                                                                       btn-outline-success"
+                                                    onclick="return confirm('Activate this category?');">
+
+                                                <i class="bi bi-play-circle"></i>
+                                                Activate
+                                            </button>
+                                        </form>
+                                    }
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+
+    <!-- Pagination -->
+    @if (Model.TotalPages > 1)
+    {
+        <div class="app-pagination">
+            <div class="pagination-info">
+                Page @Model.Filter.Page
+                of @Model.TotalPages
+            </div>
+
+            <div class="d-flex gap-2">
+                @if (Model.HasPreviousPage)
+                {
+                    <a asp-area="Admin"
+                       asp-controller="Category"
+                       asp-action="Index"
+                       asp-route-SearchText="@Model.Filter.SearchText"
+                       asp-route-IsActive="@Model.Filter.IsActive"
+                       asp-route-Page="@(Model.Filter.Page - 1)"
+                       asp-route-PageSize="@Model.Filter.PageSize"
+                       class="btn-app-secondary">
+
+                        <i class="bi bi-chevron-left"></i>
+                        Previous
+                    </a>
+                }
+
+                @if (Model.HasNextPage)
+                {
+                    <a asp-area="Admin"
+                       asp-controller="Category"
+                       asp-action="Index"
+                       asp-route-SearchText="@Model.Filter.SearchText"
+                       asp-route-IsActive="@Model.Filter.IsActive"
+                       asp-route-Page="@(Model.Filter.Page + 1)"
+                       asp-route-PageSize="@Model.Filter.PageSize"
+                       class="btn-app-secondary">
+
+                        Next
+                        <i class="bi bi-chevron-right"></i>
+                    </a>
+                }
+            </div>
+        </div>
+    }
+</div>

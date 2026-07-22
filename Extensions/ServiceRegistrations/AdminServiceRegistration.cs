@@ -16,6 +16,10 @@ namespace EduNexus.Extensions.ServiceRegistrations
                 IUserManagementService,
                 UserManagementService>();
 
+            services.AddScoped<
+    ICategoryService,
+    CategoryService>();
+
             return services;
         }
     }

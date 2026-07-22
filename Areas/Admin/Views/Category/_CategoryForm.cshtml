@@ -1,0 +1,64 @@
+﻿@model EduNexus.Areas.Admin.ViewModels.Category.CategoryFormViewModel
+
+<div asp-validation-summary="ModelOnly"
+     class="app-alert app-alert-danger">
+</div>
+
+<div class="form-section">
+    <h3 class="form-section-title">
+        Category information
+    </h3>
+
+    <div class="row g-3">
+        <div class="col-12">
+            <label asp-for="CategoryName"
+                   class="form-label">
+            </label>
+
+            <input asp-for="CategoryName"
+                   class="form-control"
+                   placeholder="Example: Software Engineering" />
+
+            <span asp-validation-for="CategoryName"
+                  class="text-danger small">
+            </span>
+        </div>
+
+        <div class="col-12">
+            <label asp-for="Description"
+                   class="form-label">
+            </label>
+
+            <textarea asp-for="Description"
+                      class="form-control"
+                      rows="5"
+                      placeholder="Describe the subjects included in this category">
+            </textarea>
+
+            <span asp-validation-for="Description"
+                  class="text-danger small">
+            </span>
+        </div>
+
+        <div class="col-12">
+            <div class="p-3 rounded-3
+                        border bg-light">
+                <div class="form-check mb-0">
+                    <input asp-for="IsActive"
+                           class="form-check-input" />
+
+                    <label asp-for="IsActive"
+                           class="form-check-label fw-semibold">
+                        Available for new courses
+                    </label>
+                </div>
+
+                <small class="text-muted d-block mt-1 ms-4">
+                    Inactive categories remain attached to
+                    existing courses but cannot be selected
+                    for new courses.
+                </small>
+            </div>
+        </div>
+    </div>
+</div>
