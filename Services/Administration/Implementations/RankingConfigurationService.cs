@@ -280,13 +280,10 @@ namespace EduNexus.Services.Administration.Implementations
 
             try
             {
-                List<RankingConfiguration>
-                    activeConfigurations =
-                        await _context
-                            .RankingConfigurations
-                            .Where(configuration =>
-                                configuration.IsActive)
-                            .ToListAsync();
+                List<RankingConfiguration> activeConfigurations =
+    await _context.RankingConfigurations
+        .Where(configuration => configuration.IsActive)
+        .ToListAsync();
 
                 foreach (RankingConfiguration configuration
                     in activeConfigurations)
@@ -294,33 +291,18 @@ namespace EduNexus.Services.Administration.Implementations
                     configuration.IsActive = false;
                 }
 
-                /*
-                 * Save deactivation first so the unique
-                 * filtered index permits inserting the
-                 * new active configuration.
-                 */
                 await _context.SaveChangesAsync();
 
                 RankingConfiguration newConfiguration =
-                    new RankingConfiguration
-                    {
-                        AssignmentWeight =
-                            assignmentWeight,
-
-                        QuizWeight =
-                            quizWeight,
-
-                        LessonProgressWeight =
-                            lessonProgressWeight,
-
-                        IsActive = true,
-
-                        UpdatedBy =
-                            updatedBy,
-
-                        UpdatedAt =
-                            DateTime.UtcNow
-                    };
+    new RankingConfiguration
+    {
+        AssignmentWeight = assignmentWeight,
+        QuizWeight = quizWeight,
+        LessonProgressWeight = lessonProgressWeight,
+        IsActive = true,
+        UpdatedBy = updatedBy,
+        UpdatedAt = DateTime.UtcNow
+    };
 
                 _context.RankingConfigurations.Add(
                     newConfiguration);

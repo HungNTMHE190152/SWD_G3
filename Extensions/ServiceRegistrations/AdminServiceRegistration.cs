@@ -17,16 +17,28 @@ namespace EduNexus.Extensions.ServiceRegistrations
                 UserManagementService>();
 
             services.AddScoped<
-    ICategoryService,
-    CategoryService>();
+                ICategoryService,
+                CategoryService>();
 
             services.AddScoped<
-    ICourseReviewService,
-    CourseReviewService>();
+                ICourseReviewService,
+                CourseReviewService>();
 
             services.AddScoped<
-    IRankingConfigurationService,
-    RankingConfigurationService>();
+                IRankingConfigurationService,
+                RankingConfigurationService>();
+
+            services.AddScoped<
+                ITeacherPerformanceConfigurationService,
+                TeacherPerformanceConfigurationService>();
+
+            services.AddScoped<
+    ITeacherPerformanceReportService,
+    TeacherPerformanceReportService>();
+
+            services.AddScoped<
+    IAdminProfileService,
+    AdminProfileService>();
             return services;
         }
     }

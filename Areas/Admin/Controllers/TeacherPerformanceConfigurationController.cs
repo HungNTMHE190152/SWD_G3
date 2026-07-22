@@ -1,4 +1,5 @@
-﻿using EduNexus.Areas.Admin.ViewModels.RankingConfiguration;
+﻿using EduNexus.Areas.Admin.ViewModels
+    .TeacherPerformanceConfiguration;
 using EduNexus.Constants;
 using EduNexus.Extensions;
 using EduNexus.Services.Administration.Interfaces;
@@ -10,25 +11,28 @@ namespace EduNexus.Areas.Admin.Controllers
 {
     [Area("Admin")]
     [Authorize(Roles = RoleNames.Admin)]
-    public class RankingConfigurationController : Controller
+    public class TeacherPerformanceConfigurationController
+        : Controller
     {
-        private readonly IRankingConfigurationService
-            _rankingConfigurationService;
+        private readonly
+            ITeacherPerformanceConfigurationService
+            _configurationService;
 
-        public RankingConfigurationController(
-            IRankingConfigurationService
-                rankingConfigurationService)
+        public TeacherPerformanceConfigurationController(
+            ITeacherPerformanceConfigurationService
+                configurationService)
         {
-            _rankingConfigurationService =
-                rankingConfigurationService;
+            _configurationService =
+                configurationService;
         }
 
         [HttpGet]
         public async Task<IActionResult> Index()
         {
-            RankingConfigurationIndexViewModel viewModel =
-                await _rankingConfigurationService
-                    .GetIndexAsync();
+            TeacherPerformanceConfigurationIndexViewModel
+                viewModel =
+                    await _configurationService
+                        .GetIndexAsync();
 
             return View(viewModel);
         }
@@ -36,14 +40,15 @@ namespace EduNexus.Areas.Admin.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Save(
-    [Bind(Prefix = "Form")]
-    RankingConfigurationFormViewModel model)
+            [Bind(Prefix = "Form")]
+            TeacherPerformanceConfigurationFormViewModel model)
         {
             if (!ModelState.IsValid)
             {
-                RankingConfigurationIndexViewModel viewModel =
-                    await _rankingConfigurationService
-                        .GetIndexAsync();
+                TeacherPerformanceConfigurationIndexViewModel
+                    viewModel =
+                        await _configurationService
+                            .GetIndexAsync();
 
                 viewModel.Form = model;
 
@@ -56,7 +61,7 @@ namespace EduNexus.Areas.Admin.Controllers
                 User.GetCurrentUserId();
 
             ServiceResult result =
-                await _rankingConfigurationService
+                await _configurationService
                     .SaveConfigurationAsync(
                         model,
                         currentAdminUserId);
@@ -67,9 +72,10 @@ namespace EduNexus.Areas.Admin.Controllers
                     string.Empty,
                     result.Message);
 
-                RankingConfigurationIndexViewModel viewModel =
-                    await _rankingConfigurationService
-                        .GetIndexAsync();
+                TeacherPerformanceConfigurationIndexViewModel
+                    viewModel =
+                        await _configurationService
+                            .GetIndexAsync();
 
                 viewModel.Form = model;
 

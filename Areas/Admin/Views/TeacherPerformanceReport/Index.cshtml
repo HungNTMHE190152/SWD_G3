@@ -1,0 +1,610 @@
+﻿@model EduNexus.Areas.Admin.ViewModels.TeacherPerformanceReport.TeacherPerformanceReportIndexViewModel
+@using EduNexus.Constants
+
+@{
+    ViewData["Title"] = "Teacher Performance Report";
+
+    string GetScoreClass(decimal score)
+    {
+        if (score >= 80m)
+        {
+            return "status-success";
+        }
+
+        if (score >= 65m)
+        {
+            return "status-info";
+        }
+
+        if (score >= 50m)
+        {
+            return "status-warning";
+        }
+
+        return "status-danger";
+    }
+}
+
+<div class="page-header">
+    <div>
+        <div class="page-eyebrow">
+            Teacher analytics
+        </div>
+
+        <h2 class="page-title">
+            Teacher Performance Report
+        </h2>
+
+        <p class="page-description">
+            Compare Teacher performance using student feedback,
+            classroom completion and student learning outcomes.
+        </p>
+    </div>
+</div>
+
+@if (!Model.HasActivePerformanceConfiguration
+    || !Model.HasActiveRankingConfiguration)
+{
+    <div class="app-alert app-alert-warning mb-4">
+        <div class="alert-icon">
+            <i class="bi bi-exclamation-triangle-fill"></i>
+        </div>
+
+        <div class="alert-content">
+            <strong>
+                Default configuration is being used
+            </strong>
+
+            @if (!Model.HasActivePerformanceConfiguration)
+            {
+                <span>
+                    No active Teacher Performance Configuration
+                    was found. The report is using 60/20/20
+                    and minimum evaluation count 5.
+                </span>
+            }
+
+            @if (!Model.HasActiveRankingConfiguration)
+            {
+                <span>
+                    No active Student Ranking Configuration
+                    was found. Student performance is using
+                    50/30/20.
+                </span>
+            }
+        </div>
+    </div>
+}
+
+<div class="row g-3 mb-4">
+    <div class="col-md-6 col-xl-3">
+        <div class="stat-card">
+            <div class="stat-card-header">
+                <div>
+                    <div class="stat-card-label">
+                        Total Teachers
+                    </div>
+
+                    <div class="stat-card-value">
+                        @Model.TotalTeacherCount
+                    </div>
+                </div>
+
+                <div class="stat-icon">
+                    <i class="bi bi-people"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6 col-xl-3">
+        <div class="stat-card">
+            <div class="stat-card-header">
+                <div>
+                    <div class="stat-card-label">
+                        Sufficient Data
+                    </div>
+
+                    <div class="stat-card-value">
+                        @Model.SufficientDataCount
+                    </div>
+                </div>
+
+                <div class="stat-icon">
+                    <i class="bi bi-database-check"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6 col-xl-3">
+        <div class="stat-card">
+            <div class="stat-card-header">
+                <div>
+                    <div class="stat-card-label">
+                        Average Score
+                    </div>
+
+                    <div class="stat-card-value">
+                        @(Model.AverageOverallScore.ToString("0.##"))
+                    </div>
+                </div>
+
+                <div class="stat-icon">
+                    <i class="bi bi-speedometer2"></i>
+                </div>
+            </div>
+
+            <div class="stat-card-note">
+                Teachers with sufficient feedback
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6 col-xl-3">
+        <div class="stat-card">
+            <div class="stat-card-header">
+                <div>
+                    <div class="stat-card-label">
+                        Top Performer
+                    </div>
+
+                    <div class="fs-6 fw-bold mt-2">
+                        @(Model.TopTeacherName
+                                                ?? "Not available")
+                    </div>
+                </div>
+
+                <div class="stat-icon">
+                    <i class="bi bi-trophy"></i>
+                </div>
+            </div>
+
+            <div class="stat-card-note">
+                @if (Model.TopTeacherScore.HasValue)
+                {
+                    <span>
+                        Score:
+                        @(Model.TopTeacherScore.Value
+                                            .ToString("0.##"))
+                </span>
+                                }
+                else
+                {
+                    <span>
+                        Insufficient evaluation data
+                    </span>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="app-card mb-4">
+    <div class="app-card-header">
+        <div>
+            <h3 class="app-card-title">
+                Active scoring formula
+            </h3>
+
+            <p class="app-card-subtitle">
+                Weights currently applied to this report.
+            </p>
+        </div>
+    </div>
+
+    <div class="app-card-body">
+        <div class="row g-3">
+            <div class="col-md-4">
+                <div class="current-ranking-item">
+                    <span>
+                        <i class="bi bi-star"></i>
+                        Feedback
+                    </span>
+
+                    <strong>
+                        @(Model.FeedbackWeightPercentage
+                                                .ToString("0.##"))%
+                    </strong>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="current-ranking-item">
+                    <span>
+                        <i class="bi bi-check2-circle"></i>
+                        Completion
+                    </span>
+
+                    <strong>
+                        @(Model.CompletionWeightPercentage
+                                                .ToString("0.##"))%
+                    </strong>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="current-ranking-item">
+                    <span>
+                        <i class="bi bi-graph-up-arrow"></i>
+                        Student performance
+                    </span>
+
+                    <strong>
+                        @(Model.StudentPerformanceWeightPercentage
+                                                .ToString("0.##"))%
+                    </strong>
+                </div>
+            </div>
+        </div>
+
+        <div class="text-muted small mt-3">
+            Student Performance breakdown:
+            Assignment
+            @(Model.AssignmentWeightPercentage.ToString("0.##"))%,
+            Quiz
+            @(Model.QuizWeightPercentage.ToString("0.##"))%,
+            Lesson Progress
+            @(Model.LessonProgressWeightPercentage.ToString("0.##"))%.
+            Minimum evaluations:
+            @Model.MinimumEvaluationCount.
+        </div>
+    </div>
+</div>
+
+<div class="filter-card">
+    <form method="get"
+          asp-area="Admin"
+          asp-controller="TeacherPerformanceReport"
+          asp-action="Index">
+
+        <div class="row g-3 align-items-end">
+            <div class="col-md-7">
+                <label class="form-label">
+                    Search Teacher
+                </label>
+
+                <div class="input-group">
+                    <span class="input-group-text bg-white">
+                        <i class="bi bi-search"></i>
+                    </span>
+
+                    <input type="text"
+                           name="SearchText"
+                           value="@Model.Filter.SearchText"
+                           class="form-control"
+                           placeholder="Name, email or username" />
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <label class="form-label">
+                    Data status
+                </label>
+
+                <select name="DataStatus"
+                        class="form-select">
+
+                    @if (Model.Filter.DataStatus ==
+                                        TeacherPerformanceDataStatuses.All)
+                    {
+                        <option value="ALL" selected>
+                            All Teachers
+                        </option>
+                    }
+                    else
+                    {
+                        <option value="ALL">
+                            All Teachers
+                        </option>
+                    }
+
+                    @if (Model.Filter.DataStatus ==
+                                        TeacherPerformanceDataStatuses.Sufficient)
+                    {
+                        <option value="SUFFICIENT" selected>
+                            Sufficient Data
+                        </option>
+                    }
+                    else
+                    {
+                        <option value="SUFFICIENT">
+                            Sufficient Data
+                        </option>
+                    }
+
+                    @if (Model.Filter.DataStatus ==
+                                        TeacherPerformanceDataStatuses.Insufficient)
+                    {
+                        <option value="INSUFFICIENT" selected>
+                            Insufficient Data
+                        </option>
+                    }
+                    else
+                    {
+                        <option value="INSUFFICIENT">
+                            Insufficient Data
+                        </option>
+                    }
+                </select>
+            </div>
+
+            <div class="col-md-2">
+                <div class="d-flex gap-2">
+                    <button type="submit"
+                            class="btn-app-primary flex-grow-1">
+
+                        <i class="bi bi-funnel"></i>
+                        Apply
+                    </button>
+
+                    <a asp-area="Admin"
+                       asp-controller="TeacherPerformanceReport"
+                       asp-action="Index"
+                       class="btn-app-secondary">
+
+                        Reset
+                    </a>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+<div class="data-table-card">
+    <div class="app-card-header">
+        <div>
+            <h3 class="app-card-title">
+                Teacher performance directory
+            </h3>
+
+            <p class="app-card-subtitle">
+                @Model.TotalItems Teacher record(s)
+                matched the selected filters.
+            </p>
+        </div>
+    </div>
+
+    @if (Model.Teachers.Count == 0)
+    {
+        <div class="empty-state">
+            <div class="empty-state-icon">
+                <i class="bi bi-person-x"></i>
+            </div>
+
+            <h3>No Teachers found</h3>
+
+            <p>
+                There are no Teacher accounts matching
+                the current search and data filters.
+            </p>
+        </div>
+    }
+    else
+    {
+        <div class="table-responsive">
+            <table class="table app-table">
+                <thead>
+                    <tr>
+                        <th>Teacher</th>
+                        <th>Classrooms</th>
+                        <th>Evaluations</th>
+                        <th>Feedback</th>
+                        <th>Completion</th>
+                        <th>Student performance</th>
+                        <th>Overall</th>
+                        <th>Data status</th>
+                        <th class="text-end">
+                            Action
+                        </th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    @foreach (var teacher in Model.Teachers)
+                    {
+                        <tr>
+                            <td>
+                                <div class="d-flex
+                                                    align-items-center
+                                                    gap-3">
+
+                                    @if (!string.IsNullOrWhiteSpace(
+                                                                teacher.AvatarUrl))
+                                    {
+                                        <img src="@teacher.AvatarUrl"
+                                             alt="@teacher.FullName"
+                                             style="width: 44px;
+                                                                height: 44px;
+                                                                border-radius: 50%;
+                                                                object-fit: cover;" />
+                                    }
+                                    else
+                                    {
+                                        <div class="stat-icon"
+                                             style="width: 44px;
+                                                                height: 44px;
+                                                                flex: 0 0 auto;">
+
+                                            <i class="bi bi-person"></i>
+                                        </div>
+                                    }
+
+                                    <div>
+                                        <div class="table-primary-text">
+                                            @teacher.FullName
+                                        </div>
+
+                                        <div class="table-secondary-text">
+                                            @teacher.Email
+                                        </div>
+
+                                        @if (!teacher.IsAccountActive
+                                                                        || teacher.UserStatus
+                                                                        != "ACTIVE")
+                                        {
+                                            <span class="status-badge
+                                                                     status-neutral mt-1">
+                                                INACTIVE ACCOUNT
+                                            </span>
+                                        }
+                                    </div>
+                                </div>
+                            </td>
+
+                            <td>
+                                <div class="table-primary-text">
+                                    @teacher.CompletedClassroomCount
+                                    completed
+                                </div>
+
+                                <div class="table-secondary-text">
+                                    @teacher.EligibleClassroomCount
+                                    eligible /
+                                    @teacher.TotalClassroomCount
+                                    total
+                                </div>
+                            </td>
+
+                            <td>
+                                <div class="table-primary-text">
+                                    @teacher.EvaluationCount
+                                </div>
+
+                                <div class="table-secondary-text">
+                                    Minimum:
+                                    @teacher.MinimumEvaluationCount
+                                </div>
+                            </td>
+
+                            <td>
+                                <span class="status-badge
+                                                     @GetScoreClass(
+                                      teacher.FeedbackScore)">
+                            @(teacher.FeedbackScore
+                                                        .ToString("0.##"))
+                        </span>
+                    </td>
+
+                            <td>
+                                <span class="status-badge
+                                                     @GetScoreClass(
+                                                                               teacher.CompletionScore)">
+                            @(teacher.CompletionScore
+                                                        .ToString("0.##"))
+                        </span>
+                    </td>
+
+                            <td>
+                                <span class="status-badge
+                                                     @GetScoreClass(
+                                                                               teacher.StudentPerformanceScore)">
+                            @(teacher.StudentPerformanceScore
+                                                        .ToString("0.##"))
+                                                                      </span>
+
+                        <div class="table-secondary-text mt-1">
+                            A:
+                            @(teacher.AssignmentScore
+                                                        .ToString("0.##"))
+                                                                          · Q:
+                            @(teacher.QuizScore
+                                                        .ToString("0.##"))
+                                                                          · L:
+                            @(teacher.LessonProgressScore
+                                                        .ToString("0.##"))
+                                                                      </div>
+                                                                  </td>
+
+                    <td>
+                        <strong class="fs-6">
+                            @(teacher.OverallScore
+                                                        .ToString("0.##"))
+                        </strong>
+                    </td>
+
+                            <td>
+                        @if (teacher
+                                                .HasSufficientEvaluationData)
+                                {
+                                    <span class="status-badge
+                                                             status-success">
+
+                                        <i class="bi bi-database-check"></i>
+                                        SUFFICIENT
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="status-badge
+                                                             status-warning">
+
+                                        <i class="bi bi-exclamation-circle"></i>
+                                        INSUFFICIENT
+                                    </span>
+                                }
+                            </td>
+
+                            <td class="text-end">
+                                <a asp-area="Admin"
+                                   asp-controller="TeacherPerformanceReport"
+                                   asp-action="Details"
+                                   asp-route-id="@teacher.TeacherId"
+                                   class="btn btn-sm
+                                                  btn-outline-primary">
+
+                                    <i class="bi bi-eye"></i>
+                                    Details
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+
+    @if (Model.TotalPages > 1)
+    {
+        <div class="app-pagination">
+            <div class="pagination-info">
+                Page @Model.Filter.Page
+                of @Model.TotalPages
+            </div>
+
+            <div class="d-flex gap-2">
+                @if (Model.HasPreviousPage)
+                {
+                    <a asp-area="Admin"
+                       asp-controller="TeacherPerformanceReport"
+                       asp-action="Index"
+                       asp-route-SearchText="@Model.Filter.SearchText"
+                       asp-route-DataStatus="@Model.Filter.DataStatus"
+                       asp-route-Page="@(Model.Filter.Page - 1)"
+                       asp-route-PageSize="@Model.Filter.PageSize"
+                       class="btn-app-secondary">
+
+                        <i class="bi bi-chevron-left"></i>
+                        Previous
+                    </a>
+                }
+
+                @if (Model.HasNextPage)
+                {
+                    <a asp-area="Admin"
+                       asp-controller="TeacherPerformanceReport"
+                       asp-action="Index"
+                       asp-route-SearchText="@Model.Filter.SearchText"
+                       asp-route-DataStatus="@Model.Filter.DataStatus"
+                       asp-route-Page="@(Model.Filter.Page + 1)"
+                       asp-route-PageSize="@Model.Filter.PageSize"
+                       class="btn-app-secondary">
+
+                        Next
+                        <i class="bi bi-chevron-right"></i>
+                    </a>
+                }
+            </div>
+        </div>
+    }
+</div>

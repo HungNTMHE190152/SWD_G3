@@ -1436,4 +1436,162 @@ textarea.form-control {
             display: none;
         }
     }
+    /* Teacher Performance Details */
+
+    .teacher-performance-profile {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+    }
+
+    .teacher-performance-avatar {
+        width: 92px;
+        height: 92px;
+        flex: 0 0 auto;
+        object-fit: cover;
+        border: 1px solid var(--border);
+        border-radius: 22px;
+    }
+
+    .teacher-performance-avatar-empty {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: var(--accent-light);
+        color: var(--accent);
+        font-size: 36px;
+    }
+
+    .performance-component-list {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .performance-component-item {
+        padding: 14px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        background: var(--surface-muted);
+    }
+
+        .performance-component-item > div {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .performance-component-item strong {
+            font-size: 13px;
+        }
+
+        .performance-component-item small {
+            color: var(--text-muted);
+            font-size: 11px;
+        }
+
+    .evaluation-average-list {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .evaluation-average-item {
+        padding: 12px 13px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 15px;
+        border: 1px solid var(--border);
+        border-radius: 11px;
+        background: var(--surface-muted);
+    }
+
+        .evaluation-average-item span {
+            color: var(--text-muted);
+            font-size: 12px;
+        }
+
+        .evaluation-average-item strong {
+            color: var(--text);
+            font-size: 14px;
+        }
+
+    .evaluation-average-overall {
+        border-color: rgba(var(--accent-rgb), 0.2);
+        background: var(--accent-light);
+    }
+
+    .teacher-evaluation-list {
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+    }
+
+    .teacher-evaluation-card {
+        padding: 17px;
+        border: 1px solid var(--border);
+        border-radius: 14px;
+        background: var(--surface-muted);
+    }
+
+    .evaluation-overall-rating {
+        color: #b7791f;
+        font-size: 14px;
+        font-weight: 750;
+    }
+
+    .evaluation-rating-grid {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 9px;
+    }
+
+        .evaluation-rating-grid span {
+            padding: 9px 10px;
+            border: 1px solid var(--border);
+            border-radius: 9px;
+            background: var(--surface);
+            color: var(--text-muted);
+            font-size: 11px;
+        }
+
+        .evaluation-rating-grid strong {
+            color: var(--text);
+        }
+
+    .evaluation-comment {
+        padding: 12px 13px;
+        border-left: 3px solid var(--accent);
+        border-radius: 8px;
+        background: var(--surface);
+        color: var(--text-muted);
+        font-size: 12px;
+        line-height: 1.65;
+    }
+
+    @media (max-width: 767.98px) {
+        .teacher-performance-profile {
+            align-items: flex-start;
+            flex-direction: column;
+        }
+
+        .evaluation-rating-grid {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+    }
+
+    @media (max-width: 479.98px) {
+        .teacher-performance-avatar {
+            width: 76px;
+            height: 76px;
+        }
+
+        .evaluation-rating-grid {
+            grid-template-columns: 1fr;
+        }
+    }
 }
