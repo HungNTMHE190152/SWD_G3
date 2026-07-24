@@ -1,0 +1,164 @@
+﻿@model EduNexus.ViewModels.Assignment.RubricViewModel
+
+@{
+    ViewData["Title"] = "Edit Rubric";
+}
+
+<div class="container mt-4">
+
+    <div class="card shadow">
+
+        <div class="card-header">
+
+            <h3>Edit Rubric</h3>
+
+        </div>
+
+        <div class="card-body">
+
+            <form asp-action="Edit" method="post">
+
+                <input asp-for="RubricId" type="hidden" />
+                <input asp-for="AssignmentTemplateId" type="hidden" />
+
+                <div class="mb-3">
+
+                    <label asp-for="Title" class="form-label"></label>
+
+                    <input asp-for="Title" class="form-control" />
+
+                </div>
+
+                <div class="mb-3">
+
+                    <label asp-for="Description" class="form-label"></label>
+
+                    <textarea asp-for="Description"
+                              rows="3"
+                              class="form-control"></textarea>
+
+                </div>
+
+                <hr />
+
+                <h5>Criteria</h5>
+
+                <table class="table table-bordered" id="criteriaTable">
+
+                    <thead class="table-light">
+
+                        <tr>
+
+                            <th>Name</th>
+
+                            <th>Description</th>
+
+                            <th width="120">Max Score</th>
+
+                            <th width="100">Order</th>
+
+                            <th width="80"></th>
+
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        @for (int i = 0; i < Model.Criteria.Count; i++)
+                        {
+                            <tr>
+
+                                <td>
+
+                                    <input type="hidden"
+                                           asp-for="Criteria[i].RubricCriterionId" />
+
+                                    <input asp-for="Criteria[i].CriterionName"
+                                           class="form-control" />
+
+                                </td>
+
+                                <td>
+
+                                    <input asp-for="Criteria[i].Description"
+                                           class="form-control" />
+
+                                </td>
+
+                                <td>
+
+                                    <input asp-for="Criteria[i].MaxScore"
+                                           class="form-control" />
+
+                                </td>
+
+                                <td>
+
+                                    <input asp-for="Criteria[i].DisplayOrder"
+                                           class="form-control" />
+
+                                </td>
+
+                                <td>
+
+                                    <button type="button"
+                                            class="btn btn-danger btnRemove">
+
+                                        X
+
+                                    </button>
+
+                                </td>
+
+                            </tr>
+                        }
+
+                    </tbody>
+
+                </table>
+
+                <button type="button"
+                        class="btn btn-success mb-3"
+                        id="btnAdd">
+
+                    + Add Criterion
+
+                </button>
+
+                <br />
+
+                <button class="btn btn-primary">
+
+                    Update Rubric
+
+                </button>
+
+                <a asp-action="Index"
+                   class="btn btn-secondary">
+
+                    Cancel
+
+                </a>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+@section Scripts {
+
+    <partial name="_ValidationScriptsPartial" />
+
+    <script>
+
+        let index=@Model.Criteria.Count;
+
+    </script>
+
+    <script src="~/js/rubric.js"></script>
+
+}

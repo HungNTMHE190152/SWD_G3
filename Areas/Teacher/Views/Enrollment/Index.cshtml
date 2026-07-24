@@ -1,0 +1,94 @@
+﻿@model IEnumerable<EduNexus.ViewModels.Assignment.EnrollmentViewModel>
+
+@{
+    ViewData["Title"] = "Students";
+}
+
+<div class="container mt-4">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="fw-bold">
+                <i class="bi bi-people-fill"></i>
+                Student List
+            </h2>
+
+            <p class="text-muted">
+                Students enrolled in this classroom
+            </p>
+        </div>
+
+        <a asp-area="Teacher"
+           asp-controller="Classroom"
+           asp-action="Index"
+           class="btn btn-secondary">
+
+            <i class="bi bi-arrow-left"></i>
+            Back
+        </a>
+    </div>
+
+    <div class="card shadow-sm">
+
+        <div class="card-body">
+
+            <table class="table table-hover align-middle">
+
+                <thead class="table-light">
+
+                    <tr>
+                        <th>Student</th>
+                        <th>Email</th>
+                        <th>Enrolled At</th>
+                        <th>Status</th>
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                    @if (Model.Any())
+                    {
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+
+                                <td>@item.StudentName</td>
+
+                                <td>@item.StudentEmail</td>
+
+                                <td>@item.EnrolledAt.ToString("dd/MM/yyyy")</td>
+
+                                <td>
+
+                                    <span class="badge bg-success">
+                                        @item.Status
+                                    </span>
+
+                                </td>
+
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+
+                            <td colspan="4" class="text-center text-muted">
+
+                                No students found.
+
+                            </td>
+
+                        </tr>
+                    }
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div>

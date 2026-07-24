@@ -1,0 +1,159 @@
+﻿@model EduNexus.ViewModels.Assignment.AssignmentTemplateFormViewModel
+
+@{
+    ViewData["Title"] = "Edit Assignment Template";
+}
+
+<div class="container mt-4">
+
+    <h2>Edit Assignment Template</h2>
+
+    <hr />
+
+    <form asp-action="Edit" method="post">
+
+        <input asp-for="AssignmentTemplateId" type="hidden" />
+
+        <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+        <div class="mb-3">
+
+            <label asp-for="CourseId" class="form-label"></label>
+
+            <select asp-for="CourseId"
+                    class="form-select"
+                    id="courseSelect">
+
+                @foreach (var course in Model.Courses)
+                {
+                    <option value="@course.CourseId">
+                        @course.CourseCode - @course.CourseTitle
+                    </option>
+                }
+
+            </select>
+
+        </div>
+
+        <div class="mb-3">
+
+            <label asp-for="ModuleId" class="form-label"></label>
+
+            <select asp-for="ModuleId"
+                    class="form-select"
+                    id="moduleSelect">
+
+                @foreach (var module in Model.Modules)
+                {
+                    <option value="@module.ModuleId">
+                        @module.ModuleTitle
+                    </option>
+                }
+
+            </select>
+
+        </div>
+
+        <div class="mb-3">
+
+            <label asp-for="Title" class="form-label"></label>
+
+            <input asp-for="Title" class="form-control" />
+
+            <span asp-validation-for="Title" class="text-danger"></span>
+
+        </div>
+
+        <div class="mb-3">
+
+            <label asp-for="Description" class="form-label"></label>
+
+            <textarea asp-for="Description"
+                      class="form-control"
+                      rows="3"></textarea>
+
+        </div>
+
+        <div class="mb-3">
+
+            <label asp-for="Instructions" class="form-label"></label>
+
+            <textarea asp-for="Instructions"
+                      class="form-control"
+                      rows="5"></textarea>
+
+        </div>
+
+        <div class="mb-3">
+
+            <label asp-for="TotalScore" class="form-label"></label>
+
+            <input asp-for="TotalScore"
+                   class="form-control" />
+
+        </div>
+
+        <div class="form-check mb-4">
+
+            <input asp-for="IsActive"
+                   class="form-check-input" />
+
+            <label asp-for="IsActive"
+                   class="form-check-label"></label>
+
+        </div>
+
+        <button class="btn btn-primary">
+            Update
+        </button>
+
+        <a asp-action="Index"
+           class="btn btn-secondary">
+            Cancel
+        </a>
+
+    </form>
+
+</div>
+
+@section Scripts {
+
+    <partial name="_ValidationScriptsPartial" />
+
+    <script>
+
+        $("#courseSelect").change(function(){
+
+            let courseId=$(this).val();
+
+            $("#moduleSelect").empty();
+
+            $("#moduleSelect").append(
+                '<option value="">-- Select Module --</option>'
+            );
+
+            $.get('/SME/AssignmentTemplate/GetModules',
+            {
+                courseId:courseId
+            },
+            function(data){
+
+                $.each(data,function(i,item){
+
+                    $("#moduleSelect").append(
+
+                        '<option value="'+item.moduleId+'">'+
+                        item.moduleTitle+
+                        '</option>'
+
+                    );
+
+                });
+
+            });
+
+        });
+
+    </script>
+
+}

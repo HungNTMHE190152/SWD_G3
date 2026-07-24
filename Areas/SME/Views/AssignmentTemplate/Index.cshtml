@@ -1,0 +1,176 @@
+﻿@model List<EduNexus.ViewModels.Assignment.AssignmentTemplateListViewModel>
+
+@{
+    ViewData["Title"] = "Assignment Templates";
+}
+
+<div class="container mt-4">
+
+    <div class="card shadow-sm">
+
+        <div class="card-header d-flex justify-content-between align-items-center">
+
+            <h3 class="mb-0">
+                Assignment Templates
+            </h3>
+
+            <a asp-action="Create"
+               class="btn btn-success">
+                <i class="bi bi-plus-circle"></i>
+                Create Assignment
+            </a>
+
+        </div>
+
+        <div class="card-body">
+
+            @if (!Model.Any())
+            {
+                <div class="alert alert-info mb-0">
+                    No Assignment Templates found.
+                </div>
+            }
+            else
+            {
+                <table class="table table-hover table-bordered align-middle">
+
+                    <thead class="table-dark">
+
+                        <tr>
+
+                            <th style="width:25%">Title</th>
+
+                            <th>Course</th>
+
+                            <th>Module</th>
+
+                            <th class="text-center">
+                                Total Score
+                            </th>
+
+                            <th class="text-center">
+                                Rubric
+                            </th>
+
+                            <th class="text-center">
+                                Status
+                            </th>
+
+                            <th class="text-center" style="width:180px">
+                                Actions
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+
+                                <td>
+
+                                    <strong>
+                                        @item.Title
+                                    </strong>
+
+                                </td>
+
+                                <td>
+                                    @item.CourseName
+                                </td>
+
+                                <td>
+                                    @(string.IsNullOrEmpty(item.ModuleName)
+                                                                ? "-"
+                                                                : item.ModuleName)
+                        </td>
+
+                                <td class="text-center">
+
+                                    @item.TotalScore
+
+                                </td>
+
+                                <td class="text-center">
+
+                            @if (item.HasRubric)
+                                    {
+                                        <span class="badge bg-success">
+                                            Available
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-warning text-dark">
+                                            Missing
+                                        </span>
+                                    }
+
+                                </td>
+
+                                <td class="text-center">
+
+                                    @if (item.IsActive)
+                                    {
+                                        <span class="badge bg-primary">
+                                            Active
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-danger">
+                                            Inactive
+                                        </span>
+                                    }
+
+                                </td>
+
+                                <td class="text-center">
+
+                                    <a asp-action="Edit"
+                                       asp-route-id="@item.AssignmentTemplateId"
+                                       class="btn btn-outline-primary btn-sm">
+                                        Edit
+                                    </a>
+
+                                    <a asp-area="SME"
+                                       asp-controller="Rubric"
+                                       asp-action="Create"
+                                       asp-route-assignmentId="@item.AssignmentTemplateId"
+                                       class="btn btn-outline-success btn-sm">
+                                        Rubric
+                                    </a>
+
+                                    <form asp-action="Delete"
+                                          asp-route-id="@item.AssignmentTemplateId"
+                                          method="post"
+                                          class="d-inline">
+
+                                        @Html.AntiForgeryToken()
+
+                                        <button type="submit"
+                                                class="btn btn-outline-danger btn-sm"
+                                                onclick="return confirm('Are you sure you want to delete this Assignment Template?');">
+                                            Delete
+                                        </button>
+
+                                    </form>
+
+                                </td>
+
+                            </tr>
+                        }
+
+                    </tbody>
+
+                </table>
+            }
+
+        </div>
+
+    </div>
+
+</div>

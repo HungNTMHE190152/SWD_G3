@@ -2,10 +2,13 @@
     ViewData["Title"] = "Teacher Dashboard";
 }
 
-<div class="container mt-4">
-    <h1>Teacher Dashboard</h1>
+<h2>Teacher Dashboard</h2>
 
-    <div class="alert alert-success">
-        Logged in successfully as Teacher.
-    </div>
-</div>
+<a asp-area="Teacher"
+   asp-controller="Classroom"
+   asp-action="Index"
+   class="btn btn-primary">
+
+    Classroom Management
+
+</a>

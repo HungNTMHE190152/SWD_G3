@@ -1,0 +1,128 @@
+﻿@model EduNexus.ViewModels.Assignment.SubmissionGradeViewModel
+
+@{
+    ViewData["Title"] = "Grade Submission";
+}
+
+<div class="container-fluid">
+
+    <div class="card shadow border-0">
+
+        <div class="card-header bg-primary text-white">
+            <h4 class="mb-0">
+                Grade Submission
+            </h4>
+        </div>
+
+        <div class="card-body">
+
+            <form asp-action="Edit" method="post">
+
+                @Html.AntiForgeryToken()
+
+                <input asp-for="SubmissionId" type="hidden" />
+                <input asp-for="ClassroomAssignmentId" type="hidden" />
+
+                <div class="mb-3">
+                    <label class="form-label">Assignment</label>
+                    <input class="form-control"
+                           value="@Model.AssignmentTitle"
+                           readonly />
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Student</label>
+                    <input class="form-control"
+                           value="@Model.StudentName"
+                           readonly />
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Submitted At</label>
+                    <input class="form-control"
+                           value="@(Model.SubmittedAt?.ToString("dd/MM/yyyy HH:mm"))"
+                           readonly />
+                </div>
+
+                @if (!string.IsNullOrWhiteSpace(Model.SubmissionText))
+                {
+                    <div class="mb-3">
+                        <label class="form-label">Submission</label>
+                        <textarea class="form-control"
+                              rows="5"
+                              readonly>@Model.SubmissionText</textarea>
+                    </div>
+                }
+
+                @if (!string.IsNullOrWhiteSpace(Model.FileUrl))
+                {
+                    <div class="mb-3">
+                        <label class="form-label">Attachment</label>
+
+                        <div>
+                            <a href="@Model.FileUrl"
+                               target="_blank"
+                               class="btn btn-outline-primary">
+
+                                <i class="bi bi-paperclip"></i>
+
+                                Open Attachment
+
+                            </a>
+                        </div>
+
+                    </div>
+                }
+
+                <div class="mb-3">
+
+                    <label asp-for="Score"></label>
+
+                    <input asp-for="Score"
+                           class="form-control" />
+
+                    <span asp-validation-for="Score"
+                          class="text-danger"></span>
+
+                </div>
+
+                <div class="mb-3">
+
+                    <label asp-for="Feedback"></label>
+
+                    <textarea asp-for="Feedback"
+                              class="form-control"
+                              rows="5"></textarea>
+
+                </div>
+
+                <div class="d-flex gap-2">
+
+                    <button type="submit"
+                            class="btn btn-success">
+
+                        <i class="bi bi-check-circle"></i>
+
+                        Save Grade
+
+                    </button>
+
+                    <a asp-area="Teacher"
+                       asp-controller="AssignmentSubmission"
+                       asp-action="Index"
+                       asp-route-classroomAssignmentId="@Model.ClassroomAssignmentId"
+                       class="btn btn-secondary">
+
+                        Cancel
+
+                    </a>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>

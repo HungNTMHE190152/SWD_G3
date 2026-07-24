@@ -1,0 +1,118 @@
+﻿@model List<EduNexus.ViewModels.Assignment.RubricViewModel>
+
+@{
+    ViewData["Title"] = "Rubrics";
+}
+
+<div class="container mt-4">
+
+    <div class="card shadow-sm">
+
+        <div class="card-header">
+
+            <h3 class="mb-0">
+                Rubrics
+            </h3>
+
+        </div>
+
+        <div class="card-body">
+
+            @if (!Model.Any())
+            {
+                <div class="alert alert-info">
+
+                    No Rubrics.
+
+                </div>
+            }
+            else
+            {
+
+                <table class="table table-hover">
+
+                    <thead>
+
+                        <tr>
+
+                            <th>Assignment</th>
+
+                            <th>Title</th>
+
+                            <th>Description</th>
+
+                            <th width="180">
+
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        @foreach (var item in Model)
+                        {
+
+                            <tr>
+
+                                <td>
+
+                                    @item.AssignmentTitle
+
+                                </td>
+
+                                <td>
+
+                                    @item.Title
+
+                                </td>
+
+                                <td>
+
+                                    @item.Description
+
+                                </td>
+
+                                <td>
+
+                                    <a asp-action="Edit"
+                                       asp-route-id="@item.RubricId"
+                                       class="btn btn-warning btn-sm">
+
+                                        Edit
+
+                                    </a>
+
+                                    <form asp-action="Delete"
+                                          asp-route-id="@item.RubricId"
+                                          method="post"
+                                          class="d-inline">
+
+                                        @Html.AntiForgeryToken()
+
+                                        <button class="btn btn-danger btn-sm">
+
+                                            Delete
+
+                                        </button>
+
+                                    </form>
+
+                                </td>
+
+                            </tr>
+
+                        }
+
+                    </tbody>
+
+                </table>
+
+            }
+
+        </div>
+
+    </div>
+
+</div>
