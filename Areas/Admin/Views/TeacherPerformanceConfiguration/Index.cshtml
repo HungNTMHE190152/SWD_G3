@@ -1,0 +1,938 @@
+﻿@model EduNexus.Areas.Admin.ViewModels.TeacherPerformanceConfiguration.TeacherPerformanceConfigurationIndexViewModel
+
+@{
+    ViewData["Title"] = "Teacher Performance Configuration";
+
+    string hasActiveConfigurationJson =
+        Model.HasActiveConfiguration
+            ? "true"
+            : "false";
+
+    string activeValuesJson =
+        System.Text.Json.JsonSerializer.Serialize(
+            new
+            {
+                feedback =
+                    Model.CurrentFeedbackPercentage ?? 0m,
+
+                completion =
+                    Model.CurrentCompletionPercentage ?? 0m,
+
+                studentPerformance =
+                    Model.CurrentStudentPerformancePercentage
+                    ?? 0m,
+
+                minimumEvaluationCount =
+                    Model.CurrentMinimumEvaluationCount ?? 0
+            });
+}
+
+<div class="page-header">
+    <div>
+        <div class="page-eyebrow">
+            Teacher analytics
+        </div>
+
+        <h2 class="page-title">
+            Teacher Performance Configuration
+        </h2>
+
+        <p class="page-description">
+            Configure how student feedback, classroom completion
+            and student performance contribute to the overall
+            Teacher Performance Score.
+        </p>
+    </div>
+
+    <div class="page-actions">
+        <a href="#teacherPerformanceConfigurationCard"
+           class="btn-app-primary">
+
+            @if (Model.HasActiveConfiguration)
+            {
+                <i class="bi bi-plus-lg"></i>
+                <span>Create new version</span>
+            }
+            else
+            {
+                <i class="bi bi-sliders"></i>
+                <span>Create first configuration</span>
+            }
+        </a>
+    </div>
+</div>
+
+<div class="row g-4">
+    <div class="col-xl-8">
+        <div class="app-card mb-4"
+             id="teacherPerformanceConfigurationCard">
+
+            <div class="app-card-header">
+                <div>
+                    @if (Model.HasActiveConfiguration)
+                    {
+                        <h3 class="app-card-title">
+                            Create New Configuration Version
+                        </h3>
+
+                        <p class="app-card-subtitle">
+                            Adjust at least one setting and save it
+                            as the new active configuration.
+                        </p>
+                    }
+                    else
+                    {
+                        <h3 class="app-card-title">
+                            Create First Teacher Performance Configuration
+                        </h3>
+
+                        <p class="app-card-subtitle">
+                            Configure the initial Teacher Performance
+                            Score calculation.
+                        </p>
+                    }
+                </div>
+
+                @if (Model.HasActiveConfiguration)
+                {
+                    <span class="status-badge status-success">
+                        <i class="bi bi-check-circle"></i>
+                        ACTIVE CONFIGURATION
+                    </span>
+                }
+                else
+                {
+                    <span class="status-badge status-warning">
+                        <i class="bi bi-exclamation-circle"></i>
+                        NOT SAVED
+                    </span>
+                }
+            </div>
+
+            <div class="app-card-body">
+                <form asp-area="Admin"
+                      asp-controller="TeacherPerformanceConfiguration"
+                      asp-action="Save"
+                      method="post"
+                      id="teacherPerformanceConfigurationForm">
+
+                    @if (!ViewData.ModelState.IsValid)
+                    {
+                        <div asp-validation-summary="ModelOnly"
+                             class="app-alert app-alert-danger mb-4">
+                        </div>
+                    }
+
+                    <div class="ranking-weight-grid">
+                        <div class="ranking-weight-card">
+                            <div class="ranking-weight-header">
+                                <div class="ranking-weight-icon">
+                                    <i class="bi bi-star"></i>
+                                </div>
+
+                                <div>
+                                    <h4>Student feedback</h4>
+
+                                    <p>
+                                        Evaluation ratings submitted
+                                        by students.
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div class="ranking-input-wrapper">
+                                <input asp-for="Form.FeedbackPercentage"
+                                       id="feedbackPercentage"
+                                       class="form-control ranking-percentage-input"
+                                       type="number"
+                                       min="0"
+                                       max="100"
+                                       step="0.01" />
+
+                                <span class="ranking-percent-symbol">
+                                    %
+                                </span>
+                            </div>
+
+                            <span asp-validation-for="Form.FeedbackPercentage"
+                                  class="text-danger small">
+                            </span>
+
+                            <div class="ranking-progress">
+                                <div class="ranking-progress-bar"
+                                     id="feedbackProgress">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="ranking-weight-card">
+                            <div class="ranking-weight-header">
+                                <div class="ranking-weight-icon">
+                                    <i class="bi bi-check2-circle"></i>
+                                </div>
+
+                                <div>
+                                    <h4>Classroom completion</h4>
+
+                                    <p>
+                                        Percentage of classrooms
+                                        completed successfully.
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div class="ranking-input-wrapper">
+                                <input asp-for="Form.CompletionPercentage"
+                                       id="completionPercentage"
+                                       class="form-control ranking-percentage-input"
+                                       type="number"
+                                       min="0"
+                                       max="100"
+                                       step="0.01" />
+
+                                <span class="ranking-percent-symbol">
+                                    %
+                                </span>
+                            </div>
+
+                            <span asp-validation-for="Form.CompletionPercentage"
+                                  class="text-danger small">
+                            </span>
+
+                            <div class="ranking-progress">
+                                <div class="ranking-progress-bar"
+                                     id="completionProgress">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="ranking-weight-card">
+                            <div class="ranking-weight-header">
+                                <div class="ranking-weight-icon">
+                                    <i class="bi bi-graph-up-arrow"></i>
+                                </div>
+
+                                <div>
+                                    <h4>Student performance</h4>
+
+                                    <p>
+                                        Student learning outcomes
+                                        across Teacher classrooms.
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div class="ranking-input-wrapper">
+                                <input asp-for="Form.StudentPerformancePercentage"
+                                       id="studentPerformancePercentage"
+                                       class="form-control ranking-percentage-input"
+                                       type="number"
+                                       min="0"
+                                       max="100"
+                                       step="0.01" />
+
+                                <span class="ranking-percent-symbol">
+                                    %
+                                </span>
+                            </div>
+
+                            <span asp-validation-for="Form.StudentPerformancePercentage"
+                                  class="text-danger small">
+                            </span>
+
+                            <div class="ranking-progress">
+                                <div class="ranking-progress-bar"
+                                     id="studentPerformanceProgress">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="app-card mt-4 shadow-none">
+                        <div class="app-card-body">
+                            <div class="row align-items-center g-3">
+                                <div class="col-md">
+                                    <div class="d-flex align-items-start gap-3">
+                                        <div class="ranking-weight-icon">
+                                            <i class="bi bi-people"></i>
+                                        </div>
+
+                                        <div>
+                                            <h4 class="mb-1 fs-6">
+                                                Minimum Evaluation Count
+                                            </h4>
+
+                                            <p class="text-muted small mb-0">
+                                                Minimum number of student evaluations
+                                                required before a Teacher receives
+                                                a reliable performance score.
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-4">
+                                    <label asp-for="Form.MinimumEvaluationCount"
+                                           class="form-label">
+                                    </label>
+
+                                    <input asp-for="Form.MinimumEvaluationCount"
+                                           id="minimumEvaluationCount"
+                                           class="form-control"
+                                           type="number"
+                                           min="1"
+                                           step="1" />
+
+                                    <span asp-validation-for="Form.MinimumEvaluationCount"
+                                          class="text-danger small">
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="ranking-total-panel mt-4"
+                         id="performanceTotalPanel">
+
+                        <div>
+                            <span class="ranking-total-label">
+                                Total configured weight
+                            </span>
+
+                            <strong id="totalPercentage">
+                                @(Model.Form.TotalPercentage.ToString("0.##"))%
+                            </strong>
+                        </div>
+
+                        <div id="totalStatus"
+                             class="status-badge">
+                        </div>
+                    </div>
+
+                    <div class="ranking-formula-preview mt-4">
+                        <div class="formula-preview-header">
+                            <i class="bi bi-calculator"></i>
+
+                            <div>
+                                <strong>
+                                    Formula preview
+                                </strong>
+
+                                <small>
+                                    Teacher Performance Score calculation
+                                </small>
+                            </div>
+                        </div>
+
+                        <div class="formula-preview-content">
+                            <span>Feedback Average</span>
+
+                            <strong>
+                                ×
+                                <span id="formulaFeedback">
+                                    @(Model.Form.FeedbackPercentage.ToString("0.##"))
+                                </span>%
+                            </strong>
+
+                            <span class="formula-plus">+</span>
+
+                            <span>Completion Score</span>
+
+                            <strong>
+                                ×
+                                <span id="formulaCompletion">
+                                    @(Model.Form.CompletionPercentage.ToString("0.##"))
+                                </span>%
+                            </strong>
+
+                            <span class="formula-plus">+</span>
+
+                            <span>Student Performance</span>
+
+                            <strong>
+                                ×
+                                <span id="formulaStudentPerformance">
+                                    @(Model.Form.StudentPerformancePercentage.ToString("0.##"))
+                                </span>%
+                            </strong>
+                        </div>
+                    </div>
+
+                    <div class="d-flex flex-wrap
+                                justify-content-between
+                                align-items-center
+                                gap-3 mt-4">
+
+                        <div>
+                            <p class="text-muted small mb-2">
+                                Saving creates a new configuration
+                                and preserves all previous versions.
+                            </p>
+
+                            @if (Model.HasActiveConfiguration)
+                            {
+                                <div class="alert alert-info py-2 mb-0"
+                                     id="configurationChangeNotice">
+
+                                    <i class="bi bi-info-circle me-1"></i>
+
+                                    Change at least one setting to create
+                                    a new configuration version.
+                                </div>
+                            }
+                        </div>
+
+                        <button type="submit"
+                                class="btn-app-primary"
+                                id="saveConfigurationButton">
+
+                            @if (Model.HasActiveConfiguration)
+                            {
+                                <i class="bi bi-plus-circle"></i>
+                                <span>Save as new version</span>
+                            }
+                            else
+                            {
+                                <i class="bi bi-check-lg"></i>
+                                <span>Create configuration</span>
+                            }
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xl-4">
+        <div class="app-card mb-4">
+            <div class="app-card-header">
+                <div>
+                    <h3 class="app-card-title">
+                        Current configuration
+                    </h3>
+
+                    <p class="app-card-subtitle">
+                        Settings currently used by Teacher analytics.
+                    </p>
+                </div>
+            </div>
+
+            <div class="app-card-body">
+                @if (Model.HasActiveConfiguration)
+                {
+                    <div class="current-ranking-summary">
+                        <div class="current-ranking-item">
+                            <span>
+                                <i class="bi bi-star"></i>
+                                Feedback
+                            </span>
+
+                            <strong>
+                                @(Model.CurrentFeedbackPercentage
+                                                            ?.ToString("0.##"))%
+                                                                           </strong>
+                                                                       </div>
+
+                        <div class="current-ranking-item">
+                            <span>
+                                <i class="bi bi-check2-circle"></i>
+                                Completion
+                            </span>
+
+                            <strong>
+                                @(Model.CurrentCompletionPercentage
+                                                            ?.ToString("0.##"))%
+                                                                           </strong>
+                                                                       </div>
+
+                        <div class="current-ranking-item">
+                            <span>
+                                <i class="bi bi-graph-up-arrow"></i>
+                                Student performance
+                            </span>
+
+                            <strong>
+                                @(Model.CurrentStudentPerformancePercentage
+                                                            ?.ToString("0.##"))%
+                                                                           </strong>
+                                                                       </div>
+
+                        <div class="current-ranking-item">
+                            <span>
+                                <i class="bi bi-people"></i>
+                                Minimum evaluations
+                            </span>
+
+                            <strong>
+                                @(Model.CurrentMinimumEvaluationCount)
+                            </strong>
+                        </div>
+                    </div>
+
+                    <hr />
+
+                    <dl class="row small mb-0">
+                        <dt class="col-5 text-muted">
+                            Updated by
+                        </dt>
+
+                        <dd class="col-7 text-end fw-semibold">
+                            @(Model.CurrentUpdatedByName
+                                                    ?? "Not available")
+                                                                   </dd>
+
+                        <dt class="col-5 text-muted">
+                            Updated at
+                        </dt>
+
+                        <dd class="col-7 text-end fw-semibold">
+                            @(Model.CurrentUpdatedAt
+                                                    ?.ToString("dd/MM/yyyy HH:mm")
+                                                    ?? "Not available")
+                    </dd>
+                </dl>
+                                }
+                else
+                {
+                    <div class="empty-state py-4">
+                        <div class="empty-state-icon">
+                            <i class="bi bi-speedometer2"></i>
+                        </div>
+
+                        <h3>No active configuration</h3>
+
+                        <p>
+                            The recommended defaults are displayed
+                            in the form. Save them to activate
+                            Teacher Performance analytics.
+                        </p>
+                    </div>
+                }
+            </div>
+        </div>
+
+        <div class="app-card">
+            <div class="app-card-header">
+                <div>
+                    <h3 class="app-card-title">
+                        Performance components
+                    </h3>
+                </div>
+            </div>
+
+            <div class="app-card-body">
+                <ul class="ranking-note-list">
+                    <li>
+                        Feedback uses ratings submitted by students.
+                    </li>
+
+                    <li>
+                        Completion measures successfully completed
+                        classrooms.
+                    </li>
+
+                    <li>
+                        Student performance reflects learning outcomes
+                        in the Teacher's classrooms.
+                    </li>
+
+                    <li>
+                        Teachers below the minimum evaluation count
+                        should be marked as having insufficient data.
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="data-table-card mt-4">
+    <div class="app-card-header">
+        <div>
+            <h3 class="app-card-title">
+                Configuration history
+            </h3>
+
+            <p class="app-card-subtitle">
+                The 20 most recently saved configurations.
+            </p>
+        </div>
+    </div>
+
+    @if (Model.History.Count == 0)
+    {
+        <div class="empty-state">
+            <div class="empty-state-icon">
+                <i class="bi bi-clock-history"></i>
+            </div>
+
+            <h3>No configuration history</h3>
+
+            <p>
+                Saved Teacher Performance configurations
+                will appear here.
+            </p>
+        </div>
+    }
+    else
+    {
+        <div class="table-responsive">
+            <table class="table app-table">
+                <thead>
+                    <tr>
+                        <th>Version</th>
+                        <th>Feedback</th>
+                        <th>Completion</th>
+                        <th>Student performance</th>
+                        <th>Minimum evaluations</th>
+                        <th>Total</th>
+                        <th>Updated by</th>
+                        <th>Updated at</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    @foreach (var configuration in Model.History)
+                    {
+                        <tr>
+                            <td>
+                                <span class="table-primary-text">
+                                    #@(configuration
+                                                                .TeacherPerformanceConfigurationId)
+                                                                                               </span>
+                                                                                           </td>
+
+                            <td>
+                                @(configuration.FeedbackPercentage
+                                                        .ToString("0.##"))%
+                                                                      </td>
+
+                            <td>
+                                @(configuration.CompletionPercentage
+                                                        .ToString("0.##"))%
+                                                                      </td>
+
+                            <td>
+                                @(configuration
+                                                        .StudentPerformancePercentage
+                                                        .ToString("0.##"))%
+                                                                      </td>
+
+                            <td>
+                                @(configuration.MinimumEvaluationCount)
+                            </td>
+
+                            <td>
+                                <strong>
+                                    @(configuration.TotalPercentage
+                                                                .ToString("0.##"))%
+                                                                              </strong>
+                                                                          </td>
+
+                            <td>
+                                @configuration.UpdatedByName
+                            </td>
+
+                            <td>
+                                @(configuration.UpdatedAt
+                                                        .ToString("dd/MM/yyyy HH:mm"))
+                    </td>
+
+                            <td>
+                        @if (configuration.IsActive)
+                                {
+                                    <span class="status-badge status-success">
+                                        <i class="bi bi-check-circle"></i>
+                                        ACTIVE
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="status-badge status-neutral">
+                                        PREVIOUS
+                                    </span>
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+
+    <script>
+        document.addEventListener(
+            "DOMContentLoaded",
+            function () {
+                const hasActiveConfiguration =
+                    @Html.Raw(hasActiveConfigurationJson);
+
+                const activeValues =
+                    @Html.Raw(activeValuesJson);
+
+                const feedbackInput =
+                    document.getElementById(
+                        "feedbackPercentage");
+
+                const completionInput =
+                    document.getElementById(
+                        "completionPercentage");
+
+                const studentPerformanceInput =
+                    document.getElementById(
+                        "studentPerformancePercentage");
+
+                const minimumEvaluationInput =
+                    document.getElementById(
+                        "minimumEvaluationCount");
+
+                const totalElement =
+                    document.getElementById(
+                        "totalPercentage");
+
+                const totalStatus =
+                    document.getElementById(
+                        "totalStatus");
+
+                const totalPanel =
+                    document.getElementById(
+                        "performanceTotalPanel");
+
+                const saveButton =
+                    document.getElementById(
+                        "saveConfigurationButton");
+
+                const changeNotice =
+                    document.getElementById(
+                        "configurationChangeNotice");
+
+                function getNumberValue(input) {
+                    const normalizedValue =
+                        String(input.value)
+                            .replace(",", ".");
+
+                    const value =
+                        Number.parseFloat(normalizedValue);
+
+                    return Number.isFinite(value)
+                        ? value
+                        : 0;
+                }
+
+                function getIntegerValue(input) {
+                    const value =
+                        Number.parseInt(input.value, 10);
+
+                    return Number.isFinite(value)
+                        ? value
+                        : 0;
+                }
+
+                function formatNumber(value) {
+                    return Number.isInteger(value)
+                        ? value.toString()
+                        : value.toFixed(2)
+                            .replace(/0+$/, "")
+                            .replace(/\.$/, "");
+                }
+
+                function valuesAreEqual(
+                    firstValue,
+                    secondValue) {
+
+                    return Math.abs(
+                        firstValue - secondValue
+                    ) < 0.0001;
+                }
+
+                function clampProgress(value) {
+                    return Math.max(
+                        0,
+                        Math.min(100, value));
+                }
+
+                function hasConfigurationChanged(
+                    feedback,
+                    completion,
+                    studentPerformance,
+                    minimumEvaluationCount) {
+
+                    if (!hasActiveConfiguration) {
+                        return true;
+                    }
+
+                    return !(
+                        valuesAreEqual(
+                            feedback,
+                            activeValues.feedback
+                        )
+                        &&
+                        valuesAreEqual(
+                            completion,
+                            activeValues.completion
+                        )
+                        &&
+                        valuesAreEqual(
+                            studentPerformance,
+                            activeValues.studentPerformance
+                        )
+                        &&
+                        minimumEvaluationCount
+                            === activeValues.minimumEvaluationCount
+                    );
+                }
+
+                function updatePreview() {
+                    const feedback =
+                        getNumberValue(feedbackInput);
+
+                    const completion =
+                        getNumberValue(completionInput);
+
+                    const studentPerformance =
+                        getNumberValue(
+                            studentPerformanceInput);
+
+                    const minimumEvaluationCount =
+                        getIntegerValue(
+                            minimumEvaluationInput);
+
+                    const total =
+                        feedback
+                        + completion
+                        + studentPerformance;
+
+                    const weightsInRange =
+                        feedback >= 0
+                        && feedback <= 100
+                        && completion >= 0
+                        && completion <= 100
+                        && studentPerformance >= 0
+                        && studentPerformance <= 100;
+
+                    const totalIsValid =
+                        Math.abs(total - 100) < 0.0001;
+
+                    const minimumCountIsValid =
+                        minimumEvaluationCount > 0;
+
+                    const hasChanges =
+                        hasConfigurationChanged(
+                            feedback,
+                            completion,
+                            studentPerformance,
+                            minimumEvaluationCount);
+
+                    totalElement.textContent =
+                        formatNumber(total) + "%";
+
+                    document.getElementById(
+                        "formulaFeedback"
+                    ).textContent =
+                        formatNumber(feedback);
+
+                    document.getElementById(
+                        "formulaCompletion"
+                    ).textContent =
+                        formatNumber(completion);
+
+                    document.getElementById(
+                        "formulaStudentPerformance"
+                    ).textContent =
+                        formatNumber(studentPerformance);
+
+                    document.getElementById(
+                        "feedbackProgress"
+                    ).style.width =
+                        clampProgress(feedback) + "%";
+
+                    document.getElementById(
+                        "completionProgress"
+                    ).style.width =
+                        clampProgress(completion) + "%";
+
+                    document.getElementById(
+                        "studentPerformanceProgress"
+                    ).style.width =
+                        clampProgress(studentPerformance) + "%";
+
+                    const formIsValid =
+                        totalIsValid
+                        && weightsInRange
+                        && minimumCountIsValid;
+
+                    totalStatus.className =
+                        "status-badge "
+                        + (
+                            formIsValid
+                                ? "status-success"
+                                : "status-danger"
+                        );
+
+                    if (!minimumCountIsValid) {
+                        totalStatus.innerHTML =
+                            '<i class="bi bi-exclamation-circle"></i>'
+                            + ' MINIMUM EVALUATIONS MUST BE GREATER THAN 0';
+                    }
+                    else if (!totalIsValid
+                        || !weightsInRange) {
+                        totalStatus.innerHTML =
+                            '<i class="bi bi-exclamation-circle"></i>'
+                            + ' TOTAL MUST EQUAL 100%';
+                    }
+                    else {
+                        totalStatus.innerHTML =
+                            '<i class="bi bi-check-circle"></i>'
+                            + ' VALID';
+                    }
+
+                    totalPanel.classList.toggle(
+                        "ranking-total-invalid",
+                        !formIsValid);
+
+                    saveButton.disabled =
+                        !formIsValid
+                        || !hasChanges;
+
+                    if (changeNotice) {
+                        if (hasChanges) {
+                            changeNotice.className =
+                                "alert alert-success py-2 mb-0";
+
+                            changeNotice.innerHTML =
+                                '<i class="bi bi-check-circle me-1"></i>'
+                                + 'The configuration has changed. '
+                                + 'It can now be saved as a new version.';
+                        }
+                        else {
+                            changeNotice.className =
+                                "alert alert-info py-2 mb-0";
+
+                            changeNotice.innerHTML =
+                                '<i class="bi bi-info-circle me-1"></i>'
+                                + 'Change at least one setting to create '
+                                + 'a new configuration version.';
+                        }
+                    }
+                }
+
+                [
+                    feedbackInput,
+                    completionInput,
+                    studentPerformanceInput,
+                    minimumEvaluationInput
+                ].forEach(function (input) {
+                    input.addEventListener(
+                        "input",
+                        updatePreview);
+                });
+
+                updatePreview();
+            });
+    </script>
+}

@@ -1,0 +1,1034 @@
+﻿@model EduNexus.Areas.Admin.ViewModels.CourseReview.CourseReviewDetailsViewModel
+
+@{
+    ViewData["Title"] = "Course Review Details";
+}
+
+<div class="page-header">
+    <div>
+        <div class="page-eyebrow">
+            Content governance
+        </div>
+
+        <h2 class="page-title">
+            Course Review Details
+        </h2>
+
+        <p class="page-description">
+            Inspect the course structure, learning materials
+            and assessment templates before making a decision.
+        </p>
+    </div>
+
+    <div class="page-actions">
+        <a asp-area="Admin"
+           asp-controller="CourseReview"
+           asp-action="Index"
+           class="btn-app-secondary">
+
+            <i class="bi bi-arrow-left"></i>
+            Back to list
+        </a>
+    </div>
+</div>
+
+<div class="course-review-hero app-card mb-4">
+    <div class="app-card-body">
+        <div class="row g-4 align-items-center">
+            <div class="col-lg-auto">
+                @if (!string.IsNullOrWhiteSpace(
+                                Model.ThumbnailUrl))
+                {
+                    <img src="@Model.ThumbnailUrl"
+                         alt="@Model.Title"
+                         class="course-review-thumbnail" />
+                }
+                else
+                {
+                    <div class="course-review-thumbnail
+                                    course-review-thumbnail-empty">
+
+                        <i class="bi bi-journal-bookmark"></i>
+                    </div>
+                }
+            </div>
+
+            <div class="col-lg">
+                <div class="d-flex flex-wrap
+                            align-items-center gap-2 mb-2">
+
+                    <span class="status-badge status-info">
+                        @Model.CourseCode
+                    </span>
+
+                    @if (Model.Status ==
+                                        CourseStatuses.PendingReview)
+                    {
+                        <span class="status-badge status-warning">
+                            <i class="bi bi-hourglass-split"></i>
+                            PENDING REVIEW
+                        </span>
+                    }
+                    else if (Model.Status ==
+                    CourseStatuses.Approved)
+                    {
+                        <span class="status-badge status-success">
+                            <i class="bi bi-check-circle"></i>
+                            APPROVED
+                        </span>
+                    }
+                    else if (Model.Status ==
+                    CourseStatuses.Rejected)
+                    {
+                        <span class="status-badge status-danger">
+                            <i class="bi bi-x-circle"></i>
+                            REJECTED
+                        </span>
+                    }
+                    else
+                    {
+                        <span class="status-badge status-neutral">
+                            @Model.Status
+                        </span>
+                    }
+                </div>
+
+                <h3 class="course-review-title">
+                    @Model.Title
+                </h3>
+
+                <p class="course-review-description">
+                    @(string.IsNullOrWhiteSpace(Model.Description)
+                                        ? "No course description was provided."
+                                        : Model.Description)
+                </p>
+
+                <div class="course-meta-grid">
+                    <div class="course-meta-item">
+                        <i class="bi bi-tags"></i>
+
+                        <div>
+                            <small>Category</small>
+                            <strong>@Model.CategoryName</strong>
+                        </div>
+                    </div>
+
+                    <div class="course-meta-item">
+                        <i class="bi bi-person-badge"></i>
+
+                        <div>
+                            <small>Created by</small>
+                            <strong>@Model.SmeName</strong>
+                        </div>
+                    </div>
+
+                    <div class="course-meta-item">
+                        <i class="bi bi-envelope"></i>
+
+                        <div>
+                            <small>SME email</small>
+                            <strong>@Model.SmeEmail</strong>
+                        </div>
+                    </div>
+
+                    <div class="course-meta-item">
+                        <i class="bi bi-send"></i>
+
+                        <div>
+                            <small>Submitted</small>
+                            <strong>
+                                @(Model.SubmittedAt
+                                                                ?.ToString("dd/MM/yyyy HH:mm")
+                                                                ?? "Not submitted")
+                            </strong>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-3 mb-4">
+    <div class="col-sm-6 col-xl">
+        <div class="stat-card">
+            <div class="stat-card-header">
+                <div>
+                    <div class="stat-card-label">
+                        Modules
+                    </div>
+
+                    <div class="stat-card-value">
+                        @Model.ModuleCount
+                    </div>
+                </div>
+
+                <div class="stat-icon">
+                    <i class="bi bi-list-nested"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-sm-6 col-xl">
+        <div class="stat-card">
+            <div class="stat-card-header">
+                <div>
+                    <div class="stat-card-label">
+                        Lessons
+                    </div>
+
+                    <div class="stat-card-value">
+                        @Model.LessonCount
+                    </div>
+                </div>
+
+                <div class="stat-icon">
+                    <i class="bi bi-file-text"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-sm-6 col-xl">
+        <div class="stat-card">
+            <div class="stat-card-header">
+                <div>
+                    <div class="stat-card-label">
+                        Published lessons
+                    </div>
+
+                    <div class="stat-card-value">
+                        @Model.PublishedLessonCount
+                    </div>
+                </div>
+
+                <div class="stat-icon">
+                    <i class="bi bi-check2-square"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-sm-6 col-xl">
+        <div class="stat-card">
+            <div class="stat-card-header">
+                <div>
+                    <div class="stat-card-label">
+                        Quiz templates
+                    </div>
+
+                    <div class="stat-card-value">
+                        @Model.QuizTemplateCount
+                    </div>
+                </div>
+
+                <div class="stat-icon">
+                    <i class="bi bi-ui-checks-grid"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-sm-6 col-xl">
+        <div class="stat-card">
+            <div class="stat-card-header">
+                <div>
+                    <div class="stat-card-label">
+                        Assignments
+                    </div>
+
+                    <div class="stat-card-value">
+                        @Model.AssignmentTemplateCount
+                    </div>
+                </div>
+
+                <div class="stat-icon">
+                    <i class="bi bi-clipboard-check"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@if (Model.ContentWarnings.Count > 0)
+{
+    <div class="app-alert app-alert-warning mb-4">
+        <div class="alert-icon">
+            <i class="bi bi-exclamation-triangle-fill"></i>
+        </div>
+
+        <div class="alert-content">
+            <strong>
+                Content review warnings
+            </strong>
+
+            <span>
+                Review the following issues before approving:
+            </span>
+
+            <ul class="mb-0 mt-2 ps-3">
+                @foreach (string warning
+                            in Model.ContentWarnings)
+                {
+                    <li>@warning</li>
+                }
+            </ul>
+        </div>
+    </div>
+}
+
+<div class="row g-4">
+    <div class="col-xl-8">
+        <div class="app-card mb-4">
+            <div class="app-card-header">
+                <div>
+                    <h3 class="app-card-title">
+                        Course structure
+                    </h3>
+
+                    <p class="app-card-subtitle">
+                        Modules and lessons submitted by the SME.
+                    </p>
+                </div>
+            </div>
+
+            <div class="app-card-body">
+                @if (Model.Modules.Count == 0)
+                {
+                    <div class="empty-state">
+                        <div class="empty-state-icon">
+                            <i class="bi bi-list-nested"></i>
+                        </div>
+
+                        <h3>No modules available</h3>
+
+                        <p>
+                            This course has not been provided
+                            with any learning modules.
+                        </p>
+                    </div>
+                }
+                else
+                {
+                    <div class="accordion"
+                         id="courseModuleAccordion">
+
+                        @for (int moduleIndex = 0;
+                                            moduleIndex < Model.Modules.Count;
+                                            moduleIndex++)
+                        {
+                            var module =
+                            Model.Modules[moduleIndex];
+
+                            string headingId =
+                            $"module-heading-{module.ModuleId}";
+
+                            string collapseId =
+                            $"module-collapse-{module.ModuleId}";
+
+                            <div class="accordion-item
+                                                course-module-item">
+
+                                <h2 class="accordion-header"
+                                    id="@headingId">
+
+                                    <button class="accordion-button
+                                                           @(moduleIndex == 0
+                                                                                                   ? ""
+                                                                                                   : "collapsed")"
+                                    type="button"
+                                    data-bs-toggle="collapse"
+                                    data-bs-target="#@collapseId"
+                                    aria-expanded="@(moduleIndex == 0
+                                                                                    ? "true"
+                                                                                    : "false")"
+                                                                                              aria-controls="@collapseId">
+
+                                <div class="d-flex
+                                                    align-items-center
+                                                    gap-3">
+
+                                    <span class="module-number">
+                                        @module.DisplayOrder
+                                    </span>
+
+                                    <span>
+                                        <strong>
+                                            @module.Title
+                                        </strong>
+
+                                        <small class="d-block
+                                                              text-muted">
+                                            @module.Lessons.Count
+                                            lesson(s)
+                                        </small>
+                                    </span>
+                                </div>
+                            </button>
+                        </h2>
+
+                        <div id="@collapseId"
+                             class="accordion-collapse collapse
+                                            @(moduleIndex == 0
+                                                                             ? "show"
+                                                                             : "")"
+                             aria-labelledby="@headingId"
+                             data-bs-parent="#courseModuleAccordion">
+
+                                    <div class="accordion-body">
+                                @if (!string.IsNullOrWhiteSpace(
+                                                                module.Description))
+                                        {
+                                            <p class="text-muted mb-3">
+                                                @module.Description
+                                            </p>
+                                        }
+
+                                        @if (module.Lessons.Count == 0)
+                                        {
+                                            <div class="alert alert-warning mb-0">
+                                                This module does not contain
+                                                any lessons.
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            <div class="lesson-review-list">
+                                                @foreach (var lesson
+                                                                                    in module.Lessons)
+                                                {
+                                                    <div class="lesson-review-item">
+                                                        <div class="lesson-review-icon">
+                                                            @if (lesson.LessonType
+                                                                                                        == "VIDEO")
+                                                            {
+                                                                <i class="bi bi-play-btn"></i>
+                                                            }
+                                                            else if (lesson.LessonType
+                                                            == "DOCUMENT")
+                                                            {
+                                                                <i class="bi bi-file-earmark-pdf"></i>
+                                                            }
+                                                            else
+                                                            {
+                                                                <i class="bi bi-file-text"></i>
+                                                            }
+                                                        </div>
+
+                                                        <div class="flex-grow-1">
+                                                            <div class="d-flex
+                                                                                        flex-wrap
+                                                                                        justify-content-between
+                                                                                        gap-2">
+
+                                                                <div>
+                                                                    <div class="table-primary-text">
+                                                                        @lesson.DisplayOrder.
+                                                                        @lesson.Title
+                                                                    </div>
+
+                                                                    <div class="table-secondary-text">
+                                                                        @lesson.LessonType
+
+                                                                        @if (lesson.EstimatedMinutes
+                                                                                                                                .HasValue)
+                                                                        {
+                                                                            <span>
+                                                                                ·
+                                                                                @lesson.EstimatedMinutes
+                                                                                min
+                                                                            </span>
+                                                                        }
+
+                                                                        <span>
+                                                                            ·
+                                                                            @lesson.ResourceCount
+                                                                            resource(s)
+                                                                        </span>
+                                                                    </div>
+                                                                </div>
+
+                                                                @if (lesson.Status
+                                                                                                                == "PUBLISHED")
+                                                                {
+                                                                    <span class="status-badge
+                                                                                                     status-success">
+                                                                        PUBLISHED
+                                                                    </span>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <span class="status-badge
+                                                                                                     status-warning">
+                                                                        DRAFT
+                                                                    </span>
+                                                                }
+                                                            </div>
+
+                                                            @if (!string.IsNullOrWhiteSpace(
+                                                                                                        lesson.Content))
+                                                            {
+                                                                <p class="lesson-preview-text">
+                                                                    @lesson.Content
+                                                                </p>
+                                                            }
+                                                        </div>
+                                                    </div>
+                                                }
+                                            </div>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                }
+            </div>
+        </div>
+
+        <div class="app-card mb-4">
+            <div class="app-card-header">
+                <div>
+                    <h3 class="app-card-title">
+                        Quiz templates
+                    </h3>
+
+                    <p class="app-card-subtitle">
+                        Assessments prepared for this course.
+                    </p>
+                </div>
+            </div>
+
+            @if (Model.QuizTemplates.Count == 0)
+            {
+                <div class="empty-state">
+                    <div class="empty-state-icon">
+                        <i class="bi bi-ui-checks"></i>
+                    </div>
+
+                    <h3>No quiz templates</h3>
+
+                    <p>
+                        This course currently has no quiz templates.
+                    </p>
+                </div>
+            }
+            else
+            {
+                <div class="table-responsive">
+                    <table class="table app-table">
+                        <thead>
+                            <tr>
+                                <th>Quiz</th>
+                                <th>Questions</th>
+                                <th>Duration</th>
+                                <th>Passing score</th>
+                                <th>Attempts</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            @foreach (var quiz
+                                                    in Model.QuizTemplates)
+                            {
+                                <tr>
+                                    <td>
+                                        <div class="table-primary-text">
+                                            @quiz.Title
+                                        </div>
+
+                                        <div class="table-secondary-text">
+                                            @(quiz.Description
+                                                                                ?? "No description")
+                                </div>
+                            </td>
+
+                                    <td>@quiz.QuestionCount</td>
+
+                                    <td>
+                                        @quiz.DefaultDurationMinutes min
+                                    </td>
+
+                                    <td>
+                                        @quiz.DefaultPassingScore
+                                    </td>
+
+                                    <td>
+                                        @quiz.DefaultMaxAttempts
+                                    </td>
+
+                                    <td>
+                                @if (quiz.IsActive)
+                                        {
+                                            <span class="status-badge
+                                                                     status-success">
+                                                ACTIVE
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            <span class="status-badge
+                                                                     status-neutral">
+                                                INACTIVE
+                                            </span>
+                                        }
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+        </div>
+
+        <div class="app-card mb-4">
+            <div class="app-card-header">
+                <div>
+                    <h3 class="app-card-title">
+                        Assignment templates
+                    </h3>
+
+                    <p class="app-card-subtitle">
+                        Assignments and grading structures.
+                    </p>
+                </div>
+            </div>
+
+            @if (Model.AssignmentTemplates.Count == 0)
+            {
+                <div class="empty-state">
+                    <div class="empty-state-icon">
+                        <i class="bi bi-clipboard"></i>
+                    </div>
+
+                    <h3>No assignment templates</h3>
+
+                    <p>
+                        This course currently has no assignments.
+                    </p>
+                </div>
+            }
+            else
+            {
+                <div class="table-responsive">
+                    <table class="table app-table">
+                        <thead>
+                            <tr>
+                                <th>Assignment</th>
+                                <th>Total score</th>
+                                <th>Rubric</th>
+                                <th>Criteria</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            @foreach (var assignment
+                                                    in Model.AssignmentTemplates)
+                            {
+                                <tr>
+                                    <td>
+                                        <div class="table-primary-text">
+                                            @assignment.Title
+                                        </div>
+
+                                        <div class="table-secondary-text">
+                                            @(assignment.Description
+                                                                                ?? "No description")
+                                </div>
+                            </td>
+
+                                    <td>
+                                        @assignment.TotalScore
+                                    </td>
+
+                                    <td>
+                                @if (assignment.HasRubric)
+                                        {
+                                            <span class="status-badge
+                                                                     status-success">
+                                                AVAILABLE
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            <span class="status-badge
+                                                                     status-warning">
+                                                MISSING
+                                            </span>
+                                        }
+                                    </td>
+
+                                    <td>
+                                        @assignment.RubricCriterionCount
+                                    </td>
+
+                                    <td>
+                                        @if (assignment.IsActive)
+                                        {
+                                            <span class="status-badge
+                                                                     status-success">
+                                                ACTIVE
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            <span class="status-badge
+                                                                     status-neutral">
+                                                INACTIVE
+                                            </span>
+                                        }
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+        </div>
+    </div>
+
+    <div class="col-xl-4">
+        <div class="app-card mb-4">
+            <div class="app-card-header">
+                <div>
+                    <h3 class="app-card-title">
+                        Review decision
+                    </h3>
+
+                    <p class="app-card-subtitle">
+                        Approve the course or return it
+                        to the SME for revision.
+                    </p>
+                </div>
+            </div>
+
+            <div class="app-card-body">
+                @if (Model.CanReview)
+                {
+                    <div class="decision-help mb-4">
+                        <i class="bi bi-shield-check"></i>
+
+                        <p class="mb-0">
+                            Verify the course structure,
+                            lesson status and assessment content
+                            before making a final decision.
+                        </p>
+                    </div>
+
+                    <button type="button"
+                            class="btn-app-primary w-100 mb-2"
+                            data-bs-toggle="modal"
+                            data-bs-target="#approveCourseModal">
+
+                        <i class="bi bi-check-circle"></i>
+                        Approve course
+                    </button>
+
+                    <button type="button"
+                            class="btn-app-danger w-100"
+                            data-bs-toggle="modal"
+                            data-bs-target="#rejectCourseModal">
+
+                        <i class="bi bi-x-circle"></i>
+                        Reject course
+                    </button>
+                }
+                else
+                {
+                    <div class="decision-completed">
+                        @if (Model.Status ==
+                                            CourseStatuses.Approved)
+                        {
+                            <div class="stat-icon mb-3">
+                                <i class="bi bi-check-circle"></i>
+                            </div>
+
+                            <h4>Course approved</h4>
+
+                            <p class="text-muted mb-0">
+                                This course is available for
+                                teachers to use when creating
+                                classrooms.
+                            </p>
+                        }
+                        else if (Model.Status ==
+                        CourseStatuses.Rejected)
+                        {
+                            <div class="stat-icon mb-3">
+                                <i class="bi bi-x-circle"></i>
+                            </div>
+
+                            <h4>Course rejected</h4>
+
+                            <p class="text-muted mb-0">
+                                The course has been returned
+                                to the SME for revision.
+                            </p>
+                        }
+                        else
+                        {
+                            <p class="text-muted mb-0">
+                                This course is not currently
+                                available for review.
+                            </p>
+                        }
+                    </div>
+                }
+            </div>
+        </div>
+
+        <div class="app-card">
+            <div class="app-card-header">
+                <div>
+                    <h3 class="app-card-title">
+                        Review history
+                    </h3>
+
+                    <p class="app-card-subtitle">
+                        Previous decisions for this course.
+                    </p>
+                </div>
+            </div>
+
+            <div class="app-card-body">
+                @if (Model.ReviewHistory.Count == 0)
+                {
+                    <div class="text-center py-4">
+                        <div class="stat-icon mx-auto mb-3">
+                            <i class="bi bi-clock-history"></i>
+                        </div>
+
+                        <p class="text-muted mb-0">
+                            No review decisions have been recorded.
+                        </p>
+                    </div>
+                }
+                else
+                {
+                    <div class="review-timeline">
+                        @foreach (var review
+                                            in Model.ReviewHistory)
+                        {
+                            <div class="review-timeline-item">
+                                <div class="review-timeline-marker
+                                                    @(review.Decision ==
+                                                                                     CourseReviewDecisions.Approved
+                                                                                     ? "approved"
+                                                                                     : "rejected")">
+                        </div>
+
+                                <div class="review-timeline-content">
+                                    <div class="d-flex
+                                                        justify-content-between
+                                                        gap-2">
+
+                                @if (review.Decision ==
+                                                                CourseReviewDecisions.Approved)
+                                        {
+                                            <span class="status-badge
+                                                                     status-success">
+                                                APPROVED
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            <span class="status-badge
+                                                                     status-danger">
+                                                REJECTED
+                                            </span>
+                                        }
+
+                                        <small class="text-muted">
+                                            @review.ReviewedAt
+                                            .ToString("dd/MM/yyyy HH:mm")
+                                        </small>
+                                    </div>
+
+                                    <div class="mt-2">
+                                        <strong>
+                                            @review.ReviewerName
+                                        </strong>
+                                    </div>
+
+                                    @if (!string.IsNullOrWhiteSpace(
+                                                                review.ReviewComment))
+                                    {
+                                        <p class="review-comment">
+                                            @review.ReviewComment
+                                        </p>
+                                    }
+                                    else
+                                    {
+                                        <p class="review-comment
+                                                              text-muted">
+                                            No review comment.
+                                        </p>
+                                    }
+                                </div>
+                            </div>
+                        }
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+@if (Model.CanReview)
+{
+    <div class="modal fade"
+         id="approveCourseModal"
+         tabindex="-1"
+         aria-hidden="true">
+
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content app-modal">
+                <div class="modal-header">
+                    <div>
+                        <h5 class="modal-title">
+                            Approve Course
+                        </h5>
+
+                        <p class="text-muted small mb-0 mt-1">
+                            Confirm that this course meets
+                            EduNexus content standards.
+                        </p>
+                    </div>
+
+                    <button type="button"
+                            class="btn-close"
+                            data-bs-dismiss="modal">
+                    </button>
+                </div>
+
+                <form asp-area="Admin"
+                      asp-controller="CourseReview"
+                      asp-action="Approve"
+                      method="post">
+
+                    <div class="modal-body">
+                        <input type="hidden"
+                               name="CourseId"
+                               value="@Model.CourseId" />
+
+                        <div class="mb-3">
+                            <label class="form-label">
+                                Approval comment
+                                <span class="text-muted">
+                                    (optional)
+                                </span>
+                            </label>
+
+                            <textarea name="ReviewComment"
+                                  class="form-control"
+                                  rows="4"
+                                  maxlength="1000"
+                                  placeholder="Add an optional note for the SME">
+                            </textarea>
+                        </div>
+
+                        <div class="alert alert-success mb-0">
+                            After approval, teachers may use
+                            this course to create classrooms.
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button"
+                                class="btn-app-secondary"
+                                data-bs-dismiss="modal">
+                            Cancel
+                        </button>
+
+                        <button type="submit"
+                                class="btn-app-primary">
+                            <i class="bi bi-check-circle"></i>
+                            Confirm approval
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade"
+         id="rejectCourseModal"
+         tabindex="-1"
+         aria-hidden="true">
+
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content app-modal">
+                <div class="modal-header">
+                    <div>
+                        <h5 class="modal-title">
+                            Reject Course
+                        </h5>
+
+                        <p class="text-muted small mb-0 mt-1">
+                            Explain what the SME must revise
+                            before submitting again.
+                        </p>
+                    </div>
+
+                    <button type="button"
+                            class="btn-close"
+                            data-bs-dismiss="modal">
+                    </button>
+                </div>
+
+                <form asp-area="Admin"
+                      asp-controller="CourseReview"
+                      asp-action="Reject"
+                      method="post">
+
+                    <div class="modal-body">
+                        <input type="hidden"
+                               name="CourseId"
+                               value="@Model.CourseId" />
+
+                        <div class="mb-3">
+                            <label class="form-label">
+                                Rejection reason
+                                <span class="text-danger">*</span>
+                            </label>
+
+                            <textarea name="ReviewComment"
+                                  class="form-control"
+                                  rows="5"
+                                  maxlength="1000"
+                                  required
+                                  placeholder="Describe the issues the SME must correct">
+                            </textarea>
+
+                            <div class="form-text">
+                                Maximum 1000 characters.
+                            </div>
+                        </div>
+
+                        <div class="alert alert-warning mb-0">
+                            The course will be returned to
+                            the SME with status REJECTED.
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button"
+                                class="btn-app-secondary"
+                                data-bs-dismiss="modal">
+                            Cancel
+                        </button>
+
+                        <button type="submit"
+                                class="btn-app-danger">
+                            <i class="bi bi-x-circle"></i>
+                            Confirm rejection
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+}

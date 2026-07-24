@@ -1,0 +1,562 @@
+﻿@model EduNexus.Areas.Admin.ViewModels.CourseReview.CourseReviewIndexViewModel
+
+@{
+    ViewData["Title"] = "Course Review";
+}
+
+<div class="page-header">
+    <div>
+        <div class="page-eyebrow">
+            Content governance
+        </div>
+
+        <h2 class="page-title">
+            Course Review
+        </h2>
+
+        <p class="page-description">
+            Review courses submitted by subject matter experts
+            before they become available for teachers.
+        </p>
+    </div>
+</div>
+
+<!-- Summary cards -->
+<div class="row g-3 mb-4">
+    <div class="col-md-4">
+        <a asp-area="Admin"
+           asp-controller="CourseReview"
+           asp-action="Index"
+           asp-route-Status="@CourseStatuses.PendingReview"
+           class="text-decoration-none">
+
+            <div class="stat-card">
+                <div class="stat-card-header">
+                    <div>
+                        <div class="stat-card-label">
+                            Pending review
+                        </div>
+
+                        <div class="stat-card-value">
+                            @Model.PendingCount
+                        </div>
+                    </div>
+
+                    <div class="stat-icon">
+                        <i class="bi bi-hourglass-split"></i>
+                    </div>
+                </div>
+
+                <div class="stat-card-note">
+                    Courses awaiting a decision
+                </div>
+            </div>
+        </a>
+    </div>
+
+    <div class="col-md-4">
+        <a asp-area="Admin"
+           asp-controller="CourseReview"
+           asp-action="Index"
+           asp-route-Status="@CourseStatuses.Approved"
+           class="text-decoration-none">
+
+            <div class="stat-card">
+                <div class="stat-card-header">
+                    <div>
+                        <div class="stat-card-label">
+                            Approved courses
+                        </div>
+
+                        <div class="stat-card-value">
+                            @Model.ApprovedCount
+                        </div>
+                    </div>
+
+                    <div class="stat-icon">
+                        <i class="bi bi-check2-circle"></i>
+                    </div>
+                </div>
+
+                <div class="stat-card-note">
+                    Courses approved by Admin
+                </div>
+            </div>
+        </a>
+    </div>
+
+    <div class="col-md-4">
+        <a asp-area="Admin"
+           asp-controller="CourseReview"
+           asp-action="Index"
+           asp-route-Status="@CourseStatuses.Rejected"
+           class="text-decoration-none">
+
+            <div class="stat-card">
+                <div class="stat-card-header">
+                    <div>
+                        <div class="stat-card-label">
+                            Rejected courses
+                        </div>
+
+                        <div class="stat-card-value">
+                            @Model.RejectedCount
+                        </div>
+                    </div>
+
+                    <div class="stat-icon">
+                        <i class="bi bi-x-circle"></i>
+                    </div>
+                </div>
+
+                <div class="stat-card-note">
+                    Courses returned for revision
+                </div>
+            </div>
+        </a>
+    </div>
+</div>
+
+<!-- Filters -->
+<div class="filter-card">
+    <form method="get"
+          asp-area="Admin"
+          asp-controller="CourseReview"
+          asp-action="Index">
+
+        <div class="row g-3 align-items-end">
+            <div class="col-lg-4">
+                <label class="form-label">
+                    Search course
+                </label>
+
+                <div class="input-group">
+                    <span class="input-group-text bg-white">
+                        <i class="bi bi-search"></i>
+                    </span>
+
+                    <input type="text"
+                           name="SearchText"
+                           value="@Model.Filter.SearchText"
+                           class="form-control"
+                           placeholder="Code, title or SME name" />
+                </div>
+            </div>
+
+            <div class="col-lg-3">
+                <label class="form-label">
+                    Category
+                </label>
+
+                <select name="CategoryId"
+                        class="form-select">
+
+                    <option value="">
+                        All categories
+                    </option>
+
+                    @foreach (var category in Model.Categories)
+                    {
+                        if (Model.Filter.CategoryId ==
+                        category.CategoryId)
+                        {
+                            <option value="@category.CategoryId"
+                                    selected>
+                                @category.CategoryName
+                            </option>
+                        }
+                        else
+                        {
+                            <option value="@category.CategoryId">
+                                @category.CategoryName
+                            </option>
+                        }
+                    }
+                </select>
+            </div>
+
+            <div class="col-lg-3">
+                <label class="form-label">
+                    Course status
+                </label>
+
+                <select name="Status"
+                        class="form-select">
+
+                    <option value="">
+                        All statuses
+                    </option>
+
+                    @if (Model.Filter.Status ==
+                                        CourseStatuses.Draft)
+                    {
+                        <option value="@CourseStatuses.Draft"
+                                selected>
+                            DRAFT
+                        </option>
+                    }
+                    else
+                    {
+                        <option value="@CourseStatuses.Draft">
+                            DRAFT
+                        </option>
+                    }
+
+                    @if (Model.Filter.Status ==
+                                        CourseStatuses.PendingReview)
+                    {
+                        <option value="@CourseStatuses.PendingReview"
+                                selected>
+                            PENDING REVIEW
+                        </option>
+                    }
+                    else
+                    {
+                        <option value="@CourseStatuses.PendingReview">
+                            PENDING REVIEW
+                        </option>
+                    }
+
+                    @if (Model.Filter.Status ==
+                                        CourseStatuses.Approved)
+                    {
+                        <option value="@CourseStatuses.Approved"
+                                selected>
+                            APPROVED
+                        </option>
+                    }
+                    else
+                    {
+                        <option value="@CourseStatuses.Approved">
+                            APPROVED
+                        </option>
+                    }
+
+                    @if (Model.Filter.Status ==
+                                        CourseStatuses.Rejected)
+                    {
+                        <option value="@CourseStatuses.Rejected"
+                                selected>
+                            REJECTED
+                        </option>
+                    }
+                    else
+                    {
+                        <option value="@CourseStatuses.Rejected">
+                            REJECTED
+                        </option>
+                    }
+
+                    @if (Model.Filter.Status ==
+                                        CourseStatuses.Archived)
+                    {
+                        <option value="@CourseStatuses.Archived"
+                                selected>
+                            ARCHIVED
+                        </option>
+                    }
+                    else
+                    {
+                        <option value="@CourseStatuses.Archived">
+                            ARCHIVED
+                        </option>
+                    }
+                </select>
+            </div>
+
+            <div class="col-lg-2">
+                <div class="d-flex gap-2">
+                    <button type="submit"
+                            class="btn-app-primary flex-grow-1">
+
+                        <i class="bi bi-funnel"></i>
+                        Apply
+                    </button>
+
+                    <a asp-area="Admin"
+                       asp-controller="CourseReview"
+                       asp-action="Index"
+                       class="btn-app-secondary">
+
+                        Reset
+                    </a>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+<!-- Course table -->
+<div class="data-table-card">
+    <div class="app-card-header">
+        <div>
+            <h3 class="app-card-title">
+                Submitted courses
+            </h3>
+
+            <p class="app-card-subtitle">
+                @Model.TotalItems course record(s)
+                matched the selected filters.
+            </p>
+        </div>
+    </div>
+
+    @if (Model.Courses.Count == 0)
+    {
+        <div class="empty-state">
+            <div class="empty-state-icon">
+                <i class="bi bi-journal-x"></i>
+            </div>
+
+            <h3>No courses found</h3>
+
+            <p>
+                There are no courses matching the current
+                search and filter conditions.
+            </p>
+
+            <a asp-area="Admin"
+               asp-controller="CourseReview"
+               asp-action="Index"
+               class="btn-app-secondary mt-3">
+
+                Reset filters
+            </a>
+        </div>
+    }
+    else
+    {
+        <div class="table-responsive">
+            <table class="table app-table">
+                <thead>
+                    <tr>
+                        <th>Course</th>
+                        <th>Category</th>
+                        <th>Created by</th>
+                        <th>Content</th>
+                        <th>Status</th>
+                        <th>Submitted</th>
+                        <th class="text-end">
+                            Action
+                        </th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    @foreach (var course in Model.Courses)
+                    {
+                        <tr>
+                            <td>
+                                <div class="d-flex
+                                                    align-items-center gap-3">
+
+                                    @if (!string.IsNullOrWhiteSpace(
+                                                                course.ThumbnailUrl))
+                                    {
+                                        <img src="@course.ThumbnailUrl"
+                                             alt="@course.Title"
+                                             style="width: 48px;
+                                                                height: 48px;
+                                                                border-radius: 12px;
+                                                                object-fit: cover;" />
+                                    }
+                                    else
+                                    {
+                                        <div class="stat-icon"
+                                             style="width: 48px;
+                                                                height: 48px;
+                                                                flex: 0 0 auto;">
+
+                                            <i class="bi bi-journal-bookmark"></i>
+                                        </div>
+                                    }
+
+                                    <div>
+                                        <div class="table-primary-text">
+                                            @course.Title
+                                        </div>
+
+                                        <div class="table-secondary-text">
+                                            @course.CourseCode
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+
+                            <td>
+                                @course.CategoryName
+                            </td>
+
+                            <td>
+                                <div class="table-primary-text">
+                                    @course.SmeName
+                                </div>
+
+                                <div class="table-secondary-text">
+                                    Subject matter expert
+                                </div>
+                            </td>
+
+                            <td>
+                                <div class="d-flex flex-wrap gap-1">
+                                    <span class="status-badge status-info">
+                                        <i class="bi bi-list-nested"></i>
+                                        @course.ModuleCount modules
+                                    </span>
+
+                                    <span class="status-badge status-neutral">
+                                        <i class="bi bi-file-text"></i>
+                                        @course.LessonCount lessons
+                                    </span>
+                                </div>
+
+                                <div class="d-flex flex-wrap gap-1 mt-1">
+                                    <span class="status-badge status-neutral">
+                                        <i class="bi bi-ui-checks"></i>
+                                        @course.QuizTemplateCount quizzes
+                                    </span>
+
+                                    <span class="status-badge status-neutral">
+                                        <i class="bi bi-clipboard-check"></i>
+                                        @course.AssignmentTemplateCount assignments
+                                    </span>
+                                </div>
+                            </td>
+
+                            <td>
+                                @if (course.Status ==
+                                                        CourseStatuses.PendingReview)
+                                {
+                                    <span class="status-badge status-warning">
+                                        <i class="bi bi-hourglass-split"></i>
+                                        PENDING REVIEW
+                                    </span>
+                                }
+                                else if (course.Status ==
+                                CourseStatuses.Approved)
+                                {
+                                    <span class="status-badge status-success">
+                                        <i class="bi bi-check-circle"></i>
+                                        APPROVED
+                                    </span>
+                                }
+                                else if (course.Status ==
+                                CourseStatuses.Rejected)
+                                {
+                                    <span class="status-badge status-danger">
+                                        <i class="bi bi-x-circle"></i>
+                                        REJECTED
+                                    </span>
+                                }
+                                else if (course.Status ==
+                                CourseStatuses.Draft)
+                                {
+                                    <span class="status-badge status-neutral">
+                                        <i class="bi bi-pencil-square"></i>
+                                        DRAFT
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="status-badge status-neutral">
+                                        <i class="bi bi-archive"></i>
+                                        @course.Status
+                                    </span>
+                                }
+                            </td>
+
+                            <td>
+                                @if (course.SubmittedAt.HasValue)
+                                {
+                                    <div class="table-primary-text">
+                                        @course.SubmittedAt.Value
+                                        .ToString("dd/MM/yyyy")
+                                    </div>
+
+                                    <div class="table-secondary-text">
+                                        @course.SubmittedAt.Value
+                                        .ToString("HH:mm")
+                                    </div>
+                                }
+                                else
+                                {
+                                    <span class="text-muted">
+                                        Not submitted
+                                    </span>
+                                }
+                            </td>
+
+                            <td class="text-end">
+                                <a asp-area="Admin"
+                                   asp-controller="CourseReview"
+                                   asp-action="Details"
+                                   asp-route-id="@course.CourseId"
+                                   class="btn btn-sm
+                                                  btn-outline-primary">
+
+                                    <i class="bi bi-eye"></i>
+
+                                    @if (course.Status ==
+                                                                CourseStatuses.PendingReview)
+                                    {
+                                        <span>Review</span>
+                                    }
+                                    else
+                                    {
+                                        <span>View</span>
+                                    }
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+
+    @if (Model.TotalPages > 1)
+    {
+        <div class="app-pagination">
+            <div class="pagination-info">
+                Page @Model.Filter.Page
+                of @Model.TotalPages
+            </div>
+
+            <div class="d-flex gap-2">
+                @if (Model.HasPreviousPage)
+                {
+                    <a asp-area="Admin"
+                       asp-controller="CourseReview"
+                       asp-action="Index"
+                       asp-route-SearchText="@Model.Filter.SearchText"
+                       asp-route-Status="@Model.Filter.Status"
+                       asp-route-CategoryId="@Model.Filter.CategoryId"
+                       asp-route-Page="@(Model.Filter.Page - 1)"
+                       asp-route-PageSize="@Model.Filter.PageSize"
+                       class="btn-app-secondary">
+
+                        <i class="bi bi-chevron-left"></i>
+                        Previous
+                    </a>
+                }
+
+                @if (Model.HasNextPage)
+                {
+                    <a asp-area="Admin"
+                       asp-controller="CourseReview"
+                       asp-action="Index"
+                       asp-route-SearchText="@Model.Filter.SearchText"
+                       asp-route-Status="@Model.Filter.Status"
+                       asp-route-CategoryId="@Model.Filter.CategoryId"
+                       asp-route-Page="@(Model.Filter.Page + 1)"
+                       asp-route-PageSize="@Model.Filter.PageSize"
+                       class="btn-app-secondary">
+
+                        Next
+                        <i class="bi bi-chevron-right"></i>
+                    </a>
+                }
+            </div>
+        </div>
+    }
+</div>

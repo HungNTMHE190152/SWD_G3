@@ -1,0 +1,71 @@
+﻿@model EduNexus.Areas.Admin.ViewModels.Category.CategoryFormViewModel
+
+@{
+    ViewData["Title"] = "Edit Category";
+}
+
+<div class="page-header">
+    <div>
+        <div class="page-eyebrow">
+            Course organization
+        </div>
+
+        <h2 class="page-title">
+            Edit Category
+        </h2>
+
+        <p class="page-description">
+            Update category information and availability.
+        </p>
+    </div>
+
+    <div class="page-actions">
+        <a asp-area="Admin"
+           asp-controller="Category"
+           asp-action="Index"
+           class="btn-app-secondary">
+
+            <i class="bi bi-arrow-left"></i>
+            Back to list
+        </a>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-xl-8">
+        <div class="form-card">
+            <form asp-area="Admin"
+                  asp-controller="Category"
+                  asp-action="Edit"
+                  method="post">
+
+                <input asp-for="CategoryId"
+                       type="hidden" />
+
+                <partial name="~/Areas/Admin/Views/Category/_CategoryForm.cshtml"
+                         model="Model" />   
+
+                <div class="d-flex gap-2 mt-4">
+                    <button type="submit"
+                            class="btn-app-primary">
+
+                        <i class="bi bi-check-lg"></i>
+                        Save changes
+                    </button>
+
+                    <a asp-area="Admin"
+                       asp-controller="Category"
+                       asp-action="Index"
+                       class="btn-app-secondary">
+
+                        Cancel
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

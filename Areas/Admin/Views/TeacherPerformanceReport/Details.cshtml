@@ -1,0 +1,740 @@
+﻿@model EduNexus.Areas.Admin.ViewModels.TeacherPerformanceReport.TeacherPerformanceDetailsViewModel
+
+@{
+    ViewData["Title"] = "Teacher Performance Details";
+
+    string GetScoreClass(decimal score)
+    {
+        if (score >= 80m)
+        {
+            return "status-success";
+        }
+
+        if (score >= 65m)
+        {
+            return "status-info";
+        }
+
+        if (score >= 50m)
+        {
+            return "status-warning";
+        }
+
+        return "status-danger";
+    }
+
+    string GetClassroomStatusClass(string status)
+    {
+        return status switch
+        {
+            "COMPLETED" => "status-success",
+            "IN_PROGRESS" => "status-info",
+            "OPEN" => "status-warning",
+            "CANCELLED" => "status-danger",
+            _ => "status-neutral"
+        };
+    }
+}
+
+<div class="page-header">
+    <div>
+        <div class="page-eyebrow">
+            Teacher analytics
+        </div>
+
+        <h2 class="page-title">
+            Teacher Performance Details
+        </h2>
+
+        <p class="page-description">
+            Review performance scores, Classroom outcomes
+            and Student evaluation feedback.
+        </p>
+    </div>
+
+    <div class="page-actions">
+        <a asp-area="Admin"
+           asp-controller="TeacherPerformanceReport"
+           asp-action="Index"
+           class="btn-app-secondary">
+
+            <i class="bi bi-arrow-left"></i>
+            Back to report
+        </a>
+    </div>
+</div>
+
+<div class="app-card mb-4">
+    <div class="app-card-body">
+        <div class="teacher-performance-profile">
+            @if (!string.IsNullOrWhiteSpace(
+                        Model.Summary.AvatarUrl))
+            {
+                <img src="@Model.Summary.AvatarUrl"
+                     alt="@Model.Summary.FullName"
+                     class="teacher-performance-avatar" />
+            }
+            else
+            {
+                <div class="teacher-performance-avatar
+                                teacher-performance-avatar-empty">
+
+                    <i class="bi bi-person"></i>
+                </div>
+            }
+
+            <div class="flex-grow-1">
+                <div class="d-flex flex-wrap gap-2 mb-2">
+                    @if (Model.Summary.IsAccountActive
+                                        && Model.Summary.UserStatus == "ACTIVE")
+                    {
+                        <span class="status-badge status-success">
+                            ACTIVE ACCOUNT
+                        </span>
+                    }
+                    else
+                    {
+                        <span class="status-badge status-neutral">
+                            INACTIVE ACCOUNT
+                        </span>
+                    }
+
+                    @if (Model.Summary
+                                        .HasSufficientEvaluationData)
+                    {
+                        <span class="status-badge status-success">
+                            <i class="bi bi-database-check"></i>
+                            SUFFICIENT DATA
+                        </span>
+                    }
+                    else
+                    {
+                        <span class="status-badge status-warning">
+                            <i class="bi bi-exclamation-circle"></i>
+                            INSUFFICIENT DATA
+                        </span>
+                    }
+                </div>
+
+                <h3 class="mb-1 fw-bold">
+                    @Model.Summary.FullName
+                </h3>
+
+                <div class="text-muted">
+                    @Model.Summary.Email
+                    · @Model.Summary.Username
+                </div>
+
+                <div class="mt-3 d-flex flex-wrap gap-3">
+                    <span class="text-muted small">
+                        <i class="bi bi-journals me-1"></i>
+                        @Model.Summary.TotalClassroomCount
+                        Classroom(s)
+                    </span>
+
+                    <span class="text-muted small">
+                        <i class="bi bi-chat-square-star me-1"></i>
+                        @Model.Summary.EvaluationCount
+                        Evaluation(s)
+                    </span>
+
+                    <span class="text-muted small">
+                        Minimum required:
+                        @Model.Summary.MinimumEvaluationCount
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@if (!Model.Summary.HasSufficientEvaluationData)
+{
+    <div class="app-alert app-alert-warning mb-4">
+        <div class="alert-icon">
+            <i class="bi bi-exclamation-triangle-fill"></i>
+        </div>
+
+        <div class="alert-content">
+            <strong>
+                Insufficient evaluation data
+            </strong>
+
+            <span>
+                This Teacher currently has
+                @Model.Summary.EvaluationCount evaluation(s).
+                At least
+                @Model.Summary.MinimumEvaluationCount
+                are required before the performance score
+                is considered reliable.
+            </span>
+        </div>
+    </div>
+}
+
+<div class="row g-3 mb-4">
+    <div class="col-sm-6 col-xl-3">
+        <div class="stat-card">
+            <div class="stat-card-header">
+                <div>
+                    <div class="stat-card-label">
+                        Overall Score
+                    </div>
+
+                    <div class="stat-card-value">
+                        @(Model.Summary.OverallScore
+                                                .ToString("0.##"))
+                    </div>
+                </div>
+
+                <div class="stat-icon">
+                    <i class="bi bi-speedometer2"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-sm-6 col-xl-3">
+        <div class="stat-card">
+            <div class="stat-card-header">
+                <div>
+                    <div class="stat-card-label">
+                        Feedback Score
+                    </div>
+
+                    <div class="stat-card-value">
+                        @(Model.Summary.FeedbackScore
+                                                .ToString("0.##"))
+                    </div>
+                </div>
+
+                <div class="stat-icon">
+                    <i class="bi bi-star"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-sm-6 col-xl-3">
+        <div class="stat-card">
+            <div class="stat-card-header">
+                <div>
+                    <div class="stat-card-label">
+                        Completion Score
+                    </div>
+
+                    <div class="stat-card-value">
+                        @(Model.Summary.CompletionScore
+                                                .ToString("0.##"))
+                    </div>
+                </div>
+
+                <div class="stat-icon">
+                    <i class="bi bi-check2-circle"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-sm-6 col-xl-3">
+        <div class="stat-card">
+            <div class="stat-card-header">
+                <div>
+                    <div class="stat-card-label">
+                        Student Performance
+                    </div>
+
+                    <div class="stat-card-value">
+                        @(Model.Summary.StudentPerformanceScore
+                                                .ToString("0.##"))
+                    </div>
+                </div>
+
+                <div class="stat-icon">
+                    <i class="bi bi-graph-up-arrow"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-4 mb-4">
+    <div class="col-xl-7">
+        <div class="app-card h-100">
+            <div class="app-card-header">
+                <div>
+                    <h3 class="app-card-title">
+                        Score composition
+                    </h3>
+
+                    <p class="app-card-subtitle">
+                        Components used to calculate this
+                        Teacher's performance.
+                    </p>
+                </div>
+            </div>
+
+            <div class="app-card-body">
+                <div class="performance-component-list">
+                    <div class="performance-component-item">
+                        <div>
+                            <strong>Feedback</strong>
+
+                            <small>
+                                Weight:
+                                @(Model.FeedbackWeightPercentage
+                                                                .ToString("0.##"))%
+                            </small>
+                        </div>
+
+                        <span class="status-badge
+                                     @GetScoreClass(
+                                                                       Model.Summary.FeedbackScore)">
+
+                            @(Model.Summary.FeedbackScore
+                                                        .ToString("0.##"))
+                        </span>
+                    </div>
+
+                    <div class="performance-component-item">
+                        <div>
+                            <strong>Completion</strong>
+
+                            <small>
+                                Weight:
+                                @(Model.CompletionWeightPercentage
+                                                                .ToString("0.##"))%
+                            </small>
+                        </div>
+
+                        <span class="status-badge
+                                     @GetScoreClass(
+                                                                       Model.Summary.CompletionScore)">
+
+                            @(Model.Summary.CompletionScore
+                                                        .ToString("0.##"))
+                        </span>
+                    </div>
+
+                    <div class="performance-component-item">
+                        <div>
+                            <strong>Student performance</strong>
+
+                            <small>
+                                Weight:
+                                @(Model.StudentPerformanceWeightPercentage
+                                                                .ToString("0.##"))%
+                            </small>
+                        </div>
+
+                        <span class="status-badge
+                                     @GetScoreClass(
+                                                                       Model.Summary.StudentPerformanceScore)">
+
+                            @(Model.Summary.StudentPerformanceScore
+                                                        .ToString("0.##"))
+                        </span>
+                    </div>
+                </div>
+
+                <div class="ranking-formula-preview mt-4">
+                    <div class="formula-preview-header">
+                        <i class="bi bi-calculator"></i>
+
+                        <div>
+                            <strong>
+                                Student Performance Breakdown
+                            </strong>
+
+                            <small>
+                                Ranking configuration applied
+                            </small>
+                        </div>
+                    </div>
+
+                    <div class="formula-preview-content">
+                        <span>
+                            Assignment
+                            @(Model.Summary.AssignmentScore
+                                                        .ToString("0.##"))
+                        </span>
+
+                        <strong>
+                            ×
+                            @(Model.AssignmentWeightPercentage
+                                                        .ToString("0.##"))%
+                        </strong>
+
+                        <span class="formula-plus">+</span>
+
+                        <span>
+                            Quiz
+                            @(Model.Summary.QuizScore
+                                                        .ToString("0.##"))
+                        </span>
+
+                        <strong>
+                            ×
+                            @(Model.QuizWeightPercentage
+                                                        .ToString("0.##"))%
+                        </strong>
+
+                        <span class="formula-plus">+</span>
+
+                        <span>
+                            Lesson
+                            @(Model.Summary.LessonProgressScore
+                                                        .ToString("0.##"))
+                        </span>
+
+                        <strong>
+                            ×
+                            @(Model.LessonProgressWeightPercentage
+                                                        .ToString("0.##"))%
+                        </strong>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xl-5">
+        <div class="app-card h-100">
+            <div class="app-card-header">
+                <div>
+                    <h3 class="app-card-title">
+                        Evaluation averages
+                    </h3>
+
+                    <p class="app-card-subtitle">
+                        Average Student rating on a 1–5 scale.
+                    </p>
+                </div>
+            </div>
+
+            <div class="app-card-body">
+                <div class="evaluation-average-list">
+                    <div class="evaluation-average-item">
+                        <span>Content clarity</span>
+                        <strong>
+                            @(Model.AverageContentClarityRating
+                                                        .ToString("0.##")) / 5
+                        </strong>
+                    </div>
+
+                    <div class="evaluation-average-item">
+                        <span>Support</span>
+                        <strong>
+                            @(Model.AverageSupportRating
+                                                        .ToString("0.##")) / 5
+                        </strong>
+                    </div>
+
+                    <div class="evaluation-average-item">
+                        <span>Feedback quality</span>
+                        <strong>
+                            @(Model.AverageFeedbackQualityRating
+                                                        .ToString("0.##")) / 5
+                        </strong>
+                    </div>
+
+                    <div class="evaluation-average-item">
+                        <span>Class organization</span>
+                        <strong>
+                            @(Model.AverageClassOrganizationRating
+                                                        .ToString("0.##")) / 5
+                        </strong>
+                    </div>
+
+                    <div class="evaluation-average-item
+                                evaluation-average-overall">
+                        <span>Overall rating</span>
+                        <strong>
+                            @(Model.AverageOverallRating
+                                                        .ToString("0.##")) / 5
+                        </strong>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="data-table-card mb-4">
+    <div class="app-card-header">
+        <div>
+            <h3 class="app-card-title">
+                Classroom breakdown
+            </h3>
+
+            <p class="app-card-subtitle">
+                Performance metrics for each Classroom
+                managed by this Teacher.
+            </p>
+        </div>
+    </div>
+
+    @if (Model.Classrooms.Count == 0)
+    {
+        <div class="empty-state">
+            <div class="empty-state-icon">
+                <i class="bi bi-journals"></i>
+            </div>
+
+            <h3>No Classrooms found</h3>
+
+            <p>
+                This Teacher has not managed any Classrooms.
+            </p>
+        </div>
+    }
+    else
+    {
+        <div class="table-responsive">
+            <table class="table app-table">
+                <thead>
+                    <tr>
+                        <th>Classroom</th>
+                        <th>Status</th>
+                        <th>Students</th>
+                        <th>Evaluations</th>
+                        <th>Feedback</th>
+                        <th>Completion</th>
+                        <th>Student performance</th>
+                        <th>Overall</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    @foreach (var classroom in Model.Classrooms)
+                    {
+                        <tr>
+                            <td>
+                                <div class="table-primary-text">
+                                    @classroom.ClassName
+                                </div>
+
+                                <div class="table-secondary-text">
+                                    @classroom.CourseCode
+                                    · @classroom.CourseTitle
+                                </div>
+
+                                <div class="table-secondary-text">
+                                    @(classroom.StartDate
+                                                                .ToString("dd/MM/yyyy"))
+                                                                                        –
+                                    @(classroom.EndDate
+                                                                .ToString("dd/MM/yyyy"))
+                        </div>
+                    </td>
+
+                                                                             <td>
+                                                                                 <span class="status-badge
+                                                                                                      @GetClassroomStatusClass(
+                                                                                       classroom.Status)">
+
+                            @classroom.Status
+                        </span>
+                    </td>
+
+                            <td>
+                                <div class="table-primary-text">
+                                    @classroom.EnrollmentCount
+                                </div>
+
+                                <div class="table-secondary-text">
+                                    @classroom.CompletedEnrollmentCount
+                                    completed
+                                </div>
+                            </td>
+
+                            <td>
+                                @classroom.EvaluationCount
+                            </td>
+
+                            <td>
+                                <span class="status-badge
+                                                     @GetScoreClass(
+                                                                               classroom.FeedbackScore)">
+
+                            @(classroom.FeedbackScore
+                                                        .ToString("0.##"))
+                        </span>
+                    </td>
+
+                            <td>
+                        @if (classroom.IsCompletionEligible)
+                                {
+                                    <span class="status-badge
+                                                             @GetScoreClass(
+                                          classroom.CompletionScore)">
+
+                            @(classroom.CompletionScore
+                                                        .ToString("0.##"))
+                        </span>
+                                                }
+                                else
+                                {
+                                    <span class="status-badge status-neutral">
+                                        NOT ELIGIBLE
+                                    </span>
+                                }
+                            </td>
+
+                            <td>
+                                <span class="status-badge
+                                                     @GetScoreClass(
+                                      classroom
+                                          .StudentPerformanceScore)">
+
+                            @(classroom.StudentPerformanceScore
+                                                        .ToString("0.##"))
+                                                                      </span>
+
+                        <div class="table-secondary-text mt-1">
+                            A:
+                            @(classroom.AssignmentScore
+                                                        .ToString("0.##"))
+                                                                          · Q:
+                            @(classroom.QuizScore
+                                                        .ToString("0.##"))
+                                                                          · L:
+                            @(classroom.LessonProgressScore
+                                                        .ToString("0.##"))
+                                                                      </div>
+                                                                  </td>
+
+                    <td>
+                        <strong>
+                            @(classroom.OverallScore
+                                                        .ToString("0.##"))
+                        </strong>
+                    </td>
+                </tr>
+                                }
+                </tbody>
+            </table>
+        </div>
+    }
+</div>
+
+<div class="app-card">
+    <div class="app-card-header">
+        <div>
+            <h3 class="app-card-title">
+                Student evaluations
+            </h3>
+
+            <p class="app-card-subtitle">
+                Evaluation ratings and comments submitted
+                for this Teacher's Classrooms.
+            </p>
+        </div>
+    </div>
+
+    <div class="app-card-body">
+        @if (Model.Evaluations.Count == 0)
+        {
+            <div class="empty-state py-4">
+                <div class="empty-state-icon">
+                    <i class="bi bi-chat-square-text"></i>
+                </div>
+
+                <h3>No evaluations available</h3>
+
+                <p>
+                    Students have not submitted any evaluations
+                    for this Teacher.
+                </p>
+            </div>
+        }
+        else
+        {
+            <div class="teacher-evaluation-list">
+                @foreach (var evaluation in Model.Evaluations)
+                {
+                    <div class="teacher-evaluation-card">
+                        <div class="d-flex
+                                            justify-content-between
+                                            align-items-start
+                                            gap-3">
+
+                            <div>
+                                <div class="table-primary-text">
+                                    @evaluation.StudentName
+                                </div>
+
+                                <div class="table-secondary-text">
+                                    @evaluation.StudentEmail
+                                    · @evaluation.ClassroomName
+                                </div>
+                            </div>
+
+                            <div class="text-end">
+                                <div class="evaluation-overall-rating">
+                                    <i class="bi bi-star-fill"></i>
+
+                                    @evaluation.OverallRating / 5
+                                </div>
+
+                                <small class="text-muted">
+                                    @(evaluation.CreatedAt
+                                                                .ToString("dd/MM/yyyy HH:mm"))
+                        </small>
+                    </div>
+                </div>
+
+                        <div class="evaluation-rating-grid mt-3">
+                            <span>
+                                Clarity:
+                                <strong>
+                                    @evaluation.ContentClarityRating
+                                </strong>
+                            </span>
+
+                            <span>
+                                Support:
+                                <strong>
+                                    @evaluation.SupportRating
+                                </strong>
+                            </span>
+
+                            <span>
+                                Feedback:
+                                <strong>
+                                    @evaluation.FeedbackQualityRating
+                                </strong>
+                            </span>
+
+                            <span>
+                                Organization:
+                                <strong>
+                                    @evaluation.ClassOrganizationRating
+                                </strong>
+                            </span>
+                        </div>
+
+                @if (!string.IsNullOrWhiteSpace(
+                                evaluation.Comment))
+                        {
+                            <div class="evaluation-comment mt-3">
+                                @if (evaluation.IsCommentHidden)
+                                {
+                                    <span class="status-badge
+                                                                 status-neutral mb-2">
+
+                                        COMMENT HIDDEN
+                                    </span>
+                                }
+
+                                <p class="mb-0">
+                                    @evaluation.Comment
+                                </p>
+                            </div>
+                        }
+                    </div>
+                }
+            </div>
+        }
+    </div>
+</div>

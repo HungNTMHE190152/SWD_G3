@@ -1,13 +1,16 @@
-﻿@{
-    string area =
+﻿@using System.Security.Claims
+@using EduNexus.Constants
+
+@{
+    string currentArea =
         ViewContext.RouteData.Values["area"]?.ToString()
         ?? string.Empty;
 
-    string controller =
+    string currentController =
         ViewContext.RouteData.Values["controller"]?.ToString()
         ?? string.Empty;
 
-    string role =
+    string currentRole =
         User.FindFirstValue(ClaimTypes.Role)
         ?? string.Empty;
 
@@ -15,23 +18,30 @@
         string targetArea,
         string targetController)
     {
-        bool active =
+        bool isActive =
             string.Equals(
-                area,
+                currentArea,
                 targetArea,
                 StringComparison.OrdinalIgnoreCase)
             &&
             string.Equals(
-                controller,
+                currentController,
                 targetController,
                 StringComparison.OrdinalIgnoreCase);
 
-        return active ? "active" : string.Empty;
+        return isActive
+            ? "active"
+            : string.Empty;
     }
 }
 
 <ul class="sidebar-menu">
-    @if (role == RoleNames.Admin)
+
+    @* =====================================================
+       ADMIN SIDEBAR
+       ===================================================== *@
+
+    @if (currentRole == RoleNames.Admin)
     {
         <li class="sidebar-section-title">
             Administration
@@ -41,11 +51,15 @@
             <a asp-area="Admin"
                asp-controller="Dashboard"
                asp-action="Index"
-               class="sidebar-link
-                          @ActiveLink("Admin", "Dashboard")">
+               class="sidebar-link @ActiveLink(
+                                  "Admin",
+                                  "Dashboard")">
 
-                <i class="bi bi-grid-1x2"></i>
-                <span>Dashboard</span>
+            <i class="bi bi-grid-1x2"></i>
+
+                <span>
+                    Dashboard
+                </span>
             </a>
         </li>
 
@@ -53,11 +67,15 @@
             <a asp-area="Admin"
                asp-controller="UserManagement"
                asp-action="Index"
-               class="sidebar-link
-                          @ActiveLink("Admin", "UserManagement")">
+               class="sidebar-link @ActiveLink(
+                              "Admin",
+                              "UserManagement")">
 
-                <i class="bi bi-people"></i>
-                <span>User Management</span>
+            <i class="bi bi-people"></i>
+
+                <span>
+                    User Management
+                </span>
             </a>
         </li>
 
@@ -65,11 +83,15 @@
             <a asp-area="Admin"
                asp-controller="Category"
                asp-action="Index"
-               class="sidebar-link
-                          @ActiveLink("Admin", "Category")">
+               class="sidebar-link @ActiveLink(
+                              "Admin",
+                              "Category")">
 
-                <i class="bi bi-tags"></i>
-                <span>Categories</span>
+            <i class="bi bi-tags"></i>
+
+                <span>
+                    Categories
+                </span>
             </a>
         </li>
 
@@ -77,11 +99,15 @@
             <a asp-area="Admin"
                asp-controller="CourseReview"
                asp-action="Index"
-               class="sidebar-link
-                          @ActiveLink("Admin", "CourseReview")">
+               class="sidebar-link @ActiveLink(
+                              "Admin",
+                              "CourseReview")">
 
-                <i class="bi bi-journal-check"></i>
-                <span>Course Review</span>
+            <i class="bi bi-journal-check"></i>
+
+                <span>
+                    Course Review
+                </span>
             </a>
         </li>
 
@@ -93,28 +119,56 @@
             <a asp-area="Admin"
                asp-controller="RankingConfiguration"
                asp-action="Index"
-               class="sidebar-link
-                          @ActiveLink("Admin", "RankingConfiguration")">
+               class="sidebar-link @ActiveLink(
+                              "Admin",
+                              "RankingConfiguration")">
 
-                <i class="bi bi-sliders"></i>
-                <span>Ranking Settings</span>
+            <i class="bi bi-sliders"></i>
+
+                <span>
+                    Ranking Settings
+                </span>
             </a>
         </li>
 
         <li>
             <a asp-area="Admin"
-               asp-controller="TeacherPerformance"
+               asp-controller="TeacherPerformanceConfiguration"
                asp-action="Index"
-               class="sidebar-link
-                          @ActiveLink("Admin", "TeacherPerformance")">
+               class="sidebar-link @ActiveLink(
+                              "Admin",
+                              "TeacherPerformanceConfiguration")">
 
-                <i class="bi bi-bar-chart"></i>
-                <span>Teacher Performance</span>
+            <i class="bi bi-gear"></i>
+
+                <span>
+                    Performance Settings
+                </span>
             </a>
         </li>
-    }
 
-    @if (role == RoleNames.Sme)
+        <li>
+            <a asp-area="Admin"
+               asp-controller="TeacherPerformanceReport"
+               asp-action="Index"
+               class="sidebar-link @ActiveLink(
+                              "Admin",
+                              "TeacherPerformanceReport")">
+
+            <i class="bi bi-bar-chart-line"></i>
+
+                <span>
+                    Teacher Performance
+                </span>
+            </a>
+        </li>
+        }
+
+    @* =====================================================
+       SME SIDEBAR
+       ===================================================== *@
+
+    @if (currentRole == RoleNames.Sme)
     {
         <li class="sidebar-section-title">
             Course Authoring
@@ -124,11 +178,15 @@
             <a asp-area="SME"
                asp-controller="Dashboard"
                asp-action="Index"
-               class="sidebar-link
-                          @ActiveLink("SME", "Dashboard")">
+               class="sidebar-link @ActiveLink(
+                                  "SME",
+                                  "Dashboard")">
 
-                <i class="bi bi-grid-1x2"></i>
-                <span>Dashboard</span>
+            <i class="bi bi-grid-1x2"></i>
+
+                <span>
+                    Dashboard
+                </span>
             </a>
         </li>
 
@@ -136,11 +194,15 @@
             <a asp-area="SME"
                asp-controller="Course"
                asp-action="Index"
-               class="sidebar-link
-                          @ActiveLink("SME", "Course")">
+               class="sidebar-link @ActiveLink(
+                              "SME",
+                              "Course")">
 
-                <i class="bi bi-journals"></i>
-                <span>My Courses</span>
+            <i class="bi bi-journals"></i>
+
+                <span>
+                    My Courses
+                </span>
             </a>
         </li>
 
@@ -148,11 +210,15 @@
             <a asp-area="SME"
                asp-controller="QuestionBank"
                asp-action="Index"
-               class="sidebar-link
-                          @ActiveLink("SME", "QuestionBank")">
+               class="sidebar-link @ActiveLink(
+                              "SME",
+                              "QuestionBank")">
 
-                <i class="bi bi-question-square"></i>
-                <span>Question Banks</span>
+            <i class="bi bi-question-square"></i>
+
+                <span>
+                    Question Banks
+                </span>
             </a>
         </li>
 
@@ -160,11 +226,15 @@
             <a asp-area="SME"
                asp-controller="QuizTemplate"
                asp-action="Index"
-               class="sidebar-link
-                          @ActiveLink("SME", "QuizTemplate")">
+               class="sidebar-link @ActiveLink(
+                              "SME",
+                              "QuizTemplate")">
 
-                <i class="bi bi-ui-checks-grid"></i>
-                <span>Quiz Templates</span>
+            <i class="bi bi-ui-checks-grid"></i>
+
+                <span>
+                    Quiz Templates
+                </span>
             </a>
         </li>
 
@@ -172,16 +242,24 @@
             <a asp-area="SME"
                asp-controller="AssignmentTemplate"
                asp-action="Index"
-               class="sidebar-link
-                          @ActiveLink("SME", "AssignmentTemplate")">
+               class="sidebar-link @ActiveLink(
+                              "SME",
+                              "AssignmentTemplate")">
 
-                <i class="bi bi-file-earmark-text"></i>
-                <span>Assignment Templates</span>
+            <i class="bi bi-file-earmark-text"></i>
+
+                <span>
+                    Assignment Templates
+                </span>
             </a>
         </li>
-    }
+        }
 
-    @if (role == RoleNames.Teacher)
+    @* =====================================================
+       TEACHER SIDEBAR
+       ===================================================== *@
+
+    @if (currentRole == RoleNames.Teacher)
     {
         <li class="sidebar-section-title">
             Teaching
@@ -191,11 +269,15 @@
             <a asp-area="Teacher"
                asp-controller="Dashboard"
                asp-action="Index"
-               class="sidebar-link
-                          @ActiveLink("Teacher", "Dashboard")">
+               class="sidebar-link @ActiveLink(
+                                  "Teacher",
+                                  "Dashboard")">
 
-                <i class="bi bi-grid-1x2"></i>
-                <span>Dashboard</span>
+            <i class="bi bi-grid-1x2"></i>
+
+                <span>
+                    Dashboard
+                </span>
             </a>
         </li>
 
@@ -203,11 +285,15 @@
             <a asp-area="Teacher"
                asp-controller="Classroom"
                asp-action="Index"
-               class="sidebar-link
-                          @ActiveLink("Teacher", "Classroom")">
+               class="sidebar-link @ActiveLink(
+                              "Teacher",
+                              "Classroom")">
 
-                <i class="bi bi-easel2"></i>
-                <span>My Classrooms</span>
+            <i class="bi bi-easel2"></i>
+
+                <span>
+                    My Classrooms
+                </span>
             </a>
         </li>
 
@@ -215,11 +301,15 @@
             <a asp-area="Teacher"
                asp-controller="Submission"
                asp-action="Index"
-               class="sidebar-link
-                          @ActiveLink("Teacher", "Submission")">
+               class="sidebar-link @ActiveLink(
+                              "Teacher",
+                              "Submission")">
 
-                <i class="bi bi-inbox"></i>
-                <span>Submissions</span>
+            <i class="bi bi-inbox"></i>
+
+                <span>
+                    Submissions
+                </span>
             </a>
         </li>
 
@@ -227,16 +317,24 @@
             <a asp-area="Teacher"
                asp-controller="Performance"
                asp-action="Index"
-               class="sidebar-link
-                          @ActiveLink("Teacher", "Performance")">
+               class="sidebar-link @ActiveLink(
+                              "Teacher",
+                              "Performance")">
 
-                <i class="bi bi-graph-up-arrow"></i>
-                <span>My Performance</span>
+            <i class="bi bi-graph-up-arrow"></i>
+
+                <span>
+                    My Performance
+                </span>
             </a>
         </li>
-    }
+        }
 
-    @if (role == RoleNames.Student)
+    @* =====================================================
+       STUDENT SIDEBAR
+       ===================================================== *@
+
+    @if (currentRole == RoleNames.Student)
     {
         <li class="sidebar-section-title">
             Learning
@@ -246,11 +344,15 @@
             <a asp-area="Student"
                asp-controller="Dashboard"
                asp-action="Index"
-               class="sidebar-link
-                          @ActiveLink("Student", "Dashboard")">
+               class="sidebar-link @ActiveLink(
+                                  "Student",
+                                  "Dashboard")">
 
-                <i class="bi bi-grid-1x2"></i>
-                <span>Dashboard</span>
+            <i class="bi bi-grid-1x2"></i>
+
+                <span>
+                    Dashboard
+                </span>
             </a>
         </li>
 
@@ -258,11 +360,15 @@
             <a asp-area="Student"
                asp-controller="Classroom"
                asp-action="Index"
-               class="sidebar-link
-                          @ActiveLink("Student", "Classroom")">
+               class="sidebar-link @ActiveLink(
+                              "Student",
+                              "Classroom")">
 
-                <i class="bi bi-mortarboard"></i>
-                <span>My Classrooms</span>
+            <i class="bi bi-mortarboard"></i>
+
+                <span>
+                    My Classrooms
+                </span>
             </a>
         </li>
 
@@ -270,11 +376,15 @@
             <a asp-area="Student"
                asp-controller="Enrollment"
                asp-action="Join"
-               class="sidebar-link
-                          @ActiveLink("Student", "Enrollment")">
+               class="sidebar-link @ActiveLink(
+                              "Student",
+                              "Enrollment")">
 
-                <i class="bi bi-box-arrow-in-right"></i>
-                <span>Join Classroom</span>
+            <i class="bi bi-box-arrow-in-right"></i>
+
+                <span>
+                    Join Classroom
+                </span>
             </a>
         </li>
 
@@ -282,12 +392,44 @@
             <a asp-area="Student"
                asp-controller="Ranking"
                asp-action="Index"
-               class="sidebar-link
-                          @ActiveLink("Student", "Ranking")">
+               class="sidebar-link @ActiveLink(
+                              "Student",
+                              "Ranking")">
 
-                <i class="bi bi-trophy"></i>
-                <span>My Rankings</span>
+            <i class="bi bi-trophy"></i>
+
+                <span>
+                    My Rankings
+                </span>
             </a>
         </li>
-    }
+        }
+
+    @* =====================================================
+       SHARED PROFILE MENU
+       Hiển thị cho tất cả tài khoản đã đăng nhập
+       ===================================================== *@
+
+    @if (User.Identity?.IsAuthenticated == true)
+    {
+        <li class="sidebar-section-title">
+            Account
+        </li>
+
+        <li>
+            <a asp-area=""
+               asp-controller="Profile"
+               asp-action="Index"
+               class="sidebar-link @ActiveLink(
+                                  "",
+                                  "Profile")">
+
+            <i class="bi bi-person-circle"></i>
+
+                <span>
+                    My Profile
+                </span>
+            </a>
+        </li>
+        }
 </ul>

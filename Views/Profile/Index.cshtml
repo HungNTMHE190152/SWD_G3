@@ -1,0 +1,230 @@
+﻿@model EduNexus.ViewModels.Profile.UserProfileViewModel
+
+@{
+    ViewData["Title"] = "My Profile";
+
+    bool accountIsActive =
+        Model.IsAccountActive
+        && Model.UserStatus == "ACTIVE";
+}
+
+<div class="page-header">
+    <div>
+        <div class="page-eyebrow">
+            Account
+        </div>
+
+        <h2 class="page-title">
+            My Profile
+        </h2>
+
+        <p class="page-description">
+            Review your personal information
+            and account details.
+        </p>
+    </div>
+
+    <div class="page-actions">
+        <a asp-controller="Profile"
+           asp-action="Edit"
+           asp-area=""
+           class="btn-app-primary">
+
+            <i class="bi bi-pencil-square"></i>
+            Edit profile
+        </a>
+    </div>
+</div>
+
+<div class="row g-4">
+    <div class="col-xl-4">
+        <div class="app-card h-100">
+            <div class="app-card-body text-center py-5">
+                @if (!string.IsNullOrWhiteSpace(
+                                Model.AvatarUrl))
+                {
+                    <img src="@Model.AvatarUrl"
+                         alt="@Model.FullName"
+                         style="
+                                width: 120px;
+                                height: 120px;
+                                border-radius: 28px;
+                                object-fit: cover;
+                                border: 1px solid var(--border);
+                             " />
+                }
+                else
+                {
+                    <div style="
+                                width: 120px;
+                                height: 120px;
+                                margin: 0 auto;
+                                display: flex;
+                                align-items: center;
+                                justify-content: center;
+                                border-radius: 28px;
+                                background: var(--accent-light);
+                                color: var(--accent);
+                                font-size: 46px;
+                             ">
+
+                        <i class="bi bi-person"></i>
+                    </div>
+                }
+
+                <h3 class="mt-4 mb-1 fw-bold">
+                    @Model.FullName
+                </h3>
+
+                <div class="text-muted">
+                    @Model.Email
+                </div>
+
+                <div class="d-flex
+                            justify-content-center
+                            flex-wrap
+                            gap-2 mt-3">
+
+                    @if (accountIsActive)
+                    {
+                        <span class="status-badge status-success">
+                            <i class="bi bi-check-circle"></i>
+                            ACTIVE
+                        </span>
+                    }
+                    else
+                    {
+                        <span class="status-badge status-danger">
+                            <i class="bi bi-x-circle"></i>
+                            INACTIVE
+                        </span>
+                    }
+
+                    <span class="status-badge status-info">
+                        <i class="bi bi-shield-check"></i>
+                        @Model.RoleName
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xl-8">
+        <div class="app-card mb-4">
+            <div class="app-card-header">
+                <div>
+                    <h3 class="app-card-title">
+                        Personal information
+                    </h3>
+
+                    <p class="app-card-subtitle">
+                        Information associated with
+                        your user profile.
+                    </p>
+                </div>
+            </div>
+
+            <div class="app-card-body">
+                <dl class="row mb-0 g-3">
+                    <dt class="col-md-4 text-muted">
+                        Full name
+                    </dt>
+
+                    <dd class="col-md-8 fw-semibold">
+                        @Model.FullName
+                    </dd>
+
+                    <dt class="col-md-4 text-muted">
+                        Email address
+                    </dt>
+
+                    <dd class="col-md-8 fw-semibold">
+                        @Model.Email
+                    </dd>
+
+                    <dt class="col-md-4 text-muted">
+                        Phone number
+                    </dt>
+
+                    <dd class="col-md-8 fw-semibold">
+                        @(string.IsNullOrWhiteSpace(
+                                                Model.PhoneNumber)
+                                                ? "Not provided"
+                                                : Model.PhoneNumber)
+                    </dd>
+                </dl>
+            </div>
+        </div>
+
+        <div class="app-card">
+            <div class="app-card-header">
+                <div>
+                    <h3 class="app-card-title">
+                        Account information
+                    </h3>
+
+                    <p class="app-card-subtitle">
+                        Read-only identity and access information.
+                    </p>
+                </div>
+            </div>
+
+            <div class="app-card-body">
+                <dl class="row mb-0 g-3">
+                    <dt class="col-md-4 text-muted">
+                        User ID
+                    </dt>
+
+                    <dd class="col-md-8 fw-semibold">
+                        #@Model.UserId
+                    </dd>
+
+                    <dt class="col-md-4 text-muted">
+                        Username
+                    </dt>
+
+                    <dd class="col-md-8 fw-semibold">
+                        @Model.Username
+                    </dd>
+
+                    <dt class="col-md-4 text-muted">
+                        Role
+                    </dt>
+
+                    <dd class="col-md-8 fw-semibold">
+                        @Model.RoleName
+                    </dd>
+
+                    <dt class="col-md-4 text-muted">
+                        Account created
+                    </dt>
+
+                    <dd class="col-md-8 fw-semibold">
+                        @(Model.CreatedAt
+                                                .ToString("dd/MM/yyyy HH:mm"))
+                    </dd>
+
+                    <dt class="col-md-4 text-muted">
+                        Last profile update
+                    </dt>
+
+                    <dd class="col-md-8 fw-semibold">
+                        @(Model.UpdatedAt
+                                                ?.ToString("dd/MM/yyyy HH:mm")
+                                                ?? "Not updated")
+                    </dd>
+
+                    <dt class="col-md-4 text-muted">
+                        Last login
+                    </dt>
+
+                    <dd class="col-md-8 fw-semibold">
+                        @(Model.LastLoginAt
+                                                ?.ToString("dd/MM/yyyy HH:mm")
+                                                ?? "Not available")
+                    </dd>
+                </dl>
+            </div>
+        </div>
+    </div>
+</div>
