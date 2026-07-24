@@ -1,0 +1,163 @@
+﻿@model EduNexus.ViewModels.Question.QuestionViewModel
+
+@{
+    ViewData["Title"] = "Edit Question";
+}
+
+<div class="container mt-4">
+
+    <div class="card shadow">
+
+        <div class="card-header bg-warning">
+
+            <h3>
+
+                <i class="bi bi-pencil-square"></i>
+
+                Edit Question
+
+            </h3>
+
+        </div>
+
+        <div class="card-body">
+
+            <form asp-action="Edit" method="post">
+
+                @Html.AntiForgeryToken()
+
+                <input asp-for="QuestionId" hidden />
+
+                <input asp-for="QuestionBankId" hidden />
+
+                <div asp-validation-summary="ModelOnly"
+                     class="text-danger mb-3">
+                </div>
+
+                <div class="mb-3">
+
+                    <label asp-for="QuestionContent"
+                           class="form-label fw-bold">
+
+                        Question Content
+
+                    </label>
+
+                    <textarea asp-for="QuestionContent"
+                              rows="5"
+                              class="form-control">
+                    </textarea>
+
+                    <span asp-validation-for="QuestionContent"
+                          class="text-danger">
+                    </span>
+
+                </div>
+
+                <div class="row">
+
+                    <div class="col-md-6">
+
+                        <div class="mb-3">
+
+                            <label asp-for="QuestionType"
+                                   class="form-label fw-bold">
+
+                                Question Type
+
+                            </label>
+
+                            <select asp-for="QuestionType"
+                                    class="form-select">
+
+                                <option value="MCQ">Multiple Choice</option>
+
+                                <option value="TRUE_FALSE">True / False</option>
+
+                                <option value="ESSAY">Essay</option>
+
+                            </select>
+
+                        </div>
+
+                    </div>
+
+                    <div class="col-md-6">
+
+                        <div class="mb-3">
+
+                            <label asp-for="Difficulty"
+                                   class="form-label fw-bold">
+
+                                Difficulty
+
+                            </label>
+
+                            <select asp-for="Difficulty"
+                                    class="form-select">
+
+                                <option value="EASY">Easy</option>
+
+                                <option value="MEDIUM">Medium</option>
+
+                                <option value="HARD">Hard</option>
+
+                            </select>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="mb-3">
+
+                    <label asp-for="Explanation"
+                           class="form-label fw-bold">
+
+                        Explanation
+
+                    </label>
+
+                    <textarea asp-for="Explanation"
+                              rows="5"
+                              class="form-control">
+                    </textarea>
+
+                </div>
+
+                <hr />
+
+                <div class="text-end">
+
+                    <a asp-action="Index"
+                       asp-route-questionBankId="@Model.QuestionBankId"
+                       class="btn btn-secondary">
+
+                        Cancel
+
+                    </a>
+
+                    <button type="submit"
+                            class="btn btn-warning">
+
+                        <i class="bi bi-check-circle"></i>
+
+                        Save Changes
+
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+@section Scripts
+{
+    <partial name="_ValidationScriptsPartial" />
+}

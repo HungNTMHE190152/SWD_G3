@@ -1,0 +1,173 @@
+﻿@model EduNexus.ViewModels.Course.CourseViewModel
+
+@{
+    ViewData["Title"] = "Edit Course";
+}
+
+<div class="container mt-4">
+
+    <div class="card shadow-lg border-0">
+
+        <div class="card-header bg-warning">
+
+            <h3 class="text-dark">
+
+                <i class="bi bi-pencil-square"></i>
+
+                Edit Course
+
+            </h3>
+
+            <small>
+
+                Update course information
+
+            </small>
+
+        </div>
+
+        <div class="card-body">
+
+            <form asp-action="Edit">
+
+                <input asp-for="CourseId" hidden />
+
+                <div asp-validation-summary="ModelOnly"
+                     class="text-danger">
+                </div>
+
+                <div class="row">
+
+                    <div class="col-lg-8">
+
+                        <div class="mb-3">
+
+                            <label asp-for="CourseCode"
+                                   class="form-label fw-bold"></label>
+
+                            <input asp-for="CourseCode"
+                                   class="form-control" />
+
+                            <span asp-validation-for="CourseCode"
+                                  class="text-danger"></span>
+
+                        </div>
+
+                        <div class="mb-3">
+
+                            <label asp-for="Title"
+                                   class="form-label fw-bold"></label>
+
+                            <input asp-for="Title"
+                                   class="form-control" />
+
+                            <span asp-validation-for="Title"
+                                  class="text-danger"></span>
+
+                        </div>
+
+                        <div class="mb-3">
+
+                            <label asp-for="Description"
+                                   class="form-label fw-bold"></label>
+
+                            <textarea asp-for="Description"
+                                      rows="7"
+                                      class="form-control">
+                            </textarea>
+
+                        </div>
+
+                    </div>
+
+                    <div class="col-lg-4">
+
+                        <div class="mb-3">
+
+                            <label class="fw-bold">
+
+                                Category
+
+                            </label>
+
+                            <select asp-for="CategoryId"
+                                    asp-items="ViewBag.Categories"
+                                    class="form-select">
+                            </select>
+
+                        </div>
+
+                        <div class="mb-3">
+
+                            <label class="fw-bold">
+
+                                Thumbnail
+
+                            </label>
+
+                            <input asp-for="ThumbnailUrl"
+                                   class="form-control"
+                                   id="thumb" />
+
+                        </div>
+
+                        <div class="card">
+
+                            <img id="preview"
+                                 src="@Model.ThumbnailUrl"
+                                 class="img-fluid rounded" />
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <hr />
+
+                <div class="text-end">
+
+                    <a asp-action="Index"
+                       class="btn btn-secondary">
+
+                        Back
+
+                    </a>
+
+                    <button class="btn btn-warning">
+
+                        <i class="bi bi-floppy"></i>
+
+                        Save Changes
+
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+@section Scripts {
+
+    <partial name="_ValidationScriptsPartial" />
+
+    <script>
+
+        const thumb=document.getElementById("thumb");
+
+        const preview=document.getElementById("preview");
+
+        thumb.addEventListener("keyup",()=>{
+
+        preview.src=thumb.value;
+
+        });
+
+    </script>
+
+}

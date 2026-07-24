@@ -7,6 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="MailKit" Version="4.17.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.29">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -25,6 +26,9 @@
     <Folder Include="Areas\SME\ViewModels\" />
     <Folder Include="Areas\SME\Views\Shared\" />
     <Folder Include="Areas\Admin\Views\Shared\" />
+    <Folder Include="wwwroot\uploads\images\" />
+    <Folder Include="wwwroot\uploads\documents\" />
+    <Folder Include="wwwroot\uploads\videos\" />
   </ItemGroup>
 
 </Project>

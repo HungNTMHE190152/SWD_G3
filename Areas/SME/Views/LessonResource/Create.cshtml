@@ -1,0 +1,113 @@
+﻿@model EduNexus.ViewModels.Lesson.LessonResourceViewModel
+
+@{
+    ViewData["Title"] = "Add Lesson Resource";
+}
+
+<div class="container mt-4">
+
+    <div class="card shadow">
+
+        <div class="card-header bg-primary text-white">
+
+            <h3>
+
+                <i class="bi bi-upload"></i>
+
+                Add Lesson Resource
+
+            </h3>
+
+        </div>
+
+        <div class="card-body">
+
+            <form asp-action="Create"
+                  method="post"
+                  enctype="multipart/form-data">
+
+                <input asp-for="LessonId" hidden />
+
+                <div class="mb-3">
+
+                    <label asp-for="ResourceName" class="form-label"></label>
+
+                    <input asp-for="ResourceName"
+                           class="form-control" />
+
+                    <span asp-validation-for="ResourceName"
+                          class="text-danger"></span>
+
+                </div>
+
+                <div class="mb-3">
+
+                    <label asp-for="ResourceType"
+                           class="form-label"></label>
+
+                    <select asp-for="ResourceType"
+                            class="form-select">
+
+
+                        <option value="FILE">File</option>
+
+                        <option value="LINK">Link</option>
+
+                    </select>
+
+                </div>
+
+                <div class="mb-3">
+
+                    <label class="form-label">
+
+                        Upload File
+
+                    </label>
+
+                    <input asp-for="UploadFile"
+                           type="file"
+                           class="form-control" />
+
+                </div>
+
+                <div class="mb-3">
+
+                    <label asp-for="DisplayOrder"
+                           class="form-label"></label>
+
+                    <input asp-for="DisplayOrder"
+                           class="form-control" />
+
+                </div>
+
+                <button class="btn btn-success">
+
+                    <i class="bi bi-check-circle"></i>
+
+                    Save
+
+                </button>
+
+                <a asp-action="Index"
+                   asp-route-lessonId="@Model.LessonId"
+                   class="btn btn-secondary">
+
+                    Cancel
+
+                </a>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+@section Scripts
+{
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

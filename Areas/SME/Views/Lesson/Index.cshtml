@@ -1,0 +1,183 @@
+﻿@model IEnumerable<EduNexus.Models.Lesson>
+
+@{
+    ViewData["Title"] = "Lesson Management";
+}
+
+<div class="container-fluid">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <div>
+
+            <h2 class="fw-bold">
+
+                <i class="bi bi-journal-richtext text-primary"></i>
+
+                Lesson Management
+
+            </h2>
+
+            <p class="text-muted">
+
+                Manage all lessons in modules.
+
+            </p>
+
+        </div>
+
+        <a asp-action="Create"
+           class="btn btn-primary">
+
+            <i class="bi bi-plus-circle"></i>
+
+            Create Lesson
+
+        </a>
+
+    </div>
+
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success">
+
+            @TempData["Success"]
+
+        </div>
+    }
+
+    <div class="card shadow">
+
+        <div class="card-body">
+
+            <table class="table table-hover align-middle">
+
+                <thead class="table-dark">
+
+                    <tr>
+
+                        <th>Module</th>
+
+                        <th>Lesson</th>
+
+                        <th>Type</th>
+
+                        <th>Status</th>
+
+                        <th>Duration</th>
+
+                        <th>Resources</th>
+
+                        <th width="220">Action</th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                    @foreach (var item in Model)
+                    {
+
+                        <tr>
+
+                            <td>
+
+                                @item.Module.Title
+
+                            </td>
+
+                            <td>
+
+                                @item.Title
+
+                            </td>
+
+                            <td>
+
+                                @item.LessonType
+
+                            </td>
+
+                            <td>
+
+                                @if (item.Status == "PUBLISHED")
+                                {
+                                    <span class="badge bg-success">
+
+                                        Published
+
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-secondary">
+
+                                        Draft
+
+                                    </span>
+                                }
+
+                            </td>
+
+                            <td>
+
+                                @(item.EstimatedMinutes ?? 0) mins
+
+                            </td>
+
+                            <td>
+
+                                @item.LessonResources.Count
+
+                            </td>
+
+                            <td>
+
+                                <a asp-action="Details"
+                                   asp-route-id="@item.LessonId"
+                                   class="btn btn-info btn-sm">
+
+                                    <i class="bi bi-eye"></i>
+
+                                </a>
+
+                                <a asp-action="Edit"
+                                   asp-route-id="@item.LessonId"
+                                   class="btn btn-warning btn-sm">
+
+                                    <i class="bi bi-pencil"></i>
+
+                                </a>
+
+                                <form asp-action="Delete"
+                                      method="post"
+                                      class="d-inline">
+
+                                    <input hidden
+                                           name="id"
+                                           value="@item.LessonId" />
+
+                                    <button class="btn btn-danger btn-sm">
+
+                                        <i class="bi bi-trash"></i>
+
+                                    </button>
+
+                                </form>
+
+                            </td>
+
+                        </tr>
+
+                    }
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div>

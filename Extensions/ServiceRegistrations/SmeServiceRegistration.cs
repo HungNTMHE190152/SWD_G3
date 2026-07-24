@@ -1,5 +1,7 @@
 ﻿using EduNexus.Services.Assignment.Implementations;
 using EduNexus.Services.Assignment.Interfaces;
+using EduNexus.Services.SME.Interfaces;
+using EduNexus.Services.SME.Implementations;
 
 namespace EduNexus.Extensions.ServiceRegistrations
 {
@@ -22,6 +24,16 @@ namespace EduNexus.Extensions.ServiceRegistrations
             services.AddScoped<
                 IAssignmentSubmissionService, 
                 AssignmentSubmissionService>();
+            services.AddScoped<ICourseService, CourseService>();
+            services.AddScoped<IModuleService, ModuleService>();
+            services.AddScoped<ILessonResourceService, LessonResourceService>();
+            services.AddScoped<ILessonService, LessonService>();
+            services.AddScoped<IQuestionBankService, QuestionBankService>();
+            services.AddScoped<IQuestionService, QuestionService>();
+            services.AddScoped<IChoiceService, ChoiceService>();
+            services.AddScoped<IQuizTemplateService, QuizTemplateService>();
+            services.AddScoped<IQuizTemplateQuestionService,
+                           QuizTemplateQuestionService>();
             return services;
         }
     }

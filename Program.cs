@@ -18,7 +18,8 @@ namespace EduNexus
             builder.Services.AddSmeServices();
             builder.Services.AddTeacherServices();
             builder.Services.AddStudentServices();
-            builder.Services.AddAuthenticationServices();
+            builder.Services.AddAuthenticationServices(builder.Configuration);
+            builder.Services.AddMemoryCache();
             builder.Services.AddProfileServices();
 
             builder.Services

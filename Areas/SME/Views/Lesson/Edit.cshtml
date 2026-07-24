@@ -1,0 +1,144 @@
+﻿@model EduNexus.ViewModels.Lesson.LessonViewModel
+
+@{
+    ViewData["Title"] = "Edit Lesson";
+}
+
+<div class="container mt-4">
+
+    <div class="card shadow-lg border-0">
+
+        <div class="card-header bg-warning">
+
+            <h3>
+
+                <i class="bi bi-pencil-square"></i>
+
+                Edit Lesson
+
+            </h3>
+
+        </div>
+
+        <div class="card-body">
+
+            <form asp-action="Edit">
+
+                <input asp-for="LessonId" hidden />
+
+                <div asp-validation-summary="ModelOnly"
+                     class="text-danger mb-3">
+                </div>
+
+                <input asp-for="ModuleId" type="hidden" />
+
+                <div class="mb-3">
+
+                    <label class="fw-bold">
+
+                        Module ID
+
+                    </label>
+
+                    <input class="form-control"
+                           value="@Model.ModuleId"
+                           readonly />
+
+                </div>
+
+                <div class="mb-3">
+
+                    <label asp-for="Title"
+                           class="fw-bold"></label>
+
+                    <input asp-for="Title"
+                           class="form-control" />
+
+                </div>
+
+                <div class="mb-3">
+
+                    <label class="fw-bold">
+
+                        Lesson Type
+
+                    </label>
+
+                    <select asp-for="LessonType"
+                            class="form-select">
+
+                        <option>TEXT</option>
+                        <option>VIDEO</option>
+                        <option>PDF</option>
+                        <option>LINK</option>
+
+                    </select>
+
+                </div>
+
+                <div class="mb-3">
+
+                    <label asp-for="EstimatedMinutes"
+                           class="fw-bold"></label>
+
+                    <input asp-for="EstimatedMinutes"
+                           class="form-control" />
+
+                </div>
+
+                <div class="mb-3">
+
+                    <label asp-for="DisplayOrder"
+                           class="fw-bold"></label>
+
+                    <input asp-for="DisplayOrder"
+                           class="form-control" />
+
+                </div>
+
+                <div class="mb-3">
+
+                    <label asp-for="Content"
+                           class="fw-bold"></label>
+
+                    <textarea asp-for="Content"
+                              rows="10"
+                              class="form-control"></textarea>
+
+                </div>
+
+                <hr />
+
+                <div class="text-end">
+
+                    <a asp-action="Details"
+                       asp-controller="Module"
+                       asp-area="SME"
+                       asp-route-id="@Model.ModuleId"
+                       class="btn btn-secondary">
+
+                        Back
+
+                    </a>
+
+                    <button class="btn btn-warning">
+
+                        Save Changes
+
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+@section Scripts {
+
+    <partial name="_ValidationScriptsPartial" />
+
+}

@@ -1,0 +1,117 @@
+﻿@model EduNexus.ViewModels.Choice.ChoiceViewModel
+
+@{
+    ViewData["Title"] = "Edit Choice";
+}
+
+<div class="container mt-4">
+
+    <div class="card shadow">
+
+        <div class="card-header bg-warning">
+
+            <h3>
+
+                <i class="bi bi-pencil-square"></i>
+
+                Edit Choice
+
+            </h3>
+
+        </div>
+
+        <div class="card-body">
+
+            <form asp-action="Edit" method="post">
+
+                @Html.AntiForgeryToken()
+
+                <input asp-for="ChoiceId" hidden />
+
+                <input asp-for="QuestionId" hidden />
+
+                <div asp-validation-summary="ModelOnly"
+                     class="text-danger mb-3">
+                </div>
+
+                <div class="mb-3">
+
+                    <label asp-for="ChoiceContent"
+                           class="form-label fw-bold">
+
+                        Choice Content
+
+                    </label>
+
+                    <textarea asp-for="ChoiceContent"
+                              rows="4"
+                              class="form-control"></textarea>
+
+                    <span asp-validation-for="ChoiceContent"
+                          class="text-danger"></span>
+
+                </div>
+
+                <div class="mb-3">
+
+                    <label asp-for="DisplayOrder"
+                           class="form-label fw-bold">
+
+                        Display Order
+
+                    </label>
+
+                    <input asp-for="DisplayOrder"
+                           class="form-control" />
+
+                </div>
+
+                <div class="form-check mb-4">
+
+                    <input asp-for="IsCorrect"
+                           class="form-check-input" />
+
+                    <label asp-for="IsCorrect"
+                           class="form-check-label">
+
+                        Correct Answer
+
+                    </label>
+
+                </div>
+
+                <hr />
+
+                <div class="text-end">
+
+                    <a asp-action="Index"
+                       asp-route-questionId="@Model.QuestionId"
+                       class="btn btn-secondary">
+
+                        Cancel
+
+                    </a>
+
+                    <button type="submit"
+                            class="btn btn-warning">
+
+                        <i class="bi bi-check-circle"></i>
+
+                        Save Changes
+
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+@section Scripts
+{
+    <partial name="_ValidationScriptsPartial" />
+}

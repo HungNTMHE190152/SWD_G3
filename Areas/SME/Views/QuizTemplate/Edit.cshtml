@@ -1,0 +1,254 @@
+﻿@model EduNexus.ViewModels.QuizTemplate.QuizTemplateViewModel
+
+@{
+    ViewData["Title"] = "Edit Quiz Template";
+}
+
+<div class="container mt-4">
+
+    <div class="card shadow">
+
+        <div class="card-header bg-warning">
+
+            <h3>
+
+                <i class="bi bi-pencil-square"></i>
+
+                Edit Quiz Template
+
+            </h3>
+
+        </div>
+
+        <div class="card-body">
+
+            <form asp-action="Edit" method="post">
+
+                @Html.AntiForgeryToken()
+
+                <input asp-for="QuizTemplateId" hidden />
+
+                <div asp-validation-summary="ModelOnly"
+                     class="text-danger mb-3">
+                </div>
+
+                <div class="row">
+
+                    <div class="col-md-6">
+
+                        <div class="mb-3">
+
+                            <label asp-for="CourseId"
+                                   class="form-label fw-bold">
+
+                                Course
+
+                            </label>
+
+                            <select asp-for="CourseId"
+                                    asp-items="ViewBag.Courses"
+                                    class="form-select">
+                            </select>
+
+                        </div>
+
+                    </div>
+
+                    <div class="col-md-6">
+
+                        <div class="mb-3">
+
+                            <label asp-for="ModuleId"
+                                   class="form-label fw-bold">
+
+                                Module
+
+                            </label>
+
+                            <select asp-for="ModuleId"
+                                    asp-items="ViewBag.Modules"
+                                    class="form-select">
+
+                                <option value="">All Modules</option>
+
+                            </select>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="mb-3">
+
+                    <label asp-for="Title"
+                           class="form-label fw-bold">
+                    </label>
+
+                    <input asp-for="Title"
+                           class="form-control" />
+
+                </div>
+
+                <div class="mb-3">
+
+                    <label asp-for="Description"
+                           class="form-label fw-bold">
+                    </label>
+
+                    <textarea asp-for="Description"
+                              rows="4"
+                              class="form-control"></textarea>
+
+                </div>
+
+                <div class="row">
+
+                    <div class="col-md-4">
+
+                        <div class="mb-3">
+
+                            <label asp-for="DefaultDurationMinutes"
+                                   class="form-label fw-bold">
+
+                                Duration (Minutes)
+
+                            </label>
+
+                            <input asp-for="DefaultDurationMinutes"
+                                   class="form-control" />
+
+                        </div>
+
+                    </div>
+
+                    <div class="col-md-4">
+
+                        <div class="mb-3">
+
+                            <label asp-for="DefaultPassingScore"
+                                   class="form-label fw-bold">
+
+                                Passing Score
+
+                            </label>
+
+                            <input asp-for="DefaultPassingScore"
+                                   class="form-control" />
+
+                        </div>
+
+                    </div>
+
+                    <div class="col-md-4">
+
+                        <div class="mb-3">
+
+                            <label asp-for="DefaultMaxAttempts"
+                                   class="form-label fw-bold">
+
+                                Max Attempts
+
+                            </label>
+
+                            <input asp-for="DefaultMaxAttempts"
+                                   class="form-control" />
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="row">
+
+                    <div class="col-md-4">
+
+                        <div class="form-check">
+
+                            <input asp-for="ShuffleQuestions"
+                                   class="form-check-input" />
+
+                            <label asp-for="ShuffleQuestions"
+                                   class="form-check-label">
+
+                                Shuffle Questions
+
+                            </label>
+
+                        </div>
+
+                    </div>
+
+                    <div class="col-md-4">
+
+                        <div class="form-check">
+
+                            <input asp-for="ShuffleAnswers"
+                                   class="form-check-input" />
+
+                            <label asp-for="ShuffleAnswers"
+                                   class="form-check-label">
+
+                                Shuffle Answers
+
+                            </label>
+
+                        </div>
+
+                    </div>
+
+                    <div class="col-md-4">
+
+                        <div class="form-check">
+
+                            <input asp-for="IsActive"
+                                   class="form-check-input" />
+
+                            <label asp-for="IsActive"
+                                   class="form-check-label">
+
+                                Active
+
+                            </label>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <hr />
+
+                <div class="text-end">
+
+                    <a asp-action="Index"
+                       class="btn btn-secondary">
+
+                        Cancel
+
+                    </a>
+
+                    <button type="submit"
+                            class="btn btn-warning">
+
+                        <i class="bi bi-check-circle"></i>
+
+                        Save Changes
+
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+@section Scripts
+{
+    <partial name="_ValidationScriptsPartial" />
+}

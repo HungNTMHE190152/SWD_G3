@@ -1,0 +1,184 @@
+﻿@model IEnumerable<EduNexus.Models.LessonResource>
+
+@{
+    ViewData["Title"] = "Lesson Resources";
+}
+
+<div class="container mt-4">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <h2>
+
+            <i class="bi bi-folder2-open text-primary"></i>
+
+            Lesson Resources
+
+        </h2>
+
+        <a asp-action="Create"
+           asp-route-lessonId="@ViewBag.LessonId"
+           class="btn btn-primary">
+
+            <i class="bi bi-plus-circle"></i>
+
+            Add Resource
+
+        </a>
+
+    </div>
+
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success">
+
+            @TempData["Success"]
+
+        </div>
+    }
+
+    <div class="card shadow">
+
+        <div class="card-body">
+
+            <table class="table table-hover align-middle">
+
+                <thead class="table-dark">
+
+                    <tr>
+
+                        <th width="120">
+
+                            Preview
+
+                        </th>
+
+                        <th>
+
+                            Name
+
+                        </th>
+
+                        <th>
+
+                            Type
+
+                        </th>
+
+                        <th>
+
+                            Order
+
+                        </th>
+
+                        <th width="220">
+
+                            Action
+
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                    @foreach (var item in Model)
+                    {
+
+                        <tr>
+
+                            <td>
+
+                                @if (item.ResourceType == "IMAGE")
+                                {
+                                    <img src="@item.ResourceUrl"
+                                         class="img-thumbnail"
+                                         style="width:90px;height:70px;object-fit:cover;">
+                                }
+                                else if (item.ResourceType == "VIDEO")
+                                {
+                                    <i class="bi bi-camera-video-fill text-danger fs-1"></i>
+                                }
+                                else if (item.ResourceType == "PDF")
+                                {
+                                    <i class="bi bi-file-earmark-pdf-fill text-danger fs-1"></i>
+                                }
+                                else
+                                {
+                                    <i class="bi bi-file-earmark-text fs-1"></i>
+                                }
+
+                            </td>
+
+                            <td>
+
+                                @item.ResourceName
+
+                            </td>
+
+                            <td>
+
+                                <span class="badge bg-primary">
+
+                                    @item.ResourceType
+
+                                </span>
+
+                            </td>
+
+                            <td>
+
+                                @item.DisplayOrder
+
+                            </td>
+
+                            <td>
+
+                                <a asp-action="Details"
+                                   asp-route-id="@item.LessonResourceId"
+                                   class="btn btn-info btn-sm">
+
+                                    <i class="bi bi-eye"></i>
+
+                                </a>
+
+                                <a asp-action="Edit"
+                                   asp-route-id="@item.LessonResourceId"
+                                   class="btn btn-warning btn-sm">
+
+                                    <i class="bi bi-pencil"></i>
+
+                                </a>
+
+                                <form asp-action="Delete"
+                                      method="post"
+                                      class="d-inline">
+
+                                    <input hidden
+                                           name="id"
+                                           value="@item.LessonResourceId" />
+
+                                    <button class="btn btn-danger btn-sm">
+
+                                        <i class="bi bi-trash"></i>
+
+                                    </button>
+
+                                </form>
+
+                            </td>
+
+                        </tr>
+
+                    }
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div>

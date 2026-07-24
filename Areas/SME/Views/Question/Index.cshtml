@@ -1,0 +1,182 @@
+﻿@model IEnumerable<EduNexus.Models.Question>
+
+@{
+    ViewData["Title"] = "Questions";
+}
+
+<div class="container mt-4">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <h2>
+
+            <i class="bi bi-question-circle text-primary"></i>
+
+            Question List
+
+        </h2>
+
+        <div>
+
+            <a asp-area="SME"
+               asp-controller="QuestionBank"
+               asp-action="Index"
+               class="btn btn-secondary">
+
+                <i class="bi bi-arrow-left"></i>
+
+                Back
+
+            </a>
+
+            <a asp-action="Create"
+               asp-route-questionBankId="@ViewBag.QuestionBankId"
+               class="btn btn-primary">
+
+                <i class="bi bi-plus-circle"></i>
+
+                Add Question
+
+            </a>
+
+        </div>
+
+    </div>
+
+    <div class="card shadow">
+
+        <div class="card-body">
+
+            <table class="table table-hover align-middle">
+
+                <thead class="table-dark">
+
+                    <tr>
+
+                        <th width="45%">Question</th>
+
+                        <th>Difficulty</th>
+
+                        <th>Type</th>
+
+                        <th>Choices</th>
+
+                        <th width="280">Action</th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                    @if (!Model.Any())
+                    {
+                        <tr>
+
+                            <td colspan="5"
+                                class="text-center text-muted">
+
+                                No Questions found.
+
+                            </td>
+
+                        </tr>
+                    }
+                    else
+                    {
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+
+                                <td>
+
+                                    @item.QuestionContent
+
+                                </td>
+
+                                <td>
+
+                                    <span class="badge bg-info">
+
+                                        @item.Difficulty
+
+                                    </span>
+
+                                </td>
+
+                                <td>
+
+                                    @item.QuestionType
+
+                                </td>
+
+                                <td>
+
+                                    @item.Choices.Count
+
+                                </td>
+
+                                <td>
+
+                                    <a asp-action="Details"
+                                       asp-route-id="@item.QuestionId"
+                                       class="btn btn-info btn-sm">
+
+                                        <i class="bi bi-eye"></i>
+
+                                    </a>
+
+                                    <a asp-action="Edit"
+                                       asp-route-id="@item.QuestionId"
+                                       class="btn btn-warning btn-sm">
+
+                                        <i class="bi bi-pencil"></i>
+
+                                    </a>
+
+                                    <a asp-area="SME"
+                                       asp-controller="Choice"
+                                       asp-action="Index"
+                                       asp-route-questionId="@item.QuestionId"
+                                       class="btn btn-success btn-sm"
+                                       title="Manage Choices">
+
+                                        <i class="bi bi-list-check"></i>
+
+                                    </a>
+
+                                    <form asp-action="Delete"
+                                          method="post"
+                                          class="d-inline">
+
+                                        @Html.AntiForgeryToken()
+
+                                        <input type="hidden"
+                                               name="id"
+                                               value="@item.QuestionId" />
+
+                                        <button type="submit"
+                                                class="btn btn-danger btn-sm"
+                                                onclick="return confirm('Delete this Question?')">
+
+                                            <i class="bi bi-trash"></i>
+
+                                        </button>
+
+                                    </form>
+
+                                </td>
+
+                            </tr>
+                        }
+                    }
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div>

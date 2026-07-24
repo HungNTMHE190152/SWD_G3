@@ -1,0 +1,344 @@
+﻿@model EduNexus.Models.Course
+
+@{
+    ViewData["Title"] = "Course Details";
+}
+
+<div class="container mt-4">
+
+    <div class="row">
+
+        <div class="col-lg-8">
+
+            <div class="card shadow">
+
+                <div class="card-header bg-primary text-white">
+
+                    <h3>
+
+                        <i class="bi bi-book"></i>
+
+                        @Model.Title
+
+                    </h3>
+
+                </div>
+
+                <div class="card-body">
+
+                    <table class="table">
+
+                        <tr>
+
+                            <th width="200">
+
+                                Course Code
+
+                            </th>
+
+                            <td>
+
+                                @Model.CourseCode
+
+                            </td>
+
+                        </tr>
+
+                        <tr>
+
+                            <th>
+
+                                Category
+
+                            </th>
+
+                            <td>
+
+                                @Model.Category.CategoryName
+
+                            </td>
+
+                        </tr>
+
+                        <tr>
+
+                            <th>
+
+                                Status
+
+                            </th>
+
+                            <td>
+
+                                @if (Model.Status == "APPROVED")
+                                {
+                                    <span class="badge bg-success">
+
+                                        Approved
+
+                                    </span>
+                                }
+                                else if (Model.Status == "PENDING_REVIEW")
+                                {
+                                    <span class="badge bg-warning">
+
+                                        Pending
+
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-secondary">
+
+                                        Draft
+
+                                    </span>
+                                }
+
+                            </td>
+
+                        </tr>
+
+                        <tr>
+
+                            <th>
+
+                                Created
+
+                            </th>
+
+                            <td>
+
+                                @Model.CreatedAt
+
+                            </td>
+
+                        </tr>
+
+                        <tr>
+
+                            <th>
+
+                                Description
+
+                            </th>
+
+                            <td>
+
+                                @Model.Description
+
+                            </td>
+
+                        </tr>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="col-lg-4">
+
+            <div class="card shadow">
+
+                @if (!string.IsNullOrEmpty(Model.ThumbnailUrl))
+                {
+                    <img src="@Model.ThumbnailUrl"
+                         class="img-fluid rounded-top" />
+                }
+                else
+                {
+                    <img src="https://placehold.co/600x350"
+                         class="img-fluid rounded-top" />
+                }
+
+                <div class="card-body">
+
+                    <h5>
+
+                        Statistics
+
+                    </h5>
+                    <hr />
+
+                    <h5 class="mt-4">
+
+                        <i class="bi bi-collection"></i>
+
+                        Modules
+
+                    </h5>
+
+                    <a asp-area="SME"
+                       asp-controller="Module"
+                       asp-action="Create"
+                       asp-route-courseId="@Model.CourseId"
+                       class="btn btn-primary btn-sm mb-3">
+
+                        <i class="bi bi-plus-circle"></i>
+
+                        Add Module
+
+                    </a>
+
+                    <table class="table table-hover">
+
+                        <thead>
+
+                            <tr>
+
+                                <th>Order</th>
+
+                                <th>Title</th>
+
+                                <th>Lessons</th>
+
+                                <th width="180">
+
+                                    Action
+
+                                </th>
+
+                            </tr>
+
+                        </thead>
+
+                        <tbody>
+
+                            @foreach (var module in Model.Modules.OrderBy(x => x.DisplayOrder))
+                            {
+
+                                <tr>
+
+                                    <td>
+
+                                        @module.DisplayOrder
+
+                                    </td>
+
+                                    <td>
+
+                                        @module.Title
+
+                                    </td>
+
+                                    <td>
+
+                                        @module.Lessons.Count
+
+                                    </td>
+
+                                    <td>
+
+                                        <a asp-area="SME"
+                                           asp-controller="Module"
+                                           asp-action="Details"
+                                           asp-route-id="@module.ModuleId"
+                                           class="btn btn-info btn-sm">
+
+                                            <i class="bi bi-eye"></i>
+
+                                        </a>
+
+                                        <a asp-area="SME"
+                                           asp-controller="Module"
+                                           asp-action="Edit"
+                                           asp-route-id="@module.ModuleId"
+                                           class="btn btn-warning btn-sm">
+
+                                            <i class="bi bi-pencil"></i>
+
+                                        </a>
+
+                                    </td>
+
+                                </tr>
+
+                            }
+
+                        </tbody>
+
+                    </table>
+
+                    <hr />
+
+                    <p>
+
+                        📦 Modules
+
+                        <span class="float-end">
+
+                            @Model.Modules.Count
+
+                        </span>
+
+                    </p>
+
+                    <p>
+
+                        ❓ Question Banks
+
+                        <span class="float-end">
+
+                            @Model.QuestionBanks.Count
+
+                        </span>
+
+                    </p>
+
+                    <p>
+
+                        🧠 Quiz Templates
+
+                        <span class="float-end">
+
+                            @Model.QuizTemplates.Count
+
+                        </span>
+
+                    </p>
+
+                </div>
+
+            </div>
+
+            <div class="mt-3 d-grid gap-2">
+
+                <a asp-action="Edit"
+                   asp-route-id="@Model.CourseId"
+                   class="btn btn-warning">
+
+                    Edit Course
+
+                </a>
+
+                <form asp-action="SubmitForReview">
+
+                    <input hidden
+                           name="id"
+                           value="@Model.CourseId" />
+
+                    <button class="btn btn-success w-100">
+
+                        Submit For Review
+
+                    </button>
+
+                </form>
+
+                <a asp-action="Index"
+                   class="btn btn-secondary">
+
+                    Back
+
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

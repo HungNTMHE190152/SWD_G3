@@ -1,0 +1,202 @@
+﻿@model IEnumerable<EduNexus.Models.QuestionBank>
+
+@{
+    ViewData["Title"] = "Question Banks";
+}
+
+<div class="container mt-4">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <h2>
+
+            <i class="bi bi-collection text-primary"></i>
+
+            Question Banks
+
+        </h2>
+
+        <a asp-action="Create"
+           class="btn btn-primary">
+
+            <i class="bi bi-plus-circle"></i>
+
+            Add Question Bank
+
+        </a>
+
+    </div>
+
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success">
+
+            @TempData["Success"]
+
+        </div>
+    }
+
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger">
+
+            @TempData["Error"]
+
+        </div>
+    }
+
+    <div class="card shadow">
+
+        <div class="card-body">
+
+            <table class="table table-hover align-middle">
+
+                <thead class="table-dark">
+
+                    <tr>
+
+                        <th>Name</th>
+
+                        <th>Course</th>
+
+                        <th>Description</th>
+
+                        <th>Questions</th>
+
+                        <th>Status</th>
+
+                        <th width="280">Action</th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                    @if (!Model.Any())
+                    {
+                        <tr>
+
+                            <td colspan="6" class="text-center text-muted">
+
+                                No Question Banks found.
+
+                            </td>
+
+                        </tr>
+                    }
+                    else
+                    {
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+
+                                <td>
+
+                                    <strong>@item.BankName</strong>
+
+                                </td>
+
+                                <td>
+
+                                    @item.Course?.Title
+
+                                </td>
+
+                                <td>
+
+                                    @item.Description
+
+                                </td>
+
+                                <td>
+
+                                    @item.Questions.Count
+
+                                </td>
+
+                                <td>
+
+                                    @if (item.IsPublic)
+                                    {
+                                        <span class="badge bg-success">
+
+                                            Public
+
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-secondary">
+
+                                            Private
+
+                                        </span>
+                                    }
+
+                                </td>
+
+                                <td>
+
+                                    <a asp-action="Details"
+                                       asp-route-id="@item.QuestionBankId"
+                                       class="btn btn-info btn-sm">
+
+                                        <i class="bi bi-eye"></i>
+
+                                    </a>
+
+                                    <a asp-area="SME"
+                                       asp-controller="Question"
+                                       asp-action="Index"
+                                       asp-route-questionBankId="@item.QuestionBankId"
+                                       class="btn btn-success btn-sm"
+                                       title="Manage Questions">
+
+                                        <i class="bi bi-question-circle"></i>
+
+                                    </a>
+
+                                    <a asp-action="Edit"
+                                       asp-route-id="@item.QuestionBankId"
+                                       class="btn btn-warning btn-sm">
+
+                                        <i class="bi bi-pencil"></i>
+
+                                    </a>
+
+                                    <form asp-action="Delete"
+                                          method="post"
+                                          class="d-inline">
+
+                                        @Html.AntiForgeryToken()
+
+                                        <input type="hidden"
+                                               name="id"
+                                               value="@item.QuestionBankId" />
+
+                                        <button type="submit"
+                                                class="btn btn-danger btn-sm"
+                                                onclick="return confirm('Delete this Question Bank?')">
+
+                                            <i class="bi bi-trash"></i>
+
+                                        </button>
+
+                                    </form>
+
+                                </td>
+
+                            </tr>
+                        }
+                    }
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div>

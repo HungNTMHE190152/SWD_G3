@@ -1,0 +1,128 @@
+﻿@model EduNexus.ViewModels.Authentication.RegisterViewModel
+
+@{
+    ViewData["Title"] = "Register";
+}
+
+<div class="container">
+
+    <div class="row justify-content-center mt-5">
+
+        <div class="col-md-6 col-lg-5">
+
+            <div class="card shadow">
+
+                <div class="card-body p-4">
+
+                    <h2 class="text-center">
+
+                        EduNexus
+
+                    </h2>
+
+                    <p class="text-center text-muted mb-4">
+
+                        Create your account
+
+                    </p>
+
+                    <form asp-action="Register"
+                          method="post">
+
+                        @Html.AntiForgeryToken()
+
+                        <div asp-validation-summary="ModelOnly"
+                             class="text-danger mb-3">
+                        </div>
+
+                        <div class="mb-3">
+
+                            <label asp-for="FullName"></label>
+
+                            <input asp-for="FullName"
+                                   class="form-control" />
+
+                        </div>
+
+                        <div class="mb-3">
+
+                            <label asp-for="Email"></label>
+
+                            <input asp-for="Email"
+                                   class="form-control" />
+
+                        </div>
+
+                        <div class="mb-3">
+
+                            <label asp-for="PhoneNumber"></label>
+
+                            <input asp-for="PhoneNumber"
+                                   class="form-control" />
+
+                        </div>
+
+                        <div class="mb-3">
+
+                            <label asp-for="Username"></label>
+
+                            <input asp-for="Username"
+                                   class="form-control" />
+
+                        </div>
+
+                        <div class="mb-3">
+
+                            <label asp-for="Password"></label>
+
+                            <input asp-for="Password"
+                                   class="form-control" />
+
+                        </div>
+
+                        <div class="mb-3">
+
+                            <label asp-for="ConfirmPassword"></label>
+
+                            <input asp-for="ConfirmPassword"
+                                   class="form-control" />
+
+                        </div>
+
+                        <button class="btn btn-success w-100">
+
+                            Register
+
+                        </button>
+
+                    </form>
+
+                    <hr />
+
+                    <div class="text-center">
+
+                        Already have an account?
+
+                        <a asp-action="Login">
+
+                            Login
+
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+@section Scripts {
+
+    <partial name="_ValidationScriptsPartial" />
+
+}

@@ -1,0 +1,187 @@
+﻿@model EduNexus.ViewModels.Course.CourseViewModel
+
+@{
+    ViewData["Title"] = "Create Course";
+}
+
+<div class="container mt-4">
+
+    <div class="card shadow-lg border-0">
+
+        <div class="card-header bg-primary text-white">
+
+            <h3>
+                <i class="bi bi-book-half"></i>
+                Create New Course
+            </h3>
+
+            <small>
+                Create a new course for your students
+            </small>
+
+        </div>
+
+        <div class="card-body">
+
+            <form asp-action="Create" method="post">
+
+                <div asp-validation-summary="ModelOnly"
+                     class="text-danger mb-3">
+                </div>
+
+                <div class="row">
+
+                    <!-- LEFT -->
+
+                    <div class="col-lg-8">
+
+                        <div class="mb-3">
+
+                            <label class="form-label fw-bold">
+
+                                Course Code
+
+                            </label>
+
+                            <input asp-for="CourseCode"
+                                   class="form-control" />
+
+                            <span asp-validation-for="CourseCode"
+                                  class="text-danger"></span>
+
+                        </div>
+
+                        <div class="mb-3">
+
+                            <label class="form-label fw-bold">
+
+                                Title
+
+                            </label>
+
+                            <input asp-for="Title"
+                                   class="form-control" />
+
+                            <span asp-validation-for="Title"
+                                  class="text-danger"></span>
+
+                        </div>
+
+                        <div class="mb-3">
+
+                            <label class="form-label fw-bold">
+
+                                Description
+
+                            </label>
+
+                            <textarea asp-for="Description"
+                                      rows="6"
+                                      class="form-control">
+                            </textarea>
+
+                        </div>
+
+                    </div>
+
+                    <!-- RIGHT -->
+
+                    <div class="col-lg-4">
+
+                        <div class="mb-3">
+
+                            <label class="form-label fw-bold">
+
+                                Category
+
+                            </label>
+
+                            <select asp-for="CategoryId"
+                                    asp-items="ViewBag.Categories"
+                                    class="form-select">
+
+                                <option value="">
+
+                                    Select Category
+
+                                </option>
+
+                            </select>
+
+                        </div>
+
+                        <div class="mb-3">
+
+                            <label class="form-label fw-bold">
+
+                                Thumbnail URL
+
+                            </label>
+
+                            <input asp-for="ThumbnailUrl"
+                                   class="form-control"
+                                   id="thumbInput" />
+
+                        </div>
+
+                        <div class="card">
+
+                            <img id="preview"
+                                 src="https://placehold.co/500x280"
+                                 class="img-fluid rounded" />
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <hr />
+
+                <div class="d-flex justify-content-end gap-2">
+
+                    <a asp-action="Index"
+                       class="btn btn-secondary">
+
+                        Cancel
+
+                    </a>
+
+                    <button class="btn btn-primary">
+
+                        <i class="bi bi-check-circle"></i>
+
+                        Create Course
+
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+@section Scripts {
+
+    <partial name="_ValidationScriptsPartial" />
+
+    <script>
+
+        const input=document.getElementById("thumbInput");
+
+        const img=document.getElementById("preview");
+
+        input.addEventListener("keyup",()=>{
+
+        if(input.value!="")
+        img.src=input.value;
+
+        });
+
+    </script>
+
+}

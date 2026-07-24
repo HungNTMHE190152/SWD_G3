@@ -1,0 +1,222 @@
+﻿@model EduNexus.Models.Lesson
+
+@{
+    ViewData["Title"] = "Lesson Details";
+}
+
+<div class="container mt-4">
+
+    <div class="row">
+
+        <div class="col-lg-8">
+
+            <div class="card shadow">
+
+                <div class="card-header bg-success text-white">
+
+                    <h3>
+
+                        <i class="bi bi-journal-richtext"></i>
+
+                        @Model.Title
+
+                    </h3>
+
+                </div>
+
+                <div class="card-body">
+
+                    <table class="table">
+
+                        <tr>
+
+                            <th width="220">
+
+                                Module
+
+                            </th>
+
+                            <td>
+
+                                @Model.Module.Title
+
+                            </td>
+
+                        </tr>
+
+                        <tr>
+
+                            <th>
+
+                                Lesson Type
+
+                            </th>
+
+                            <td>
+
+                                @Model.LessonType
+
+                            </td>
+
+                        </tr>
+
+                        <tr>
+
+                            <th>
+
+                                Duration
+
+                            </th>
+
+                            <td>
+
+                                @(Model.EstimatedMinutes ?? 0) Minutes
+
+                            </td>
+
+                        </tr>
+
+                        <tr>
+
+                            <th>Status</th>
+
+                            <td>
+
+                                @if (Model.Status == "PUBLISHED")
+                                {
+                                    <span class="badge bg-success">
+
+                                        Published
+
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-secondary">
+
+                                        Draft
+
+                                    </span>
+                                }
+
+                            </td>
+
+                        </tr>
+
+                        <tr>
+
+                            <th>
+
+                                Content
+
+                            </th>
+
+                            <td>
+
+                                @Html.Raw(Model.Content)
+
+                            </td>
+
+                        </tr>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="col-lg-4">
+
+            <div class="card shadow">
+
+                <div class="card-body">
+
+                    <h5>
+
+                        Lesson Statistics
+
+                    </h5>
+
+                    <hr />
+
+                    <p>
+
+                        📁 Resources
+
+                        <span class="float-end">
+
+                            @Model.LessonResources.Count
+
+                        </span>
+
+                    </p>
+
+                    <p>
+
+                        📝 Display Order
+
+                        <span class="float-end">
+
+                            @Model.DisplayOrder
+
+                        </span>
+
+                    </p>
+
+                </div>
+
+            </div>
+
+            <div class="mt-3 d-grid gap-2">
+
+                <a asp-action="Edit"
+                   asp-route-id="@Model.LessonId"
+                   class="btn btn-warning">
+
+                    Edit Lesson
+
+                </a>
+                @if (Model.Status != "PUBLISHED")
+                {
+                    <form asp-action="Publish"
+                          method="post">
+
+                        <input hidden
+                               name="id"
+                               value="@Model.LessonId" />
+
+                        <button class="btn btn-success w-100">
+
+                            Publish Lesson
+
+                        </button>
+
+                    </form>
+                }
+
+                <a asp-area="SME"
+                   asp-controller="LessonResource"
+                   asp-action="Index"
+                   asp-route-lessonId="@Model.LessonId"
+                   class="btn btn-success">
+
+                    Resources
+
+                </a>
+
+                <a asp-action="Index"
+                   class="btn btn-secondary">
+
+                    Back
+
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
