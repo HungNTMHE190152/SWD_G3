@@ -6,164 +6,288 @@
 
 <div class="container-fluid">
 
-    <div class="d-flex justify-content-between align-items-center mb-4">
+    <!-- Header -->
+    <div class="page-header d-flex justify-content-between align-items-center mb-4">
 
         <div>
-            <h2 class="fw-bold mb-1">Edit Published Assignment</h2>
+
+            <h2 class="page-title mb-1">
+                Edit Published Assignment
+            </h2>
+
             <p class="text-muted mb-0">
                 Update the published assignment information.
             </p>
+
         </div>
 
         <a asp-action="Index"
            class="btn btn-outline-secondary">
 
-            <i class="bi bi-arrow-left me-1"></i>
-            Back to List
+            <i class="bi bi-arrow-left me-2"></i>
+
+            Back
 
         </a>
 
     </div>
 
-    <div class="card shadow border-0">
+    <form asp-action="Edit" method="post">
 
-        <div class="card-header bg-warning">
+        <input asp-for="ClassroomAssignmentId" type="hidden" />
+        <input asp-for="Status" type="hidden" />
 
-            <h5 class="mb-0">
+        <div asp-validation-summary="ModelOnly"
+             class="alert alert-danger">
+        </div>
 
-                <i class="bi bi-pencil-square me-2"></i>
-                Assignment Information
+        <div class="row">
 
-            </h5>
+            <!-- Left -->
+
+            <div class="col-lg-8">
+
+                <!-- Assignment Information -->
+
+                <div class="card shadow-sm border-0 mb-4">
+
+                    <div class="card-body p-4">
+
+                        <h5 class="mb-4">
+
+                            <i class="bi bi-pencil-square me-2 text-primary"></i>
+
+                            Assignment Information
+
+                        </h5>
+
+                        <div class="row">
+
+                            <div class="col-md-6 mb-3">
+
+                                <label asp-for="ClassroomId"
+                                       class="form-label fw-semibold">
+                                </label>
+
+                                <select asp-for="ClassroomId"
+                                        asp-items="Model.Classrooms"
+                                        class="form-select">
+                                </select>
+
+                                <span asp-validation-for="ClassroomId"
+                                      class="text-danger">
+                                </span>
+
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+
+                                <label asp-for="AssignmentTemplateId"
+                                       class="form-label fw-semibold">
+                                </label>
+
+                                <select asp-for="AssignmentTemplateId"
+                                        asp-items="Model.Assignments"
+                                        class="form-select">
+                                </select>
+
+                                <span asp-validation-for="AssignmentTemplateId"
+                                      class="text-danger">
+                                </span>
+
+                            </div>
+
+                        </div>
+
+                        <div class="mb-3">
+
+                            <label asp-for="Title"
+                                   class="form-label fw-semibold">
+                            </label>
+
+                            <input asp-for="Title"
+                                   class="form-control"
+                                   placeholder="Enter assignment title" />
+
+                            <span asp-validation-for="Title"
+                                  class="text-danger">
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <!-- Schedule -->
+
+                <div class="card shadow-sm border-0 mb-4">
+
+                    <div class="card-body p-4">
+
+                        <h5 class="mb-4">
+
+                            <i class="bi bi-calendar-event me-2 text-primary"></i>
+
+                            Schedule
+
+                        </h5>
+
+                        <div class="row">
+
+                            <div class="col-md-6 mb-3">
+
+                                <label asp-for="OpenDate"
+                                       class="form-label fw-semibold">
+                                </label>
+
+                                <input asp-for="OpenDate"
+                                       type="datetime-local"
+                                       class="form-control" />
+
+                                <span asp-validation-for="OpenDate"
+                                      class="text-danger">
+                                </span>
+
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+
+                                <label asp-for="DueDate"
+                                       class="form-label fw-semibold">
+                                </label>
+
+                                <input asp-for="DueDate"
+                                       type="datetime-local"
+                                       class="form-control" />
+
+                                <span asp-validation-for="DueDate"
+                                      class="text-danger">
+                                </span>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <!-- Submission Settings -->
+
+                <div class="card shadow-sm border-0">
+
+                    <div class="card-body p-4">
+
+                        <h5 class="mb-4">
+
+                            <i class="bi bi-sliders me-2 text-primary"></i>
+
+                            Submission Settings
+
+                        </h5>
+
+                        <div class="form-check form-switch">
+
+                            <input asp-for="AllowLateSubmission"
+                                   class="form-check-input" />
+
+                            <label asp-for="AllowLateSubmission"
+                                   class="form-check-label fw-semibold">
+
+                                Allow Late Submission
+
+                            </label>
+
+                        </div>
+
+                        <small class="text-muted">
+
+                            Students can still submit after the due date if this option is enabled.
+
+                        </small>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- Right -->
+
+            <div class="col-lg-4">
+
+                <div class="card shadow-sm border-0 mb-4">
+
+                    <div class="card-body">
+
+                        <h5>
+
+                            <i class="bi bi-info-circle me-2 text-primary"></i>
+
+                            Assignment Information
+
+                        </h5>
+
+                        <hr />
+
+                        <ul class="small text-muted mb-0">
+
+                            <li>
+                                Updating this assignment will immediately affect students.
+                            </li>
+
+                            <li>
+                                Keep the classroom unchanged if submissions already exist.
+                            </li>
+
+                            <li>
+                                Verify the due date before saving.
+                            </li>
+
+                            <li>
+                                Changing the template may affect assignment content.
+                            </li>
+
+                            <li>
+                                Enable Late Submission only when necessary.
+                            </li>
+
+                        </ul>
+
+                    </div>
+
+                </div>
+
+                <div class="card shadow-sm border-0">
+
+                    <div class="card-body">
+
+                        <button type="submit"
+                                class="btn btn-primary w-100 mb-2">
+
+                            <i class="bi bi-save me-2"></i>
+
+                            Save Changes
+
+                        </button>
+
+                        <a asp-action="Index"
+                           class="btn btn-outline-secondary w-100">
+
+                            Cancel
+
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </div>
 
         </div>
 
-        <div class="card-body">
-
-            <form asp-action="Edit" method="post">
-
-                <input asp-for="ClassroomAssignmentId" type="hidden" />
-                <input asp-for="Status" type="hidden" />
-
-                <div asp-validation-summary="ModelOnly"
-                     class="alert alert-danger">
-                </div>
-
-                <div class="row">
-
-                    <div class="col-md-6 mb-3">
-
-                        <label asp-for="ClassroomId"
-                               class="form-label fw-semibold">
-                        </label>
-
-                        <select asp-for="ClassroomId"
-                                asp-items="Model.Classrooms"
-                                class="form-select">
-                        </select>
-
-                    </div>
-
-                    <div class="col-md-6 mb-3">
-
-                        <label asp-for="AssignmentTemplateId"
-                               class="form-label fw-semibold">
-                        </label>
-
-                        <select asp-for="AssignmentTemplateId"
-                                asp-items="Model.Assignments"
-                                class="form-select">
-                        </select>
-
-                    </div>
-
-                </div>
-
-                <div class="mb-3">
-
-                    <label asp-for="Title"
-                           class="form-label fw-semibold">
-                    </label>
-
-                    <input asp-for="Title"
-                           class="form-control"
-                           placeholder="Enter assignment title" />
-
-                    <span asp-validation-for="Title"
-                          class="text-danger">
-                    </span>
-
-                </div>
-
-                <div class="row">
-
-                    <div class="col-md-6 mb-3">
-
-                        <label asp-for="OpenDate"
-                               class="form-label fw-semibold">
-                        </label>
-
-                        <input asp-for="OpenDate"
-                               type="datetime-local"
-                               class="form-control" />
-
-                    </div>
-
-                    <div class="col-md-6 mb-3">
-
-                        <label asp-for="DueDate"
-                               class="form-label fw-semibold">
-                        </label>
-
-                        <input asp-for="DueDate"
-                               type="datetime-local"
-                               class="form-control" />
-
-                    </div>
-
-                </div>
-
-                <div class="form-check form-switch mb-4">
-
-                    <input asp-for="AllowLateSubmission"
-                           class="form-check-input" />
-
-                    <label asp-for="AllowLateSubmission"
-                           class="form-check-label fw-semibold">
-
-                        Allow Late Submission
-
-                    </label>
-
-                </div>
-
-                <hr />
-
-                <div class="d-flex justify-content-end">
-
-                    <a asp-action="Index"
-                       class="btn btn-secondary me-2">
-
-                        <i class="bi bi-x-circle me-1"></i>
-                        Cancel
-
-                    </a>
-
-                    <button type="submit"
-                            class="btn btn-warning">
-
-                        <i class="bi bi-check-circle me-1"></i>
-                        Save Changes
-
-                    </button>
-
-                </div>
-
-            </form>
-
-        </div>
-
-    </div>
+    </form>
 
 </div>
 

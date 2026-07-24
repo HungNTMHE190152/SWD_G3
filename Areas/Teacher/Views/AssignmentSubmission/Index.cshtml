@@ -6,38 +6,206 @@
 
 <div class="container-fluid">
 
-    <div class="d-flex justify-content-between align-items-center mb-4">
+    <!-- Header -->
+    <div class="page-header d-flex justify-content-between align-items-center mb-4">
 
         <div>
-            <h2 class="fw-bold">Assignment Submissions</h2>
-            <p class="text-muted">
-                View all submissions for this assignment.
+
+            <h2 class="page-title mb-1">
+                Assignment Submissions
+            </h2>
+
+            <p class="text-muted mb-0">
+                View and grade student submissions for this assignment.
             </p>
+
         </div>
 
         <a asp-area="Teacher"
            asp-controller="ClassroomAssignment"
            asp-action="Index"
-           class="btn btn-secondary">
+           class="btn btn-outline-secondary">
 
-            <i class="bi bi-arrow-left"></i>
+            <i class="bi bi-arrow-left me-2"></i>
+
             Back
 
         </a>
 
     </div>
 
-    <div class="card shadow border-0">
+    <!-- Search -->
+    <div class="card shadow-sm border-0 mb-4">
 
-        <div class="card-header bg-primary text-white">
+        <div class="card-body">
 
-            <h5 class="mb-0">
+            <div class="row g-3">
 
-                <i class="bi bi-file-earmark-text"></i>
+                <div class="col-lg-6">
 
-                Student Submissions
+                    <label class="form-label">
+                        Search Student
+                    </label>
 
-            </h5>
+                    <input class="form-control"
+                           placeholder="Search by student name..." />
+
+                </div>
+
+                <div class="col-lg-3">
+
+                    <label class="form-label">
+                        Status
+                    </label>
+
+                    <select class="form-select">
+
+                        <option>All</option>
+                        <option>Submitted</option>
+
+                    </select>
+
+                </div>
+
+                <div class="col-lg-3 d-flex align-items-end">
+
+                    <button class="btn btn-primary me-2">
+
+                        <i class="bi bi-search"></i>
+
+                        Filter
+
+                    </button>
+
+                    <button class="btn btn-outline-secondary">
+
+                        Reset
+
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Statistics -->
+
+    <div class="row mb-4">
+
+        <div class="col-lg-3">
+
+            <div class="card shadow-sm border-0 h-100">
+
+                <div class="card-body">
+
+                    <small class="text-muted">
+                        Total Submissions
+                    </small>
+
+                    <h2 class="fw-bold text-primary mt-2">
+
+                        @Model.Count()
+
+                    </h2>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="col-lg-3">
+
+            <div class="card shadow-sm border-0 h-100">
+
+                <div class="card-body">
+
+                    <small class="text-muted">
+                        Submitted
+                    </small>
+
+                    <h2 class="fw-bold text-success mt-2">
+
+                        @Model.Count(x => x.Status == "Submitted")
+
+                    </h2>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="col-lg-3">
+
+            <div class="card shadow-sm border-0 h-100">
+
+                <div class="card-body">
+
+                    <small class="text-muted">
+                        Late
+                    </small>
+
+                    <h2 class="fw-bold text-danger mt-2">
+
+                        @Model.Count(x => x.IsLate)
+
+                    </h2>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="col-lg-3">
+
+            <div class="card shadow-sm border-0 h-100">
+
+                <div class="card-body">
+
+                    <small class="text-muted">
+                        Graded
+                    </small>
+
+                    <h2 class="fw-bold text-warning mt-2">
+
+                        @Model.Count(x => x.Score != null)
+
+                    </h2>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Table -->
+
+    <div class="card shadow-sm border-0">
+
+        <div class="card-header bg-white border-0">
+
+            <div class="d-flex justify-content-between align-items-center">
+
+                <h5 class="mb-0">
+
+                    Student Submissions
+
+                </h5>
+
+                <span class="badge bg-primary">
+
+                    @Model.Count() Students
+
+                </span>
+
+            </div>
 
         </div>
 
@@ -47,16 +215,16 @@
 
                 <table class="table table-hover align-middle mb-0">
 
-                    <thead class="table-light">
+                    <thead>
 
                         <tr>
 
                             <th>Student</th>
-                            <th>Submitted</th>
+                            <th>Submitted At</th>
                             <th>Status</th>
                             <th>Late</th>
                             <th>Score</th>
-                            <th width="120">Action</th>
+                            <th class="text-center">Action</th>
 
                         </tr>
 
@@ -70,9 +238,9 @@
                             {
                                 <tr>
 
-                                    <td>
+                                    <td class="fw-semibold">
 
-                                        <strong>@item.StudentName</strong>
+                                        @item.StudentName
 
                                     </td>
 
@@ -87,13 +255,17 @@
                                         @if (item.Status == "Submitted")
                                         {
                                             <span class="badge bg-success">
+
                                                 Submitted
+
                                             </span>
                                         }
                                         else
                                         {
                                             <span class="badge bg-secondary">
+
                                                 @item.Status
+
                                             </span>
                                         }
 
@@ -104,13 +276,17 @@
                                         @if (item.IsLate)
                                         {
                                             <span class="badge bg-danger">
+
                                                 Late
+
                                             </span>
                                         }
                                         else
                                         {
                                             <span class="badge bg-success">
+
                                                 On Time
+
                                             </span>
                                         }
 
@@ -118,17 +294,33 @@
 
                                     <td>
 
-                                        @(item.Score?.ToString() ?? "-")
+                                        @if (item.Score != null)
+                                        {
+                                            <span class="fw-semibold text-primary">
+
+                                                @item.Score
+
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            <span class="text-muted">
+
+                                                -
+
+                                            </span>
+                                        }
 
                                     </td>
 
-                                    <td>
+                                    <td class="text-center">
 
                                         <a asp-area="Teacher"
                                            asp-controller="SubmissionGrade"
                                            asp-action="Edit"
                                            asp-route-submissionId="@item.SubmissionId"
-                                           class="btn btn-primary btn-sm">
+                                           class="btn btn-outline-primary btn-sm"
+                                           title="Grade Submission">
 
                                             <i class="bi bi-award"></i>
 
@@ -143,13 +335,22 @@
                         {
                             <tr>
 
-                                <td colspan="6" class="text-center py-5">
+                                <td colspan="6"
+                                    class="text-center py-5">
 
-                                    <i class="bi bi-inbox display-5 text-muted"></i>
+                                    <i class="bi bi-file-earmark-x display-5 text-muted"></i>
 
                                     <h5 class="mt-3">
-                                        No submissions found
+
+                                        No Submissions Found
+
                                     </h5>
+
+                                    <p class="text-muted">
+
+                                        Student submissions will appear here after they submit their assignments.
+
+                                    </p>
 
                                 </td>
 

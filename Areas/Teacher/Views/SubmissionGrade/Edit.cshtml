@@ -6,123 +6,272 @@
 
 <div class="container-fluid">
 
-    <div class="card shadow border-0">
+    <!-- Header -->
+    <div class="page-header d-flex justify-content-between align-items-center mb-4">
 
-        <div class="card-header bg-primary text-white">
-            <h4 class="mb-0">
+        <div>
+
+            <h2 class="page-title mb-1">
                 Grade Submission
-            </h4>
-        </div>
+            </h2>
 
-        <div class="card-body">
-
-            <form asp-action="Edit" method="post">
-
-                @Html.AntiForgeryToken()
-
-                <input asp-for="SubmissionId" type="hidden" />
-                <input asp-for="ClassroomAssignmentId" type="hidden" />
-
-                <div class="mb-3">
-                    <label class="form-label">Assignment</label>
-                    <input class="form-control"
-                           value="@Model.AssignmentTitle"
-                           readonly />
-                </div>
-
-                <div class="mb-3">
-                    <label class="form-label">Student</label>
-                    <input class="form-control"
-                           value="@Model.StudentName"
-                           readonly />
-                </div>
-
-                <div class="mb-3">
-                    <label class="form-label">Submitted At</label>
-                    <input class="form-control"
-                           value="@(Model.SubmittedAt?.ToString("dd/MM/yyyy HH:mm"))"
-                           readonly />
-                </div>
-
-                @if (!string.IsNullOrWhiteSpace(Model.SubmissionText))
-                {
-                    <div class="mb-3">
-                        <label class="form-label">Submission</label>
-                        <textarea class="form-control"
-                              rows="5"
-                              readonly>@Model.SubmissionText</textarea>
-                    </div>
-                }
-
-                @if (!string.IsNullOrWhiteSpace(Model.FileUrl))
-                {
-                    <div class="mb-3">
-                        <label class="form-label">Attachment</label>
-
-                        <div>
-                            <a href="@Model.FileUrl"
-                               target="_blank"
-                               class="btn btn-outline-primary">
-
-                                <i class="bi bi-paperclip"></i>
-
-                                Open Attachment
-
-                            </a>
-                        </div>
-
-                    </div>
-                }
-
-                <div class="mb-3">
-
-                    <label asp-for="Score"></label>
-
-                    <input asp-for="Score"
-                           class="form-control" />
-
-                    <span asp-validation-for="Score"
-                          class="text-danger"></span>
-
-                </div>
-
-                <div class="mb-3">
-
-                    <label asp-for="Feedback"></label>
-
-                    <textarea asp-for="Feedback"
-                              class="form-control"
-                              rows="5"></textarea>
-
-                </div>
-
-                <div class="d-flex gap-2">
-
-                    <button type="submit"
-                            class="btn btn-success">
-
-                        <i class="bi bi-check-circle"></i>
-
-                        Save Grade
-
-                    </button>
-
-                    <a asp-area="Teacher"
-                       asp-controller="AssignmentSubmission"
-                       asp-action="Index"
-                       asp-route-classroomAssignmentId="@Model.ClassroomAssignmentId"
-                       class="btn btn-secondary">
-
-                        Cancel
-
-                    </a>
-
-                </div>
-
-            </form>
+            <p class="text-muted mb-0">
+                Review the student's submission and provide a score with feedback.
+            </p>
 
         </div>
+
+        <a asp-area="Teacher"
+           asp-controller="AssignmentSubmission"
+           asp-action="Index"
+           asp-route-classroomAssignmentId="@Model.ClassroomAssignmentId"
+           class="btn btn-outline-secondary">
+
+            <i class="bi bi-arrow-left me-2"></i>
+
+            Back
+
+        </a>
 
     </div>
 
+    <form asp-action="Edit" method="post">
+
+        @Html.AntiForgeryToken()
+
+        <input asp-for="SubmissionId" type="hidden" />
+        <input asp-for="ClassroomAssignmentId" type="hidden" />
+
+        <div class="row">
+
+            <!-- LEFT -->
+
+            <div class="col-lg-8">
+
+                <!-- Submission Information -->
+
+                <div class="card shadow-sm border-0 mb-4">
+
+                    <div class="card-body p-4">
+
+                        <h5 class="mb-4">
+
+                            <i class="bi bi-file-earmark-text me-2 text-primary"></i>
+
+                            Submission Information
+
+                        </h5>
+
+                        <div class="row">
+
+                            <div class="col-md-6 mb-4">
+
+                                <label class="detail-label">
+                                    Assignment
+                                </label>
+
+                                <div class="detail-box">
+                                    @Model.AssignmentTitle
+                                </div>
+
+                            </div>
+
+                            <div class="col-md-6 mb-4">
+
+                                <label class="detail-label">
+                                    Student
+                                </label>
+
+                                <div class="detail-box">
+                                    @Model.StudentName
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                        <div class="mb-4">
+
+                            <label class="detail-label">
+                                Submitted At
+                            </label>
+
+                            <div class="detail-box">
+
+                                @(Model.SubmittedAt?.ToString("dd/MM/yyyy HH:mm"))
+
+                            </div>
+
+                        </div>
+
+                        @if (!string.IsNullOrWhiteSpace(Model.SubmissionText))
+                        {
+                            <div class="mb-4">
+
+                                <label class="detail-label">
+                                    Submission
+                                </label>
+
+                                <textarea class="form-control"
+                                      rows="7"
+                                      readonly>@Model.SubmissionText</textarea>
+
+                            </div>
+                        }
+
+                        @if (!string.IsNullOrWhiteSpace(Model.FileUrl))
+                        {
+                            <div class="mb-4">
+
+                                <label class="detail-label">
+                                    Attachment
+                                </label>
+
+                                <div>
+
+                                    <a href="@Model.FileUrl"
+                                       target="_blank"
+                                       class="btn btn-outline-primary">
+
+                                        <i class="bi bi-paperclip me-2"></i>
+
+                                        Open Attachment
+
+                                    </a>
+
+                                </div>
+
+                            </div>
+                        }
+
+                    </div>
+
+                </div>
+
+                <!-- Grade -->
+
+                <div class="card shadow-sm border-0">
+
+                    <div class="card-body p-4">
+
+                        <h5 class="mb-4">
+
+                            <i class="bi bi-award me-2 text-primary"></i>
+
+                            Grade & Feedback
+
+                        </h5>
+
+                        <div class="mb-4">
+
+                            <label asp-for="Score"
+                                   class="form-label fw-semibold">
+                            </label>
+
+                            <input asp-for="Score"
+                                   class="form-control"
+                                   placeholder="Enter score..." />
+
+                            <span asp-validation-for="Score"
+                                  class="text-danger"></span>
+
+                        </div>
+
+                        <div>
+
+                            <label asp-for="Feedback"
+                                   class="form-label fw-semibold">
+                            </label>
+
+                            <textarea asp-for="Feedback"
+                                      class="form-control"
+                                      rows="6"
+                                      placeholder="Write your feedback..."></textarea>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- RIGHT -->
+
+            <div class="col-lg-4">
+
+                <!-- Tips -->
+
+                <div class="card shadow-sm border-0 mb-4">
+
+                    <div class="card-body">
+
+                        <h5>
+
+                            <i class="bi bi-lightbulb me-2 text-warning"></i>
+
+                            Grading Tips
+
+                        </h5>
+
+                        <hr />
+
+                        <ul class="small text-muted mb-0">
+
+                            <li>Review the submission carefully before grading.</li>
+
+                            <li>Provide constructive feedback.</li>
+
+                            <li>Use consistent scoring criteria.</li>
+
+                            <li>Double-check the score before saving.</li>
+
+                            <li>Your feedback will be visible to the student.</li>
+
+                        </ul>
+
+                    </div>
+
+                </div>
+
+                <!-- Action -->
+
+                <div class="card shadow-sm border-0">
+
+                    <div class="card-body">
+
+                        <button type="submit"
+                                class="btn btn-primary w-100 mb-2">
+
+                            <i class="bi bi-check-circle me-2"></i>
+
+                            Save Grade
+
+                        </button>
+
+                        <a asp-area="Teacher"
+                           asp-controller="AssignmentSubmission"
+                           asp-action="Index"
+                           asp-route-classroomAssignmentId="@Model.ClassroomAssignmentId"
+                           class="btn btn-outline-secondary w-100">
+
+                            Cancel
+
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </form>
+
 </div>
+
+@section Scripts
+{
+    <partial name="_ValidationScriptsPartial" />
+}

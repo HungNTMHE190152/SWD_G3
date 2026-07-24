@@ -1,0 +1,87 @@
+﻿<div class="teacher-sidebar">
+
+    <div class="sidebar-brand">
+
+        <h3>EduNexus</h3>
+
+        <span>Teacher Portal</span>
+
+    </div>
+
+    <div class="sidebar-user">
+
+        <div class="avatar">
+
+            <i class="bi bi-person-circle"></i>
+
+        </div>
+
+        <div>
+
+            <strong>@User.Identity?.Name</strong>
+
+            <div class="text-muted small">
+                Teacher
+            </div>
+
+        </div>
+
+    </div>
+
+    <ul class="sidebar-menu">
+
+        <li>
+            <a asp-area="Teacher"
+               asp-controller="Dashboard"
+               asp-action="Index">
+
+                <i class="bi bi-speedometer2"></i>
+
+                Dashboard
+
+            </a>
+        </li>
+
+        <li>
+            <a asp-area="Teacher"
+               asp-controller="Classroom"
+               asp-action="Index">
+
+                <i class="bi bi-building"></i>
+
+                Classrooms
+
+            </a>
+        </li>
+
+        <li>
+            <a asp-area="Teacher"
+               asp-controller="ClassroomAssignment"
+               asp-action="Index">
+
+                <i class="bi bi-journal-text"></i>
+
+                Assignments
+
+            </a>
+        </li>
+
+    </ul>
+
+    <form asp-area=""
+          asp-controller="Auth"
+          asp-action="Logout"
+          method="post"
+          class="mt-auto">
+
+        <button class="btn btn-outline-danger w-100">
+
+            <i class="bi bi-box-arrow-right"></i>
+
+            Logout
+
+        </button>
+
+    </form>
+
+</div>

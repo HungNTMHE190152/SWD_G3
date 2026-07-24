@@ -6,169 +6,280 @@
 
 <div class="container-fluid">
 
-    <div class="d-flex justify-content-between align-items-center mb-4">
+    <!-- Header -->
+    <div class="page-header d-flex justify-content-between align-items-center mb-4">
 
         <div>
-            <h2 class="fw-bold mb-1">Edit Classroom</h2>
+
+            <h2 class="page-title mb-1">
+                Edit Classroom
+            </h2>
+
             <p class="text-muted mb-0">
-                Update classroom information.
+                Update classroom information and schedule.
             </p>
+
         </div>
 
-        <a asp-action="Index" class="btn btn-outline-secondary">
-            <i class="bi bi-arrow-left me-1"></i>
-            Back to List
+        <a asp-action="Index"
+           class="btn btn-outline-secondary">
+
+            <i class="bi bi-arrow-left me-2"></i>
+
+            Back
+
         </a>
 
     </div>
 
-    <div class="card shadow border-0">
+    <form asp-action="Edit" method="post">
 
-        <div class="card-header bg-warning">
-            <h5 class="mb-0">
-                <i class="bi bi-pencil-square me-2"></i>
-                Classroom Information
-            </h5>
+        <input asp-for="ClassroomId" type="hidden" />
+
+        <div asp-validation-summary="ModelOnly"
+             class="alert alert-danger">
         </div>
 
-        <div class="card-body">
+        <div class="row">
 
-            <form asp-action="Edit" method="post">
+            <!-- Main Form -->
+            <div class="col-lg-8">
 
-                <input asp-for="ClassroomId" type="hidden" />
+                <!-- Classroom Information -->
+                <div class="card shadow-sm border-0 mb-4">
 
-                <div asp-validation-summary="ModelOnly"
-                     class="alert alert-danger">
-                </div>
+                    <div class="card-body p-4">
 
-                <div class="row">
+                        <h5 class="mb-4">
 
-                    <div class="col-md-6 mb-3">
+                            <i class="bi bi-pencil-square me-2 text-primary"></i>
 
-                        <label asp-for="CourseId"
-                               class="form-label fw-semibold">
-                            Course
-                        </label>
+                            Classroom Information
 
-                        <select asp-for="CourseId"
-                                class="form-select">
+                        </h5>
 
-                            @foreach (var course in Model.Courses)
-                            {
-                                <option value="@course.CourseId">
-                                    @course.CourseCode - @course.CourseTitle
-                                </option>
-                            }
+                        <div class="row">
 
-                        </select>
+                            <div class="col-md-6 mb-3">
 
-                        <span asp-validation-for="CourseId"
-                              class="text-danger"></span>
+                                <label asp-for="CourseId"
+                                       class="form-label fw-semibold">
+                                    Course
+                                </label>
 
-                    </div>
+                                <select asp-for="CourseId"
+                                        class="form-select">
 
-                    <div class="col-md-6 mb-3">
+                                    @foreach (var course in Model.Courses)
+                                    {
+                                        <option value="@course.CourseId">
+                                            @course.CourseCode - @course.CourseTitle
+                                        </option>
+                                    }
 
-                        <label asp-for="EnrollmentCode"
-                               class="form-label fw-semibold"></label>
+                                </select>
 
-                        <input asp-for="EnrollmentCode"
-                               class="form-control" />
+                                <span asp-validation-for="CourseId"
+                                      class="text-danger"></span>
 
-                        <span asp-validation-for="EnrollmentCode"
-                              class="text-danger"></span>
+                            </div>
 
-                    </div>
+                            <div class="col-md-6 mb-3">
 
-                </div>
+                                <label asp-for="EnrollmentCode"
+                                       class="form-label fw-semibold">
+                                </label>
 
-                <div class="mb-3">
+                                <input asp-for="EnrollmentCode"
+                                       class="form-control"
+                                       placeholder="Example: SE1908-SP25" />
 
-                    <label asp-for="ClassName"
-                           class="form-label fw-semibold"></label>
+                                <span asp-validation-for="EnrollmentCode"
+                                      class="text-danger"></span>
 
-                    <input asp-for="ClassName"
-                           class="form-control" />
+                            </div>
 
-                    <span asp-validation-for="ClassName"
-                          class="text-danger"></span>
+                        </div>
 
-                </div>
+                        <div class="mb-3">
 
-                <div class="row">
+                            <label asp-for="ClassName"
+                                   class="form-label fw-semibold">
+                            </label>
 
-                    <div class="col-md-6 mb-3">
+                            <input asp-for="ClassName"
+                                   class="form-control"
+                                   placeholder="Enter classroom name" />
 
-                        <label asp-for="StartDate"
-                               class="form-label fw-semibold"></label>
+                            <span asp-validation-for="ClassName"
+                                  class="text-danger"></span>
 
-                        <input asp-for="StartDate"
-                               type="date"
-                               class="form-control" />
-
-                        <span asp-validation-for="StartDate"
-                              class="text-danger"></span>
-
-                    </div>
-
-                    <div class="col-md-6 mb-3">
-
-                        <label asp-for="EndDate"
-                               class="form-label fw-semibold"></label>
-
-                        <input asp-for="EndDate"
-                               type="date"
-                               class="form-control" />
-
-                        <span asp-validation-for="EndDate"
-                              class="text-danger"></span>
+                        </div>
 
                     </div>
 
                 </div>
 
-                <div class="mb-4">
+                <!-- Schedule -->
+                <div class="card shadow-sm border-0 mb-4">
 
-                    <label asp-for="Status"
-                           class="form-label fw-semibold"></label>
+                    <div class="card-body p-4">
 
-                    <select asp-for="Status"
-                            class="form-select">
+                        <h5 class="mb-4">
 
-                        <option value="OPEN">OPEN</option>
-                        <option value="CLOSED">CLOSED</option>
+                            <i class="bi bi-calendar-event me-2 text-primary"></i>
 
-                    </select>
+                            Schedule
+
+                        </h5>
+
+                        <div class="row">
+
+                            <div class="col-md-6 mb-3">
+
+                                <label asp-for="StartDate"
+                                       class="form-label fw-semibold">
+                                </label>
+
+                                <input asp-for="StartDate"
+                                       type="date"
+                                       class="form-control" />
+
+                                <span asp-validation-for="StartDate"
+                                      class="text-danger"></span>
+
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+
+                                <label asp-for="EndDate"
+                                       class="form-label fw-semibold">
+                                </label>
+
+                                <input asp-for="EndDate"
+                                       type="date"
+                                       class="form-control" />
+
+                                <span asp-validation-for="EndDate"
+                                      class="text-danger"></span>
+
+                            </div>
+
+                        </div>
+
+                    </div>
 
                 </div>
 
-                <hr />
+                <!-- Status -->
+                <div class="card shadow-sm border-0">
 
-                <div class="d-flex justify-content-end">
+                    <div class="card-body p-4">
 
-                    <a asp-action="Index"
-                       class="btn btn-secondary me-2">
+                        <h5 class="mb-4">
 
-                        <i class="bi bi-x-circle me-1"></i>
-                        Cancel
+                            <i class="bi bi-toggle-on me-2 text-primary"></i>
 
-                    </a>
+                            Classroom Status
 
-                    <button type="submit"
-                            class="btn btn-warning">
+                        </h5>
 
-                        <i class="bi bi-check-circle me-1"></i>
-                        Update Classroom
+                        <div class="row">
 
-                    </button>
+                            <div class="col-md-6">
+
+                                <label asp-for="Status"
+                                       class="form-label fw-semibold">
+                                </label>
+
+                                <select asp-for="Status"
+                                        class="form-select">
+
+                                    <option value="OPEN">OPEN</option>
+                                    <option value="CLOSED">CLOSED</option>
+
+                                </select>
+
+                            </div>
+
+                        </div>
+
+                    </div>
 
                 </div>
 
-            </form>
+            </div>
+
+            <!-- Right Panel -->
+            <div class="col-lg-4">
+
+                <div class="card shadow-sm border-0 mb-4">
+
+                    <div class="card-body">
+
+                        <h5>
+
+                            <i class="bi bi-info-circle me-2 text-primary"></i>
+
+                            Information
+
+                        </h5>
+
+                        <hr />
+
+                        <ul class="small text-muted mb-0">
+
+                            <li>
+                                Updating the classroom will immediately affect enrolled students.
+                            </li>
+
+                            <li>
+                                Keep the Enrollment Code unchanged if students are already using it.
+                            </li>
+
+                            <li>
+                                Closing a classroom prevents new enrollments.
+                            </li>
+
+                            <li>
+                                Make sure the schedule remains valid.
+                            </li>
+
+                        </ul>
+
+                    </div>
+
+                </div>
+
+                <div class="card shadow-sm border-0">
+
+                    <div class="card-body">
+
+                        <button type="submit"
+                                class="btn btn-primary w-100 mb-2">
+
+                            <i class="bi bi-save me-2"></i>
+
+                            Update Classroom
+
+                        </button>
+
+                        <a asp-action="Index"
+                           class="btn btn-outline-secondary w-100">
+
+                            Cancel
+
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </div>
 
         </div>
 
-    </div>
+    </form>
 
 </div>
 

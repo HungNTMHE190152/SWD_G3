@@ -6,163 +6,254 @@
 
 <div class="container-fluid">
 
-    <div class="d-flex justify-content-between align-items-center mb-4">
+    <!-- Header -->
+    <div class="page-header d-flex justify-content-between align-items-center mb-4">
 
         <div>
-            <h2 class="fw-bold mb-1">Create Classroom</h2>
+
+            <h2 class="page-title mb-1">
+                Create Classroom
+            </h2>
+
             <p class="text-muted mb-0">
                 Create a new classroom for your course.
             </p>
+
         </div>
 
-        <a asp-action="Index" class="btn btn-outline-secondary">
-            <i class="bi bi-arrow-left me-1"></i>
-            Back to List
+        <a asp-action="Index"
+           class="btn btn-outline-secondary">
+
+            <i class="bi bi-arrow-left me-2"></i>
+
+            Back
+
         </a>
 
     </div>
 
-    <div class="card shadow border-0">
+    <form asp-action="Create" method="post">
 
-        <div class="card-header bg-primary text-white">
-            <h5 class="mb-0">
-                <i class="bi bi-plus-circle me-2"></i>
-                Classroom Information
-            </h5>
+        <div asp-validation-summary="ModelOnly"
+             class="alert alert-danger">
         </div>
 
-        <div class="card-body">
+        <div class="row">
 
-            <form asp-action="Create" method="post">
+            <!-- Left -->
 
-                <div asp-validation-summary="ModelOnly"
-                     class="alert alert-danger">
-                </div>
+            <div class="col-lg-8">
 
-                <div class="row">
+                <div class="card shadow-sm border-0 mb-4">
 
-                    <div class="col-md-6 mb-3">
+                    <div class="card-body p-4">
 
-                        <label asp-for="CourseId" class="form-label fw-semibold">
-                            Course
-                        </label>
+                        <h5 class="mb-4">
 
-                        <select asp-for="CourseId" class="form-select">
+                            <i class="bi bi-building me-2 text-primary"></i>
 
-                            <option value="">-- Select Course --</option>
+                            Classroom Information
 
-                            @foreach (var course in Model.Courses)
-                            {
-                                <option value="@course.CourseId">
-                                    @course.CourseCode - @course.CourseTitle
-                                </option>
-                            }
+                        </h5>
 
-                        </select>
+                        <div class="row">
 
-                        <span asp-validation-for="CourseId"
-                              class="text-danger">
-                        </span>
+                            <div class="col-md-6 mb-3">
 
-                    </div>
+                                <label asp-for="CourseId"
+                                       class="form-label fw-semibold">
 
-                    <div class="col-md-6 mb-3">
+                                    Course
 
-                        <label asp-for="EnrollmentCode"
-                               class="form-label fw-semibold">
-                        </label>
+                                </label>
 
-                        <input asp-for="EnrollmentCode"
-                               class="form-control"
-                               placeholder="Enter enrollment code" />
+                                <select asp-for="CourseId"
+                                        class="form-select">
 
-                        <span asp-validation-for="EnrollmentCode"
-                              class="text-danger">
-                        </span>
+                                    <option value="">
+                                        -- Select Course --
+                                    </option>
 
-                    </div>
+                                    @foreach (var course in Model.Courses)
+                                    {
+                                        <option value="@course.CourseId">
+                                            @course.CourseCode - @course.CourseTitle
+                                        </option>
+                                    }
 
-                </div>
+                                </select>
 
-                <div class="mb-3">
+                                <span asp-validation-for="CourseId"
+                                      class="text-danger">
+                                </span>
 
-                    <label asp-for="ClassName"
-                           class="form-label fw-semibold">
-                    </label>
+                            </div>
 
-                    <input asp-for="ClassName"
-                           class="form-control"
-                           placeholder="Enter classroom name" />
+                            <div class="col-md-6 mb-3">
 
-                    <span asp-validation-for="ClassName"
-                          class="text-danger">
-                    </span>
+                                <label asp-for="EnrollmentCode"
+                                       class="form-label fw-semibold">
+                                </label>
 
-                </div>
+                                <input asp-for="EnrollmentCode"
+                                       class="form-control"
+                                       placeholder="Example: SE1908-SP25" />
 
-                <div class="row">
+                                <span asp-validation-for="EnrollmentCode"
+                                      class="text-danger">
+                                </span>
 
-                    <div class="col-md-6 mb-3">
+                            </div>
 
-                        <label asp-for="StartDate"
-                               class="form-label fw-semibold">
-                        </label>
+                        </div>
 
-                        <input asp-for="StartDate"
-                               type="date"
-                               class="form-control" />
+                        <div class="mb-3">
 
-                        <span asp-validation-for="StartDate"
-                              class="text-danger">
-                        </span>
+                            <label asp-for="ClassName"
+                                   class="form-label fw-semibold">
+                            </label>
 
-                    </div>
+                            <input asp-for="ClassName"
+                                   class="form-control"
+                                   placeholder="Enter classroom name" />
 
-                    <div class="col-md-6 mb-3">
+                            <span asp-validation-for="ClassName"
+                                  class="text-danger">
+                            </span>
 
-                        <label asp-for="EndDate"
-                               class="form-label fw-semibold">
-                        </label>
-
-                        <input asp-for="EndDate"
-                               type="date"
-                               class="form-control" />
-
-                        <span asp-validation-for="EndDate"
-                              class="text-danger">
-                        </span>
+                        </div>
 
                     </div>
 
                 </div>
 
-                <hr />
+                <!-- Schedule -->
 
-                <div class="d-flex justify-content-end">
+                <div class="card shadow-sm border-0">
 
-                    <a asp-action="Index"
-                       class="btn btn-secondary me-2">
+                    <div class="card-body p-4">
 
-                        <i class="bi bi-x-circle me-1"></i>
-                        Cancel
+                        <h5 class="mb-4">
 
-                    </a>
+                            <i class="bi bi-calendar-event me-2 text-primary"></i>
 
-                    <button type="submit"
-                            class="btn btn-primary">
+                            Schedule
 
-                        <i class="bi bi-check-circle me-1"></i>
-                        Create Classroom
+                        </h5>
 
-                    </button>
+                        <div class="row">
+
+                            <div class="col-md-6 mb-3">
+
+                                <label asp-for="StartDate"
+                                       class="form-label fw-semibold">
+                                </label>
+
+                                <input asp-for="StartDate"
+                                       type="date"
+                                       class="form-control" />
+
+                                <span asp-validation-for="StartDate"
+                                      class="text-danger">
+                                </span>
+
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+
+                                <label asp-for="EndDate"
+                                       class="form-label fw-semibold">
+                                </label>
+
+                                <input asp-for="EndDate"
+                                       type="date"
+                                       class="form-control" />
+
+                                <span asp-validation-for="EndDate"
+                                      class="text-danger">
+                                </span>
+
+                            </div>
+
+                        </div>
+
+                    </div>
 
                 </div>
 
-            </form>
+            </div>
+
+            <!-- Right -->
+
+            <div class="col-lg-4">
+
+                <div class="card shadow-sm border-0 mb-4">
+
+                    <div class="card-body">
+
+                        <h5>
+
+                            <i class="bi bi-lightbulb me-2 text-warning"></i>
+
+                            Tips
+
+                        </h5>
+
+                        <hr />
+
+                        <ul class="small text-muted mb-0">
+
+                            <li>
+                                Choose the correct course.
+                            </li>
+
+                            <li>
+                                Enrollment Code should be unique.
+                            </li>
+
+                            <li>
+                                Start Date should be earlier than End Date.
+                            </li>
+
+                            <li>
+                                Students will join using the Enrollment Code.
+                            </li>
+
+                        </ul>
+
+                    </div>
+
+                </div>
+
+                <div class="card shadow-sm border-0">
+
+                    <div class="card-body">
+
+                        <button type="submit"
+                                class="btn btn-primary w-100 mb-2">
+
+                            <i class="bi bi-check-circle me-2"></i>
+
+                            Create Classroom
+
+                        </button>
+
+                        <a asp-action="Index"
+                           class="btn btn-outline-secondary w-100">
+
+                            Cancel
+
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </div>
 
         </div>
 
-    </div>
+    </form>
 
 </div>
 
